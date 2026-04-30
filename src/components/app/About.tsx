@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import profileImage from "../../assets/about/profile.png";
-import { TimelineItem } from "../TimelineItem";
 import { experienceData } from "../../consts/experience-data";
+import { TimelineItem } from "../TimelineItem";
 
 const animationVariants = {
   section: { hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0 } },
@@ -26,7 +26,7 @@ const ProfileHeader = () => (
       <p>Ó Murchú</p>
     </h1>
     <div className="mt-8 space-y-3">
-      <p className="text-accent text-sm"> Full Stack Software Engineer</p>
+      <p className="text-accent text-sm"> Creative Engineer</p>
     </div>
   </>
 );

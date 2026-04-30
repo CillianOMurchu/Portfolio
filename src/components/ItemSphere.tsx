@@ -1,5 +1,6 @@
-import React, { useRef, useEffect } from "react";
-// Vite: Import all SVGs from the programming-icons folder
+import { number } from "framer-motion";
+import React, { useEffect, useRef } from "react";
+
 const svgModules = import.meta.glob("../assets/programming-icons/*.svg", {
   eager: true,
   as: "url",
@@ -33,34 +34,55 @@ const persistentState = {
   rz: 0,
   vx: 0.01,
   vy: 0.015,
+  baseVx: 0.01,
+  baseVy: 0.015,
 };
 
 function getPersistentMountTime() {
   if (globalMountTime === null) {
     globalMountTime = performance.now();
-    console.log("[ItemSphere] Mount time set:", globalMountTime);
-  } else {
-    console.log("[ItemSphere] Mount time reused:", globalMountTime);
   }
   return globalMountTime;
 }
 
-export const ItemSphere: React.FC = () => {
+interface ItemSphereProps {
+  onIconClick?: (name: string) => void;
+}
+
+export const ItemSphere: React.FC<ItemSphereProps> = ({ onIconClick }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const sizeRef = useRef(100);
   const screenSizeRef = useRef({ width: 0, height: 0 });
-  
+
+  // Hover/interaction refs — moved inside the component
+  const isHoveringRef = useRef(false);
+  const mouseRef = useRef<{ x: number; y: number } | null>(null);
+  const projectedRef = useRef({
+    name: "string",
+    x2d: number,
+    y2d: number,
+    scaledIconSize: number,
+    z: number,
+  });
+
+  console.log('<projectedRe></projectedRe>fis ', projectedRef);
+  // Keep latest onIconClick in a ref so the effect doesn't need to re-run
+  const onIconClickRef = useRef(onIconClick);
+  useEffect(() => {
+    onIconClickRef.current = onIconClick;
+  }, [onIconClick]);
+
   // Dynamic icon size based on screen size
   const getIconSize = () => {
     const width = screenSizeRef.current.width;
-    if (width >= 1536) return 80; // 2xl screens
-    if (width >= 1280) return 70; // xl screens
-    if (width >= 1024) return 60; // lg screens
-    if (width >= 768) return 50; // md screens
-    return 40; // sm and mobile
+    if (width >= 1536) return 80;
+    if (width >= 1280) return 70;
+    if (width >= 1024) return 60;
+    if (width >= 768) return 50;
+    return 40;
   };
-  
+
   const positions = generateFibonacciSphere(iconNames.length);
   const imagesRef = useRef<Record<string, HTMLImageElement>>({});
   const fadeInDuration = 400;
@@ -71,7 +93,7 @@ export const ItemSphere: React.FC = () => {
     iconNames.forEach((name) => {
       const img = new window.Image();
       const svgPath = Object.keys(svgModules).find((p) =>
-        p.endsWith(`/${name}.svg`)
+        p.endsWith(`/${name}.svg`),
       );
       if (svgPath) {
         img.src = svgModules[svgPath] as string;
@@ -86,8 +108,7 @@ export const ItemSphere: React.FC = () => {
     if (!canvas || !container) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
-    
-    // Update screen size tracking
+
     const updateScreenSize = () => {
       screenSizeRef.current = {
         width: window.innerWidth,
@@ -95,7 +116,7 @@ export const ItemSphere: React.FC = () => {
       };
     };
     updateScreenSize();
-    
+
     const resize = () => {
       const rect = container.getBoundingClientRect();
       const min = Math.min(rect.width, rect.height);
@@ -110,17 +131,69 @@ export const ItemSphere: React.FC = () => {
         0,
         window.devicePixelRatio,
         0,
-        0
+        0,
       );
     };
     resize();
     const ro = new window.ResizeObserver(resize);
     ro.observe(container);
 
+    // --- Hit testing & event handlers (defined ONCE, not per frame) ---
+    const findIconAt = (x: number, y: number) => {
+      // Iterate from front (highest z) to back so the topmost icon wins
+      const sorted = [...projectedRef.current].sort((a, b) => b.z - a.z);
+      for (const icon of sorted) {
+        const half = icon.scaledIconSize / 2;
+        if (
+          x >= icon.x2d - half &&
+          x <= icon.x2d + half &&
+          y >= icon.y2d - half &&
+          y <= icon.y2d + half
+        ) {
+          return icon;
+        }
+      }
+      return null;
+    };
+
+    const handleMouseEnter = () => {
+      isHoveringRef.current = true;
+    };
+
+    const handleMouseLeave = () => {
+      isHoveringRef.current = false;
+      mouseRef.current = null;
+      canvas.style.cursor = "default";
+    };
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      mouseRef.current = { x, y };
+
+      const hit = findIconAt(x, y);
+      canvas.style.cursor = hit ? "pointer" : "default";
+    };
+
+    const handleClick = (e: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const hit = findIconAt(x, y);
+      if (hit && onIconClickRef.current) onIconClickRef.current(hit.name);
+    };
+
+    canvas.addEventListener("mouseenter", handleMouseEnter);
+    canvas.addEventListener("mouseleave", handleMouseLeave);
+    canvas.addEventListener("mousemove", handleMouseMove);
+    canvas.addEventListener("click", handleClick);
+
+    // --- Animation loop ---
     let animationId: number;
     const mountTime = getPersistentMountTime();
-    // Use persistentState for animation so it never resets
     const state = persistentState;
+
     function draw(now?: number) {
       const nowVal = typeof now === "number" ? now : performance.now();
       const size = sizeRef.current;
@@ -131,8 +204,17 @@ export const ItemSphere: React.FC = () => {
       ctx.translate(size / 2, size / 2);
       ctx.scale(1, 1);
       ctx.translate(-size / 2, -size / 2);
+
+      // Smoothly ease velocity toward target (slow on hover)
+      const targetMultiplier = isHoveringRef.current ? 0.15 : 1;
+      const targetVx = state.baseVx * targetMultiplier;
+      const targetVy = state.baseVy * targetMultiplier;
+      state.vx += (targetVx - state.vx) * 0.05;
+      state.vy += (targetVy - state.vy) * 0.05;
+
       state.rx += state.vx;
       state.rz += state.vy;
+
       const projected = positions.map((pos, i) => {
         const { x, y, z } = pos;
         const y1 = y * Math.cos(state.rx) - z * Math.sin(state.rx);
@@ -141,19 +223,32 @@ export const ItemSphere: React.FC = () => {
         const z2 = x * Math.sin(state.rz) + z1 * Math.cos(state.rz);
         return { name: iconNames[i], x: x2, y: y1, z: z2, index: i };
       });
+
       projected.sort((a, b) => a.z - b.z);
+
+      const hitTestData: typeof projectedRef.current = [];
+
       for (const icon of projected) {
         const perspective = 1.2 / (1.6 - icon.z);
         const x2d = size / 2 + icon.x * size * 0.36 * perspective;
         const y2d = size / 2 + icon.y * size * 0.36 * perspective;
         const scale = perspective;
         const scaledIconSize = iconSize * scale;
+
+        hitTestData.push({
+          name: icon.name,
+          x2d,
+          y2d,
+          scaledIconSize,
+          z: icon.z,
+        });
+
         const img = imagesRef.current[icon.name];
         const iconDelay = icon.index * fadeInStagger;
         const elapsed = nowVal - mountTime;
         const fadeInAlpha = Math.min(
           1,
-          Math.max(0, (elapsed - iconDelay) / fadeInDuration)
+          Math.max(0, (elapsed - iconDelay) / fadeInDuration),
         );
         const fade3d = 0.4 + 0.6 * ((icon.z + 1) / 2);
         const isFrontAndLarge = icon.z > 0.8;
@@ -166,25 +261,31 @@ export const ItemSphere: React.FC = () => {
             x2d - scaledIconSize / 2,
             y2d - scaledIconSize / 2,
             scaledIconSize,
-            scaledIconSize
+            scaledIconSize,
           );
           ctx.restore();
         }
       }
+
+      projectedRef.current = hitTestData;
+
       ctx.restore();
       animationId = requestAnimationFrame(draw);
     }
     draw();
-    
-    // Add window resize listener to track screen size changes
+
     window.addEventListener("resize", updateScreenSize);
-    
+
     return () => {
       cancelAnimationFrame(animationId);
       ro.disconnect();
       window.removeEventListener("resize", updateScreenSize);
+      canvas.removeEventListener("mouseenter", handleMouseEnter);
+      canvas.removeEventListener("mouseleave", handleMouseLeave);
+      canvas.removeEventListener("mousemove", handleMouseMove);
+      canvas.removeEventListener("click", handleClick);
     };
-  });
+  }, []);
 
   return (
     <div
