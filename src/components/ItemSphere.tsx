@@ -54,8 +54,12 @@ export const ItemSphere: React.FC<ItemSphereProps> = ({ onIconClick }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const sizeRef = useRef(100);
   const screenSizeRef = useRef({ width: 0, height: 0 });
+  const dragStartRotationRef = useRef<{ rx: number; rz: number }>({
+    rx: 0,
+    rz: 0,
+  });
 
-  // Hover/interaction refs — moved inside the component
+  // Hover/interaction refs
   const isHoveringRef = useRef(false);
   const mouseRef = useRef<{ x: number; y: number } | null>(null);
   const projectedRef = useRef({
@@ -66,7 +70,11 @@ export const ItemSphere: React.FC<ItemSphereProps> = ({ onIconClick }) => {
     z: number,
   });
 
-  console.log('<projectedRe></projectedRe>fis ', projectedRef);
+  // Drag interaction refs
+  const isDraggingRef = useRef(false);
+  const dragStartRef = useRef<{ x: number; y: number } | null>(null);
+  const dragCurrentRef = useRef<{ x: number; y: number } | null>(null);
+
   // Keep latest onIconClick in a ref so the effect doesn't need to re-run
   const onIconClickRef = useRef(onIconClick);
   useEffect(() => {
@@ -138,6 +146,18 @@ export const ItemSphere: React.FC<ItemSphereProps> = ({ onIconClick }) => {
     const ro = new window.ResizeObserver(resize);
     ro.observe(container);
 
+    // Calculate distance from center as a percentage (0 = center, 1 = edge)
+    const getDistanceFromCenter = (x: number, y: number): number => {
+      const rect = canvas.getBoundingClientRect();
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      const dx = x - centerX;
+      const dy = y - centerY;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      const maxDistance = Math.min(rect.width, rect.height) / 2;
+      return Math.min(distance / maxDistance, 1);
+    };
+
     // --- Hit testing & event handlers (defined ONCE, not per frame) ---
     const findIconAt = (x: number, y: number) => {
       // Iterate from front (highest z) to back so the topmost icon wins
@@ -163,7 +183,26 @@ export const ItemSphere: React.FC<ItemSphereProps> = ({ onIconClick }) => {
     const handleMouseLeave = () => {
       isHoveringRef.current = false;
       mouseRef.current = null;
+      isDraggingRef.current = false;
+      dragStartRef.current = null;
+      dragCurrentRef.current = null;
       canvas.style.cursor = "default";
+    };
+
+    const handleMouseDown = (e: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      isDraggingRef.current = true;
+      dragStartRef.current = { x, y };
+      dragCurrentRef.current = { x, y };
+      // Capture current rotation when drag starts
+      dragStartRotationRef.current = {
+        rx: persistentState.rx,
+        rz: persistentState.rz,
+      };
+      canvas.style.cursor = "grabbing";
     };
 
     const handleMouseMove = (e: MouseEvent) => {
@@ -172,22 +211,57 @@ export const ItemSphere: React.FC<ItemSphereProps> = ({ onIconClick }) => {
       const y = e.clientY - rect.top;
       mouseRef.current = { x, y };
 
-      const hit = findIconAt(x, y);
-      canvas.style.cursor = hit ? "pointer" : "default";
+      if (isDraggingRef.current) {
+        dragCurrentRef.current = { x, y };
+        canvas.style.cursor = "grabbing";
+      } else {
+        const hit = findIconAt(x, y);
+        canvas.style.cursor = hit ? "pointer" : "grab";
+      }
     };
 
-    const handleClick = (e: MouseEvent) => {
-      const rect = canvas.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      const hit = findIconAt(x, y);
-      if (hit && onIconClickRef.current) onIconClickRef.current(hit.name);
+    const handleMouseUp = (e: MouseEvent) => {
+      if (
+        !isDraggingRef.current ||
+        !dragStartRef.current ||
+        !dragCurrentRef.current
+      ) {
+        isDraggingRef.current = false;
+        return;
+      }
+
+      const dx = dragCurrentRef.current.x - dragStartRef.current.x;
+      const dy = dragCurrentRef.current.y - dragStartRef.current.y;
+      const dragDistance = Math.sqrt(dx * dx + dy * dy);
+
+      // Only treat as drag if moved more than 5 pixels, otherwise it's a click
+      if (dragDistance > 5) {
+        // Apply velocity based on drag
+        // Horizontal drag affects rz (horizontal spin)
+        // Vertical drag affects rx (vertical spin)
+        const velocityMultiplier = 0.0002; // Tweak for desired sensitivity
+        persistentState.vx = -dy * velocityMultiplier;
+        persistentState.vy = dx * velocityMultiplier;
+      } else {
+        // Treat as click
+        const rect = canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const hit = findIconAt(x, y);
+        if (hit && onIconClickRef.current) onIconClickRef.current(hit.name);
+      }
+
+      isDraggingRef.current = false;
+      dragStartRef.current = null;
+      dragCurrentRef.current = null;
+      canvas.style.cursor = "grab";
     };
 
     canvas.addEventListener("mouseenter", handleMouseEnter);
     canvas.addEventListener("mouseleave", handleMouseLeave);
+    canvas.addEventListener("mousedown", handleMouseDown);
     canvas.addEventListener("mousemove", handleMouseMove);
-    canvas.addEventListener("click", handleClick);
+    canvas.addEventListener("mouseup", handleMouseUp);
 
     // --- Animation loop ---
     let animationId: number;
@@ -205,15 +279,42 @@ export const ItemSphere: React.FC<ItemSphereProps> = ({ onIconClick }) => {
       ctx.scale(1, 1);
       ctx.translate(-size / 2, -size / 2);
 
-      // Smoothly ease velocity toward target (slow on hover)
-      const targetMultiplier = isHoveringRef.current ? 0.15 : 1;
-      const targetVx = state.baseVx * targetMultiplier;
-      const targetVy = state.baseVy * targetMultiplier;
-      state.vx += (targetVx - state.vx) * 0.05;
-      state.vy += (targetVy - state.vy) * 0.05;
+      // Calculate distance-based slowdown
+      let distanceMultiplier = 1;
+      if (mouseRef.current && isHoveringRef.current && !isDraggingRef.current) {
+        const distanceFromCenter = getDistanceFromCenter(
+          mouseRef.current.x,
+          mouseRef.current.y,
+        );
+        // Closer to center = slower (exponential falloff for smooth effect)
+        // 0 at center, 1 at edge
+        distanceMultiplier = Math.pow(distanceFromCenter, 2);
+      }
 
-      state.rx += state.vx;
-      state.rz += state.vy;
+      // Don't auto-rotate while dragging
+      if (!isDraggingRef.current) {
+        // Smoothly ease velocity toward target
+        const hoverSlowdown = isHoveringRef.current ? distanceMultiplier : 1;
+        const targetVx = state.baseVx * hoverSlowdown;
+        const targetVy = state.baseVy * hoverSlowdown;
+        state.vx += (targetVx - state.vx) * 0.05;
+        state.vy += (targetVy - state.vy) * 0.05;
+
+        state.rx += state.vx;
+        state.rz += state.vy;
+      } else {
+        // While dragging, apply immediate rotation based on drag delta
+        if (dragStartRef.current && dragCurrentRef.current) {
+          const dx = dragCurrentRef.current.x - dragStartRef.current.x;
+          const dy = dragCurrentRef.current.y - dragStartRef.current.y;
+          const dragRotationMultiplier = 0.005;
+          // Apply delta ON TOP of the starting rotation
+          state.rx =
+            dragStartRotationRef.current.rx - dy * dragRotationMultiplier;
+          state.rz =
+            dragStartRotationRef.current.rz + dx * dragRotationMultiplier;
+        }
+      }
 
       const projected = positions.map((pos, i) => {
         const { x, y, z } = pos;
@@ -282,8 +383,9 @@ export const ItemSphere: React.FC<ItemSphereProps> = ({ onIconClick }) => {
       window.removeEventListener("resize", updateScreenSize);
       canvas.removeEventListener("mouseenter", handleMouseEnter);
       canvas.removeEventListener("mouseleave", handleMouseLeave);
-      canvas.removeEventListener("mousemove", handleMouseMove);
-      canvas.removeEventListener("click", handleClick);
+      canvas.removeEventListener("mousedown", handleMouseDown);
+      canvas.addEventListener("mousemove", handleMouseMove);
+      canvas.removeEventListener("mouseup", handleMouseUp);
     };
   }, []);
 
