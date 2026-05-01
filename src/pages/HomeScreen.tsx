@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import HeroTitle from "../HeroTitle";
-import ToggleSphere from "../ToggleSphere";
-import ItemSphere from "../ItemSphere";
+import HeroTitle from "../components/HeroTitle/HeroTitle";
+import ToggleSphere from "../components/sphere/ToggleSphere";
+import ItemSphere from "../components/sphere/ItemSphere";
 
 type ItemType = "SASS" | "Hospitality" | "iGaming" | null;
 
@@ -176,7 +176,6 @@ const HomeScreen: React.FC = () => {
               </button>
             </div>
 
-            {/* Title */}
             <h2
               className="text-4xl md:text-5xl font-bold mb-8"
               style={{ color: theme.accentColor }}
@@ -184,13 +183,11 @@ const HomeScreen: React.FC = () => {
               {selectedItem}
             </h2>
 
-            {/* Description Content */}
             <div className="space-y-6">
               <p className="text-lg text-gray-300 leading-relaxed">
                 {itemDescriptions[selectedItem]}
               </p>
 
-              {/* Additional Details */}
               <div className="mt-10 pt-8 border-t border-white/10">
                 <h3
                   className="text-2xl font-semibold mb-6"

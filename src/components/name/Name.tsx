@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useState, useRef } from "react";
-import { useOrbOrigin } from "./OrbOriginContext";
+import { useOrbOrigin } from "../../context/OrbOriginContext";
 import "./NameAnimations.css";
 import NameDisplay from "./NameDisplay";
 import NameInfoBox from "./NameInfoBox";

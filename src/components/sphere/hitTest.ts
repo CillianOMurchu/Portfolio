@@ -1,18 +1,10 @@
-import type { ProjectedIcon } from "../types/sphere";
+import type { ProjectedIcon } from './types';
 
-/**
- * Finds the topmost icon at given screen coordinates
- * @param x Screen X coordinate
- * @param y Screen Y coordinate
- * @param icons Array of projected icons
- * @returns The icon at that position, or null
- */
 export function findIconAt(
   x: number,
   y: number,
   icons: ProjectedIcon[],
 ): ProjectedIcon | null {
-  // Front-to-back (highest z first) so nearest icon wins
   const sorted = [...icons].sort((a, b) => b.z - a.z);
 
   for (const icon of sorted) {
@@ -30,14 +22,6 @@ export function findIconAt(
   return null;
 }
 
-/**
- * Calculates normalized distance to the nearest icon
- * @param x Screen X coordinate
- * @param y Screen Y coordinate
- * @param icons Array of projected icons
- * @param slowdownRadius Distance at which slowdown begins (default 100px)
- * @returns Normalized distance (0 = touching icon, 1 = far away)
- */
 export function getDistanceToNearestIcon(
   x: number,
   y: number,
@@ -52,7 +36,6 @@ export function getDistanceToNearestIcon(
     const dx = x - icon.x2d;
     const dy = y - icon.y2d;
     const distance = Math.sqrt(dx * dx + dy * dy);
-    // Distance to icon edge (not center)
     const distanceToEdge = Math.max(0, distance - icon.scaledIconSize / 2);
     minDistance = Math.min(minDistance, distanceToEdge);
   }

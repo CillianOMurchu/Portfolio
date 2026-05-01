@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useScrollDirection } from "../../hooks/useScrollDirection";
-import { Name } from "../Name";
+import { Name } from "../name/Name";
 import { MobileMenu } from "../navigation/MobileMenu";
 
 const Navbar: React.FC = () => {

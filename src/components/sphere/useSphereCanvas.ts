@@ -1,14 +1,14 @@
 import { type MutableRefObject, useEffect, useRef } from "react";
+import type { Position3D, ProjectedIcon, SphereState } from "./types";
+import { findIconAt, getDistanceToNearestIcon } from "./hitTest";
+import { getIconSize } from "./responsive";
+import { rotatePoint } from "./rotation";
 
 const DRAG_VELOCITY_MULTIPLIER = 0.0002;
 const DRAG_ROTATION_MULTIPLIER = 0.005;
 const PERSPECTIVE_NEAR = 1.2;
 const PERSPECTIVE_FAR = 1.6;
 const SPHERE_PROJECTION_SCALE = 0.36;
-import type { Position3D, ProjectedIcon, SphereState } from "../types/sphere";
-import { findIconAt, getDistanceToNearestIcon } from "../utils/hitTest";
-import { getIconSize } from "../utils/responsive";
-import { rotatePoint } from "../utils/rotation";
 
 interface UseSphereCanvasOptions {
   canvasRef: MutableRefObject<HTMLCanvasElement | null>;
@@ -159,11 +159,9 @@ export function useSphereCanvas({
       const dragDistance = Math.sqrt(dx * dx + dy * dy);
 
       if (dragDistance > 5) {
-        // Apply velocity from drag
         persistentState.vx = -dy * DRAG_VELOCITY_MULTIPLIER;
         persistentState.vy = dx * DRAG_VELOCITY_MULTIPLIER;
       } else {
-        // Treat as click
         const rect = canvas.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
@@ -205,7 +203,6 @@ export function useSphereCanvas({
       ctx.scale(1, 1);
       ctx.translate(-size / 2, -size / 2);
 
-      // Calculate distance-based slowdown
       let distanceMultiplier = 1;
       if (mouseRef.current && isHoveringRef.current && !isDraggingRef.current) {
         const distanceToIcon = getDistanceToNearestIcon(
@@ -217,7 +214,6 @@ export function useSphereCanvas({
       }
 
       if (!isDraggingRef.current) {
-        // Auto-rotate with slowdown
         const hoverSlowdown = isHoveringRef.current ? distanceMultiplier : 1;
         const targetVx = state.baseVx * hoverSlowdown;
         const targetVy = state.baseVy * hoverSlowdown;
@@ -227,7 +223,6 @@ export function useSphereCanvas({
         state.rx += state.vx;
         state.rz += state.vy;
       } else {
-        // Manual drag rotation
         if (dragStartRef.current && dragCurrentRef.current) {
           const dx = dragCurrentRef.current.x - dragStartRef.current.x;
           const dy = dragCurrentRef.current.y - dragStartRef.current.y;
@@ -238,7 +233,6 @@ export function useSphereCanvas({
         }
       }
 
-      // Project and render
       const projected = positions.map((pos, i) => {
         const rotated = rotatePoint(pos, state.rx, state.rz);
         return { ...rotated, name: iconNames[i], index: i };

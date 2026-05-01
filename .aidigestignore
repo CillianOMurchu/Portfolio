@@ -1,0 +1,29 @@
+# AI Digest Ignore
+# Excludes files that add noise without useful context for code work
+
+# Build output
+dist/
+.vite/
+
+# Dependencies
+node_modules/
+
+# Binary assets — not useful as text
+src/assets/about/*.png
+src/assets/about/*.jpg
+src/assets/apex-legends-icon.svg
+
+# Old/archived asset folder — replaced by programming-icons/
+src/assets/old/
+
+# Test setup boilerplate
+src/test/setup.ts
+
+# Dev tool — not part of the app
+logo-scraper.ts
+
+# Lock file — too noisy
+package-lock.json
+
+# NOTE: src/assets/programming-icons/ is intentionally NOT ignored
+# The file names there define what icons appear in the sphere

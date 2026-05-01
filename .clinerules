@@ -1,0 +1,53 @@
+# Cline / AI Assistant Rules — Portfolio
+
+## Project Context
+
+Personal portfolio for Cillian Ó Murchú. React 18 + TypeScript + Vite.
+Full context: README.md, docs/ARCHITECTURE.md, docs/STYLE_GUIDE.md, docs/TROUBLESHOOTING.md
+
+## Structure Rules
+
+- Route screens → `src/pages/`
+- Feature with 2+ related files → `src/components/<feature>/` folder (co-locate hook, util, type, component)
+- General hooks → `src/hooks/`
+- General utils → `src/utils/`
+- Context providers → `src/context/`
+- Static data → `src/data/`
+- CSS → `src/styles/theme.css` (no new CSS files)
+
+## Coding Rules
+
+- TypeScript strict. No `any`. No `@ts-ignore`.
+- No `console.log` in production code.
+- Keep components under 150 lines. Extract sub-components into same folder.
+- Use `utils/animations.ts` scroll variants — do not define local Framer Motion variants.
+- Use `theme.css` utility classes before writing inline styles.
+- No new dependencies without clear justification.
+- After structural changes, run `npm run build` to verify.
+
+## Import Paths
+
+Relative imports only. No aliases.
+
+```
+pages/          → ../components, ../hooks, ../utils, ../data, ../context
+components/xyz/ → ../../hooks, ../../utils, ../../context
+components/sphere/ → ./[sibling]  (sphere is self-contained)
+components/name/   → ./[sibling]  (name is self-contained)
+```
+
+## Do Not
+
+- Install Three.js (sphere is canvas-based, not Three.js)
+- Add sphere/name utils to src/utils/ — they belong in their feature folder
+- Define animation variants locally — add to utils/animations.ts scrollVariants
+- Use wildcard versions in package.json
+- Build on useAuth or useElementCenter — both are dead code
+
+## Known Bugs
+
+- HeroTitle buttons have no onClick — selectedItem in HomeScreen never changes
+- Navbar uses `border-bottom-neon`, theme.css defines `border-neon-bottom` (mismatch)
+- Contact form does nothing — input/button are UI-only placeholders
+
+See docs/TROUBLESHOOTING.md for full list.

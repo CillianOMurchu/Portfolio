@@ -1,6 +1,5 @@
 import React from "react";
-import { useNeonFlicker } from "../hooks/useNeonFlicker";
-
+import { useNeonFlicker } from "../../hooks/useNeonFlicker";
 
 type ToggleSphereProps = {
   toggled: boolean;
@@ -17,7 +16,6 @@ const ToggleSphere: React.FC<ToggleSphereProps> = ({ toggled, setToggled }) => {
     setToggled(!toggled);
   };
 
-  // Use extracted neon flicker hook
   const showTitle = useNeonFlicker(2000);
 
   React.useEffect(() => {

@@ -1,13 +1,12 @@
 import React, { useRef } from "react";
-import { usePreloadImages } from "../hooks/usePreloadImages";
-import { useSphereCanvas } from "../hooks/useSphereCanvas";
-import type { ItemSphereProps, SphereState } from "../types/sphere";
-import { generateFibonacciSphere } from "../utils/fibonacciSphere";
-import { loadIconModules } from "../utils/iconLoader";
+import { usePreloadImages } from "./usePreloadImages";
+import { useSphereCanvas } from "./useSphereCanvas";
+import type { ItemSphereProps, SphereState } from "./types";
+import { generateFibonacciSphere } from "./fibonacciSphere";
+import { loadIconModules } from "./iconLoader";
 
 const { svgModules, iconNames } = loadIconModules();
 
-// Global persistent state (survives React strict mode double-mount)
 let globalMountTime: number | null = null;
 const persistentState: SphereState = {
   rx: Math.PI * 0.14,

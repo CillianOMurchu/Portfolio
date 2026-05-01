@@ -1,12 +1,6 @@
 import { useEffect, useRef } from "react";
-import { preloadImages } from "../utils/iconLoader";
+import { preloadImages } from "./iconLoader";
 
-/**
- * Hook to preload icon images
- * @param iconNames Array of icon names
- * @param svgModules SVG module imports
- * @returns Ref containing loaded images
- */
 export function usePreloadImages(
   iconNames: string[],
   svgModules: Record<string, string>,

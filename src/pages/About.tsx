@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
-import profileImage from "../../assets/about/profile.png";
-import { experienceData } from "../../consts/experience-data";
-import { TimelineItem } from "../TimelineItem";
-import { scrollVariants, scrollViewport, scrollTiming } from "../../utils/animations";
+import profileImage from "../assets/about/profile.png";
+import { experienceData } from "../data/experience-data";
+import { TimelineItem } from "../components/TimelineItem";
+import { scrollVariants, scrollViewport, scrollTiming } from "../utils/animations";
 
 const ProfileHeader = () => (
   <>

@@ -17,18 +17,15 @@ const HERO_ITEMS = [
 const HeroTitle: React.FC<HeroTitleProps> = ({ selectedItem }) => {
   const itemRefs = React.useRef<Record<string, HTMLButtonElement | null>>({});
 
-  // Update glow state when selectedItem changes
   React.useEffect(() => {
     HERO_ITEMS.forEach((item) => {
       const btn = itemRefs.current[item.text];
       if (!btn) return;
 
       if (selectedItem === (item.text as ItemType)) {
-        // Selected item always has glow
         btn.style.boxShadow = "var(--neon-glow-primary)";
         btn.style.color = "var(--color-accent-primary)";
       } else {
-        // Clear styles for non-selected items
         btn.style.boxShadow = "";
         btn.style.color = "";
       }
@@ -37,7 +34,6 @@ const HeroTitle: React.FC<HeroTitleProps> = ({ selectedItem }) => {
   }, [selectedItem]);
 
   const handleMouseEnter = (e: React.MouseEvent<HTMLButtonElement>) => {
-    // Apply glow only on hover when nothing is selected
     if (!selectedItem) {
       e.currentTarget.style.boxShadow = "var(--neon-glow-primary)";
       e.currentTarget.style.color = "var(--color-accent-primary)";
@@ -45,12 +41,10 @@ const HeroTitle: React.FC<HeroTitleProps> = ({ selectedItem }) => {
   };
 
   const handleMouseLeave = (e: React.MouseEvent<HTMLButtonElement>) => {
-    // Clear hover styles only if nothing is selected
     if (!selectedItem) {
       e.currentTarget.style.boxShadow = "";
       e.currentTarget.style.color = "";
     }
-    // If something is selected, keep the glow managed by useEffect
   };
 
   return (
