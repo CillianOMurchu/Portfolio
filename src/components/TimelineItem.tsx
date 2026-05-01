@@ -1,28 +1,7 @@
 import { motion } from "framer-motion";
 import ReactMarkdown from "react-markdown";
 import "../styles/theme.css";
-
-// --- ANIMATION CONFIGURATIONS ---
-
-const cardVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0 },
-};
-
-// Container for staggering the list items
-const listContainerVariants = {
-  visible: {
-    transition: {
-      staggerChildren: 0.05, // Stagger each child item's animation
-    },
-  },
-};
-
-// Individual item animation for responsibilities and features
-const listItemVariants = {
-  hidden: { opacity: 0, x: -10 },
-  visible: { opacity: 1, x: 0 },
-};
+import { scrollVariants } from "../utils/animations";
 
 // --- INTERFACES (Updated) ---
 
@@ -52,7 +31,7 @@ export const TimelineItem = ({ work, index }: TimelineItemProps) => {
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.2 }}
-      variants={cardVariants}
+      variants={scrollVariants.card}
       transition={{ delay: index * 0.1, duration: 0.3 }}
       className="grid grid-cols-1 sm:grid-cols-3 gap-6 p-6 timeline-card"
     >
@@ -109,12 +88,12 @@ export const TimelineItem = ({ work, index }: TimelineItemProps) => {
 
             <motion.ul
               className="timeline-card-list"
-              variants={listContainerVariants}
+              variants={scrollVariants.listContainer}
             >
               {work.responsibilities.map((responsibility, i) => (
                 <motion.li
                   key={`resp-${i}`}
-                  variants={listItemVariants}
+                  variants={scrollVariants.listItem}
                 >
                   <span className="timeline-card-list-bullet">•</span>
                   <ReactMarkdown>{responsibility}</ReactMarkdown>
@@ -132,12 +111,12 @@ export const TimelineItem = ({ work, index }: TimelineItemProps) => {
             </h4>
             <motion.ul
               className="timeline-card-list"
-              variants={listContainerVariants}
+              variants={scrollVariants.listContainer}
             >
               {work.keyFeatures.map((feature, i) => (
                 <motion.li
                   key={`feat-${i}`}
-                  variants={listItemVariants}
+                  variants={scrollVariants.listItem}
                 >
                   <span className="timeline-card-list-bullet">»</span>
                   <ReactMarkdown>{feature}</ReactMarkdown>

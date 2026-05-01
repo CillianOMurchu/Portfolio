@@ -1,13 +1,21 @@
-import { useEffect, useState, useRef } from "react"; // 👈 Added useRef
+import { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-// Extend Window type to include Twitch (Simplified for functional JavaScript/React setup)
-// In a dedicated TypeScript file (.d.ts), you would use the detailed interface provided earlier.
+interface TwitchPlayer {
+  addEventListener(event: string, callback: () => void): void;
+  destroy(): void;
+}
+
+interface TwitchPlayerConstructor {
+  new (containerId: string, options: Record<string, unknown>): TwitchPlayer;
+  ONLINE: string;
+  OFFLINE: string;
+}
+
 declare global {
-    interface Window {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        Twitch: any;
-    }
+  interface Window {
+    Twitch: { Player: TwitchPlayerConstructor };
+  }
 }
 
 // --- Configuration ---
@@ -31,9 +39,7 @@ function loadTwitchEmbedScript() {
 
 const Streaming = () => {
     const [isLive, setIsLive] = useState(false);
-    // 1. Use useRef to hold the Twitch Player instance
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const playerRef = useRef<any>(null); 
+    const playerRef = useRef<TwitchPlayer | null>(null);
     
     useEffect(() => {
         // 2. Load the script and initialize the player once
@@ -64,20 +70,16 @@ const Streaming = () => {
             
             // 5. Attach event listeners directly to the player instance
             playerInstance.addEventListener(window.Twitch.Player.ONLINE, () => {
-                console.log(`${TWITCH_CHANNEL_NAME} is LIVE.`);
                 setIsLive(true);
             });
 
             playerInstance.addEventListener(window.Twitch.Player.OFFLINE, () => {
-                console.log(`${TWITCH_CHANNEL_NAME} is OFFLINE.`);
                 setIsLive(false);
             });
         }
 
-        // 6. Cleanup Function: CRITICAL for preventing memory leaks
         return () => {
-            if (playerRef.current && typeof playerRef.current.destroy === 'function') {
-                console.log('Destroying Twitch Player instance.');
+            if (playerRef.current) {
                 playerRef.current.destroy();
                 playerRef.current = null; // Clear the ref
                 // Clean up the DOM element content to be safe

@@ -25,7 +25,7 @@ function getPersistentMountTime(): number {
   return globalMountTime;
 }
 
-export const ItemSphere: React.FC<ItemSphereProps> = ({ onIconClick }) => {
+export const ItemSphere: React.FC<ItemSphereProps> = ({ onIconClick, visible }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -42,6 +42,7 @@ export const ItemSphere: React.FC<ItemSphereProps> = ({ onIconClick }) => {
     persistentState,
     mountTime,
     onIconClick,
+    visible,
   });
 
   return (

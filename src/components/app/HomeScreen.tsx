@@ -58,12 +58,20 @@ const HomeScreen: React.FC = () => {
   };
 
   React.useEffect(() => {
+    let rafId: number | null = null;
     const handleScroll = () => {
-      setScrollY(window.scrollY);
+      if (rafId !== null) return;
+      rafId = requestAnimationFrame(() => {
+        setScrollY(window.scrollY);
+        rafId = null;
+      });
     };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (rafId !== null) cancelAnimationFrame(rafId);
+    };
   }, []);
 
   return (
@@ -100,7 +108,7 @@ const HomeScreen: React.FC = () => {
             transition: "opacity 0.4s cubic-bezier(.4,0,.2,1)",
           }}
         >
-          <ItemSphere />
+          <ItemSphere visible={showSphere} />
         </div>
       </div>
 

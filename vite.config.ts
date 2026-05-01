@@ -8,26 +8,14 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          // Core React vendors
           'react-vendor': ['react', 'react-dom'],
-          
-          // Heavy animation library
           'framer-motion': ['framer-motion'],
-          
-          // Supabase vendor chunk
-          'supabase-vendor': ['@supabase/supabase-js', '@supabase/auth-ui-react', '@supabase/auth-ui-shared'],
-          
-          // 3D and graphics libraries (when added)
-          'graphics-vendor': ['three', '@react-three/fiber'],
         }
       }
     },
     chunkSizeWarningLimit: 1000
   },
-  
-  // Optimize dependencies
   optimizeDeps: {
     include: ['react', 'react-dom'],
-    exclude: ['@supabase/auth-ui-react'] // Don't pre-bundle heavy auth component
   }
 })

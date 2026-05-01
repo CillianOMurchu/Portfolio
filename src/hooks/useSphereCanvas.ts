@@ -1,4 +1,10 @@
 import { type MutableRefObject, useEffect, useRef } from "react";
+
+const DRAG_VELOCITY_MULTIPLIER = 0.0002;
+const DRAG_ROTATION_MULTIPLIER = 0.005;
+const PERSPECTIVE_NEAR = 1.2;
+const PERSPECTIVE_FAR = 1.6;
+const SPHERE_PROJECTION_SCALE = 0.36;
 import type { Position3D, ProjectedIcon, SphereState } from "../types/sphere";
 import { findIconAt, getDistanceToNearestIcon } from "../utils/hitTest";
 import { getIconSize } from "../utils/responsive";
@@ -15,6 +21,7 @@ interface UseSphereCanvasOptions {
   onIconClick?: (name: string) => void;
   fadeInDuration?: number;
   fadeInStagger?: number;
+  visible?: boolean;
 }
 
 export function useSphereCanvas({
@@ -28,6 +35,7 @@ export function useSphereCanvas({
   onIconClick,
   fadeInDuration = 400,
   fadeInStagger = 60,
+  visible = true,
 }: UseSphereCanvasOptions) {
   const sizeRef = useRef(100);
   const screenSizeRef = useRef({ width: 0, height: 0 });
@@ -42,10 +50,15 @@ export function useSphereCanvas({
     rz: 0,
   });
   const onIconClickRef = useRef(onIconClick);
+  const isVisibleRef = useRef(visible);
 
   useEffect(() => {
     onIconClickRef.current = onIconClick;
   }, [onIconClick]);
+
+  useEffect(() => {
+    isVisibleRef.current = visible;
+  }, [visible]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -147,9 +160,8 @@ export function useSphereCanvas({
 
       if (dragDistance > 5) {
         // Apply velocity from drag
-        const velocityMultiplier = 0.0002;
-        persistentState.vx = -dy * velocityMultiplier;
-        persistentState.vy = dx * velocityMultiplier;
+        persistentState.vx = -dy * DRAG_VELOCITY_MULTIPLIER;
+        persistentState.vy = dx * DRAG_VELOCITY_MULTIPLIER;
       } else {
         // Treat as click
         const rect = canvas.getBoundingClientRect();
@@ -176,6 +188,12 @@ export function useSphereCanvas({
     const state = persistentState;
 
     function draw(now?: number) {
+      if (!isVisibleRef.current) {
+        animationId = window.setTimeout(() => {
+          animationId = requestAnimationFrame(draw);
+        }, 100) as unknown as number;
+        return;
+      }
       const nowVal = typeof now === "number" ? now : performance.now();
       const size = sizeRef.current;
       const iconSize = getIconSize(screenSizeRef.current.width);
@@ -213,11 +231,10 @@ export function useSphereCanvas({
         if (dragStartRef.current && dragCurrentRef.current) {
           const dx = dragCurrentRef.current.x - dragStartRef.current.x;
           const dy = dragCurrentRef.current.y - dragStartRef.current.y;
-          const dragRotationMultiplier = 0.005;
           state.rx =
-            dragStartRotationRef.current.rx - dy * dragRotationMultiplier;
+            dragStartRotationRef.current.rx - dy * DRAG_ROTATION_MULTIPLIER;
           state.rz =
-            dragStartRotationRef.current.rz + dx * dragRotationMultiplier;
+            dragStartRotationRef.current.rz + dx * DRAG_ROTATION_MULTIPLIER;
         }
       }
 
@@ -232,9 +249,9 @@ export function useSphereCanvas({
       const hitTestData: ProjectedIcon[] = [];
 
       for (const icon of projected) {
-        const perspective = 1.2 / (1.6 - icon.z);
-        const x2d = size / 2 + icon.x * size * 0.36 * perspective;
-        const y2d = size / 2 + icon.y * size * 0.36 * perspective;
+        const perspective = PERSPECTIVE_NEAR / (PERSPECTIVE_FAR - icon.z);
+        const x2d = size / 2 + icon.x * size * SPHERE_PROJECTION_SCALE * perspective;
+        const y2d = size / 2 + icon.y * size * SPHERE_PROJECTION_SCALE * perspective;
         const scaledIconSize = iconSize * perspective;
 
         hitTestData.push({
@@ -279,6 +296,7 @@ export function useSphereCanvas({
     // ─── Cleanup ───
     return () => {
       cancelAnimationFrame(animationId);
+      clearTimeout(animationId);
       ro.disconnect();
       window.removeEventListener("resize", updateScreenSize);
       canvas.removeEventListener("mouseenter", handleMouseEnter);

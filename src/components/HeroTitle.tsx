@@ -8,21 +8,18 @@ interface HeroTitleProps {
   selectedItem?: ItemType;
 }
 
+const HERO_ITEMS = [
+  { text: "SASS", className: " text-8xl lg:text-[12rem] xl:text-[14rem]" },
+  { text: "Hospitality", className: "text-6xl lg:text-[8rem] xl:text-[10rem]" },
+  { text: "iGaming", className: "text-8xl lg:text-[12rem] xl:text-[14rem]" },
+] as const;
+
 const HeroTitle: React.FC<HeroTitleProps> = ({ selectedItem }) => {
   const itemRefs = React.useRef<Record<string, HTMLButtonElement | null>>({});
 
-  const items = [
-    { text: "SASS", className: " text-8xl lg:text-[12rem] xl:text-[14rem]" },
-    {
-      text: "Hospitality",
-      className: "text-6xl lg:text-[8rem] xl:text-[10rem]",
-    },
-    { text: "iGaming", className: "text-8xl lg:text-[12rem] xl:text-[14rem]" },
-  ];
-
   // Update glow state when selectedItem changes
   React.useEffect(() => {
-    items.forEach((item) => {
+    HERO_ITEMS.forEach((item) => {
       const btn = itemRefs.current[item.text];
       if (!btn) return;
 
@@ -67,7 +64,7 @@ const HeroTitle: React.FC<HeroTitleProps> = ({ selectedItem }) => {
       }}
     >
       <div className="flex flex-col items-center justify-center h-full">
-        {items.map((item, i) => (
+        {HERO_ITEMS.map((item, i) => (
           <button
             key={item.text}
             ref={(el) => {
