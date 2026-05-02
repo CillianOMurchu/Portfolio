@@ -2,7 +2,7 @@
 
 ## System Overview
 
-Single-page application. No SSR, no API routes. Data is either static (experience-data.tsx) or fetched client-side (Twitch embed, Supabase auth — the latter unused in UI).
+Single-page application. No SSR, no API routes. Data is either static (experience-data.tsx) or fetched client-side (Twitch embed).
 
 ```
 main.tsx
@@ -161,7 +161,6 @@ No global state library. Three sources of truth:
 | `OrbOriginContext` | Ó screen position (`orbOrigin`, `oCharPosition`) + active icon hover state (`hoveredIcon: {x,y,name}\|null`) |
 | Module-level vars | Sphere rotation state (`persistentState`), mount time (`globalMountTime`) |
 
-`useAuth` hook has its own Supabase session state but nothing in the UI consumes it.
 
 ---
 

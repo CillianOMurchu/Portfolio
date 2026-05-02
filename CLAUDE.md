@@ -99,7 +99,7 @@ See **docs/TROUBLESHOOTING.md** for the full list. Critical ones:
 
 1. **HeroTitle buttons have no `onClick`** — `selectedItem` in HomeScreen is never set by user interaction. The description panel below the hero is currently unreachable. Do not assume it works.
 2. **CSS class name mismatch** — `Navbar.tsx` uses `border-bottom-neon`, `MobileMenuPanel.tsx` uses `border-left-neon`, but `theme.css` defines `border-neon-bottom` / `border-neon-left`. The borders don't render.
-3. **`useAuth` and `useElementCenter` are dead code** — do not build on top of them.
+3. **`useElementCenter` is dead code** — superseded by OrbOriginContext, do not build on top of it.
 
 ---
 

@@ -1,6 +1,6 @@
 # Cillian Ó Murchú — Portfolio
 
-Personal portfolio site. Live at `cillianomurchu.vercel.app` and `www.cillianmurchu.com`.
+[**www.cillian.murchu.com**](https://www.cillianmurchu.com)
 
 ---
 
@@ -18,17 +18,6 @@ Personal portfolio site. Live at `cillianomurchu.vercel.app` and `www.cillianmur
 ## Stack
 
 React 18 · TypeScript · Vite · React Router · Framer Motion · Tailwind CSS · Supabase
-
----
-
-## Scripts
-
-```bash
-npm run dev           # dev server
-npm run build         # tsc + vite build
-npm run test:run      # vitest single run
-npm run scrape-logos  # Puppeteer logo scraper (dev tool only)
-```
 
 ---
 
@@ -50,13 +39,4 @@ src/
 ├── hooks/              General hooks (scroll, flicker, navigation, auth)
 ├── styles/             theme.css (all CSS variables + utility classes)
 └── utils/              animations.ts, supabaseClient.ts
-```
-
----
-
-## Environment
-
-```
-VITE_SUPABASE_URL=
-VITE_SUPABASE_KEY=
 ```

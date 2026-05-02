@@ -1,8 +1,8 @@
-import React, { useState } from "react";
 import { motion } from "framer-motion";
+import React, { useState } from "react";
 import HeroTitle from "../components/HeroTitle/HeroTitle";
-import ToggleSphere from "../components/sphere/ToggleSphere";
 import ItemSphere from "../components/sphere/ItemSphere";
+import ToggleSphere from "../components/sphere/ToggleSphere";
 
 type ItemType = "SASS" | "Hospitality" | "iGaming" | null;
 
@@ -94,6 +94,7 @@ const HomeScreen: React.FC = () => {
           height: "100vh",
           position: "relative",
           zIndex: 1,
+          paddingTop: "2rem",
         }}
       >
         <HeroTitle selectedItem={selectedItem} />

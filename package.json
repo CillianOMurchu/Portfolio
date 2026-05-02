@@ -14,7 +14,6 @@
     "scrape-logos": "tsx logo-scraper.ts"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.79.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "framer-motion": "^12.23.24",
