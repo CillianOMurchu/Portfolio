@@ -43,6 +43,12 @@ const itemDescriptions: Record<Exclude<ItemType, null>, string> = {
     "View my contributions to innovative gaming platforms, featuring real-time analytics, player engagement tools, and interactive gaming experiences.",
 };
 
+const techStacks: Record<Exclude<ItemType, null>, string[]> = {
+  SASS: ["SASS/SCSS", "CSS Modules", "Tailwind CSS", "PostCSS", "Animations", "Theme Systems"],
+  Hospitality: ["React", "Node.js", "PostgreSQL", "Real-time Updates", "APIs", "UI/UX"],
+  iGaming: ["WebGL", "Three.js", "Analytics", "Real-time", "WebSocket", "Performance"],
+};
+
 const HomeScreen: React.FC = () => {
   const [showSphere, setShowSphere] = useState(false);
   const [selectedItem, setSelectedItem] = useState<ItemType>(null);
@@ -165,72 +171,14 @@ const HomeScreen: React.FC = () => {
                   Key Technologies
                 </h3>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                  {selectedItem === "SASS" && (
-                    <>
-                      <div className="px-4 py-3 bg-white/5 rounded-lg text-sm hover:bg-white/10 transition-colors cursor-default border border-white/5">
-                        SASS/SCSS
-                      </div>
-                      <div className="px-4 py-3 bg-white/5 rounded-lg text-sm hover:bg-white/10 transition-colors cursor-default border border-white/5">
-                        CSS Modules
-                      </div>
-                      <div className="px-4 py-3 bg-white/5 rounded-lg text-sm hover:bg-white/10 transition-colors cursor-default border border-white/5">
-                        Tailwind CSS
-                      </div>
-                      <div className="px-4 py-3 bg-white/5 rounded-lg text-sm hover:bg-white/10 transition-colors cursor-default border border-white/5">
-                        PostCSS
-                      </div>
-                      <div className="px-4 py-3 bg-white/5 rounded-lg text-sm hover:bg-white/10 transition-colors cursor-default border border-white/5">
-                        Animations
-                      </div>
-                      <div className="px-4 py-3 bg-white/5 rounded-lg text-sm hover:bg-white/10 transition-colors cursor-default border border-white/5">
-                        Theme Systems
-                      </div>
-                    </>
-                  )}
-                  {selectedItem === "Hospitality" && (
-                    <>
-                      <div className="px-4 py-3 bg-white/5 rounded-lg text-sm hover:bg-white/10 transition-colors cursor-default border border-white/5">
-                        React
-                      </div>
-                      <div className="px-4 py-3 bg-white/5 rounded-lg text-sm hover:bg-white/10 transition-colors cursor-default border border-white/5">
-                        Node.js
-                      </div>
-                      <div className="px-4 py-3 bg-white/5 rounded-lg text-sm hover:bg-white/10 transition-colors cursor-default border border-white/5">
-                        PostgreSQL
-                      </div>
-                      <div className="px-4 py-3 bg-white/5 rounded-lg text-sm hover:bg-white/10 transition-colors cursor-default border border-white/5">
-                        Real-time Updates
-                      </div>
-                      <div className="px-4 py-3 bg-white/5 rounded-lg text-sm hover:bg-white/10 transition-colors cursor-default border border-white/5">
-                        APIs
-                      </div>
-                      <div className="px-4 py-3 bg-white/5 rounded-lg text-sm hover:bg-white/10 transition-colors cursor-default border border-white/5">
-                        UI/UX
-                      </div>
-                    </>
-                  )}
-                  {selectedItem === "iGaming" && (
-                    <>
-                      <div className="px-4 py-3 bg-white/5 rounded-lg text-sm hover:bg-white/10 transition-colors cursor-default border border-white/5">
-                        WebGL
-                      </div>
-                      <div className="px-4 py-3 bg-white/5 rounded-lg text-sm hover:bg-white/10 transition-colors cursor-default border border-white/5">
-                        Three.js
-                      </div>
-                      <div className="px-4 py-3 bg-white/5 rounded-lg text-sm hover:bg-white/10 transition-colors cursor-default border border-white/5">
-                        Analytics
-                      </div>
-                      <div className="px-4 py-3 bg-white/5 rounded-lg text-sm hover:bg-white/10 transition-colors cursor-default border border-white/5">
-                        Real-time
-                      </div>
-                      <div className="px-4 py-3 bg-white/5 rounded-lg text-sm hover:bg-white/10 transition-colors cursor-default border border-white/5">
-                        WebSocket
-                      </div>
-                      <div className="px-4 py-3 bg-white/5 rounded-lg text-sm hover:bg-white/10 transition-colors cursor-default border border-white/5">
-                        Performance
-                      </div>
-                    </>
-                  )}
+                  {techStacks[selectedItem].map((tech) => (
+                    <div
+                      key={tech}
+                      className="px-4 py-3 bg-white/5 rounded-lg text-sm hover:bg-white/10 transition-colors cursor-default border border-white/5"
+                    >
+                      {tech}
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
