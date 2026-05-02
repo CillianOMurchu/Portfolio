@@ -1,4 +1,5 @@
 export const iconDescriptions: Record<string, string> = {
+  stencilJs: "StencilJS\nWeb component compiler used to create reusable, framework-agnostic UI components.",
   react: "React\nThe UI library powering every interactive component — used across SaaS, hospitality, and iGaming projects.",
   typescript: "TypeScript\nPrimary language across the full stack. Strict types catch errors at build time, not in production.",
   javascript: "JavaScript\nFoundation of all front-end work — used before TypeScript adoption and in Node.js runtime contexts.",
