@@ -8,6 +8,9 @@ const ORB_SIZE = 8;
 const LINE_WIDTH = 56;
 const SETTLE_DELAY_MS = 450;
 const TYPING_INTERVAL_MS = 22;
+const ORB_SPRING = { type: "spring" as const, stiffness: 280, damping: 22 };
+const ORB_APPEAR_DURATION = 0.12;
+const ORB_FLY_DELAY = 0.12;
 
 const SphereOrb: React.FC = () => {
   const { orbOrigin, hoveredIcon } = useOrbOrigin();
@@ -82,10 +85,10 @@ const SphereOrb: React.FC = () => {
             }}
             exit={{ opacity: 0, scale: 0, transition: { duration: 0.15 } }}
             transition={{
-              x: { type: "spring", stiffness: 280, damping: 22, delay: 0.12 },
-              y: { type: "spring", stiffness: 280, damping: 22, delay: 0.12 },
-              opacity: { duration: 0.12, ease: "easeOut" },
-              scale: { duration: 0.12, ease: "easeOut" },
+              x: { ...ORB_SPRING, delay: ORB_FLY_DELAY },
+              y: { ...ORB_SPRING, delay: ORB_FLY_DELAY },
+              opacity: { duration: ORB_APPEAR_DURATION, ease: "easeOut" },
+              scale: { duration: ORB_APPEAR_DURATION, ease: "easeOut" },
             }}
           />
         )}
