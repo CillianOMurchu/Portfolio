@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useState, useRef } from "react";
 import { useOrbOrigin } from "../../context/OrbOriginContext";
 import "./NameAnimations.css";
 import NameDisplay from "./NameDisplay";
-import NameInfoBox from "./NameInfoBox";
+import InfoBox from "../ui/InfoBox";
 import OrbTrace from "./OrbTrace";
 
 const NAME = "CILLIAN Ó MURCHÚ";
@@ -91,10 +91,10 @@ export function Name() {
         <OrbTrace isHovered={isHovered} orbStart={orbStart} />
       </div>
       {isHovered && (
-        <NameInfoBox
-          showText={showText}
+        <InfoBox
+          text={BIO_TEXT}
           displayedText={displayedText}
-          bioText={BIO_TEXT}
+          className="info-box absolute left-0 mt-8 h-24"
         />
       )}
     </div>

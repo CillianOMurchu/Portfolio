@@ -7,15 +7,15 @@ import  {
 
 export type OrbOrigin = { x: number; y: number } | null;
 export type OCharPosition = { x: number; y: number } | null;
-export type HoveredIconPosition = { x: number; y: number } | null;
+export type HoveredIcon = { x: number; y: number; name: string } | null;
 
 interface OrbOriginContextType {
   orbOrigin: OrbOrigin;
   setOrbOrigin: (pos: OrbOrigin) => void;
   oCharPosition: OCharPosition;
   setOCharPosition: (pos: OCharPosition) => void;
-  hoveredIconPosition: HoveredIconPosition;
-  setHoveredIconPosition: (pos: HoveredIconPosition) => void;
+  hoveredIcon: HoveredIcon;
+  setHoveredIcon: (icon: HoveredIcon) => void;
 }
 
 const OrbOriginContext = createContext<OrbOriginContextType | undefined>(
@@ -25,9 +25,9 @@ const OrbOriginContext = createContext<OrbOriginContextType | undefined>(
 export function OrbOriginProvider({ children }: { children: ReactNode }) {
   const [orbOrigin, setOrbOrigin] = useState<OrbOrigin>(null);
   const [oCharPosition, setOCharPosition] = useState<OCharPosition>(null);
-  const [hoveredIconPosition, setHoveredIconPosition] = useState<HoveredIconPosition>(null);
+  const [hoveredIcon, setHoveredIcon] = useState<HoveredIcon>(null);
   return (
-    <OrbOriginContext.Provider value={{ orbOrigin, setOrbOrigin, oCharPosition, setOCharPosition, hoveredIconPosition, setHoveredIconPosition }}>
+    <OrbOriginContext.Provider value={{ orbOrigin, setOrbOrigin, oCharPosition, setOCharPosition, hoveredIcon, setHoveredIcon }}>
       {children}
     </OrbOriginContext.Provider>
   );

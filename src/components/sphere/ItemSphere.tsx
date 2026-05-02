@@ -29,7 +29,7 @@ function getPersistentMountTime(): number {
 export const ItemSphere: React.FC<ItemSphereProps> = ({ onIconClick, visible }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const { setHoveredIconPosition } = useOrbOrigin();
+  const { setHoveredIcon } = useOrbOrigin();
 
   const imagesRef = usePreloadImages(iconNames, svgModules);
   const mountTime = getPersistentMountTime();
@@ -43,7 +43,7 @@ export const ItemSphere: React.FC<ItemSphereProps> = ({ onIconClick, visible }) 
     persistentState,
     mountTime,
     onIconClick,
-    onIconHover: setHoveredIconPosition,
+    onIconHover: setHoveredIcon,
     visible,
   });
 

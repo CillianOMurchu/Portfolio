@@ -19,7 +19,7 @@ interface UseSphereCanvasOptions {
   persistentState: SphereState;
   mountTime: number;
   onIconClick?: (name: string) => void;
-  onIconHover?: (pos: { x: number; y: number } | null) => void;
+  onIconHover?: (data: { x: number; y: number; name: string } | null) => void;
   fadeInDuration?: number;
   fadeInStagger?: number;
   visible?: boolean;
@@ -151,7 +151,7 @@ export function useSphereCanvas({
         const hit = findIconAt(x, y, projectedRef.current);
         canvas.style.cursor = hit ? "pointer" : "grab";
         onIconHoverRef.current?.(
-          hit ? { x: rect.left + hit.x2d, y: rect.top + hit.y2d } : null
+          hit ? { x: rect.left + hit.x2d, y: rect.top + hit.y2d, name: hit.name } : null
         );
       }
     };
