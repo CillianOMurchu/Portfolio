@@ -1,10 +1,7 @@
 import { motion } from "framer-motion";
 import React, { useState } from "react";
-import HeroTitle from "../components/HeroTitle/HeroTitle";
-import ItemSphere from "../components/sphere/ItemSphere";
+import HeroSection, { type ItemType } from "../components/HeroSection/HeroSection";
 import ToggleSphere from "../components/sphere/ToggleSphere";
-
-type ItemType = "SASS" | "Hospitality" | "iGaming" | null;
 
 interface ThemeConfig {
   background: string;
@@ -77,41 +74,12 @@ const HomeScreen: React.FC = () => {
   return (
     <motion.div
       className="home-screen relative"
-      animate={{
-        background: theme.background,
-      }}
+      animate={{ background: theme.background }}
       transition={{ duration: 0.8, ease: "easeInOut" }}
-      style={{
-        minHeight: "auto",
-      }}
     >
-      {/* Background transition overlay */}
       <ToggleSphere toggled={showSphere} setToggled={setShowSphere} />
 
-      {/* Hero Section */}
-      <div
-        style={{
-          height: "100vh",
-          position: "relative",
-          zIndex: 1,
-          paddingTop: "2rem",
-        }}
-      >
-        <HeroTitle selectedItem={selectedItem} />
-        <div
-          className="sphere"
-          style={{
-            position: "fixed",
-            inset: 0,
-            zIndex: -1,
-            pointerEvents: showSphere ? "auto" : "none",
-            opacity: showSphere ? 1 : 0,
-            transition: "opacity 0.4s cubic-bezier(.4,0,.2,1)",
-          }}
-        >
-          <ItemSphere visible={showSphere} />
-        </div>
-      </div>
+      <HeroSection selectedItem={selectedItem} showSphere={showSphere} />
 
       {selectedItem && scrollY < 50 && (
         <motion.div
