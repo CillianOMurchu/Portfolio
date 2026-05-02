@@ -8,3 +8,33 @@
     transform: translateX(0);
   }
 }
+
+@keyframes flyInUp {
+  from {
+    opacity: 0;
+    transform: translateY(80px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-title-wrapper {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  z-index: -1;
+}
+
+.hero-title-btn {
+  text-align: center;
+  width: 100%;
+  position: relative;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  will-change: opacity, transform;
+  outline: none;
+  animation: flyInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}

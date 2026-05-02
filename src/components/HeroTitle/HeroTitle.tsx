@@ -48,69 +48,32 @@ const HeroTitle: React.FC<HeroTitleProps> = ({ selectedItem }) => {
   };
 
   return (
-    <div
-      className="hero-title "
-      style={{
-        width: "100vw",
-        height: "100vh",
-        position: "absolute",
-        zIndex: -1,
-      }}
-    >
+    <div className="hero-title hero-title-wrapper">
       <div className="flex flex-col items-center justify-center h-full">
-        {HERO_ITEMS.map((item, i) => (
-          <button
-            key={item.text}
-            ref={(el) => {
-              if (el) itemRefs.current[item.text] = el;
-            }}
-            className={`p-4 block text-slate-500/15${item.text === "Hospitality" ? "" : " font-bold"} ${item.className} whitespace-nowrap transition-all duration-300 cursor-pointer`}
-            style={{
-              opacity:
-                selectedItem && selectedItem !== (item.text as ItemType)
-                  ? 0.3
-                  : 0,
-              transform:
-                selectedItem && selectedItem !== (item.text as ItemType)
-                  ? "scale(0.9) translateY(20px)"
-                  : "translateY(0)",
-              animation: `flyInUp 0.8s cubic-bezier(.4,0,.2,1) forwards`,
-              animationDelay: `${i * 0.15}s`,
-              textAlign: "center",
-              width: "100%",
-              left: 0,
-              right: 0,
-              margin: "0 auto",
-              position: "relative",
-              willChange: "opacity, transform",
-              outline: "none",
-              ...(item.text === "Hospitality" ? {} : { fontWeight: 700 }),
-            }}
-            aria-label={item.text}
-            title={
-              selectedItem === (item.text as ItemType)
-                ? "Click to deactivate"
-                : "Click to explore"
-            }
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-          >
-            {item.text}
-          </button>
-        ))}
+        {HERO_ITEMS.map((item, i) => {
+          const isDeemphasised = selectedItem && selectedItem !== (item.text as ItemType);
+          return (
+            <button
+              key={item.text}
+              ref={(el) => {
+                if (el) itemRefs.current[item.text] = el;
+              }}
+              className={`hero-title-btn p-4 block text-slate-500/15${item.text === "Hospitality" ? "" : " font-bold"} ${item.className} whitespace-nowrap transition-all duration-300 cursor-pointer`}
+              style={{
+                opacity: isDeemphasised ? 0.3 : 0,
+                transform: isDeemphasised ? "scale(0.9) translateY(20px)" : "translateY(0)",
+                animationDelay: `${i * 0.15}s`,
+              }}
+              aria-label={item.text}
+              title={selectedItem === (item.text as ItemType) ? "Click to deactivate" : "Click to explore"}
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+            >
+              {item.text}
+            </button>
+          );
+        })}
       </div>
-      <style>{`
-            @keyframes flyInUp {
-              0% {
-                opacity: 0;
-                transform: translateY(80px);
-              }
-              100% {
-                opacity: 1;
-                transform: translateY(0);
-              }
-            }
-          `}</style>
     </div>
   );
 };
