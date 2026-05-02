@@ -4,6 +4,7 @@ import { usePageNavigation } from "./hooks/usePageNavigation";
 import PageRouter from "./pages/PageRouter";
 import Navbar from "./components/layout/Navbar";
 import Footer from "./components/layout/Footer";
+import SphereOrb from "./components/name/SphereOrb";
 
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
         <PageRouter currentPage={currentPage} />
       </main>
       <Footer />
+      <SphereOrb />
     </div>
   );
 }

@@ -4,8 +4,10 @@ import { useSphereCanvas } from "./useSphereCanvas";
 import type { ItemSphereProps, SphereState } from "./types";
 import { generateFibonacciSphere } from "./fibonacciSphere";
 import { loadIconModules } from "./iconLoader";
+import { useOrbOrigin } from "../../context/OrbOriginContext";
 
 const { svgModules, iconNames } = loadIconModules();
+const positions = generateFibonacciSphere(iconNames.length);
 
 let globalMountTime: number | null = null;
 const persistentState: SphereState = {
@@ -27,8 +29,8 @@ function getPersistentMountTime(): number {
 export const ItemSphere: React.FC<ItemSphereProps> = ({ onIconClick, visible }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const { setHoveredIconPosition } = useOrbOrigin();
 
-  const positions = generateFibonacciSphere(iconNames.length);
   const imagesRef = usePreloadImages(iconNames, svgModules);
   const mountTime = getPersistentMountTime();
 
@@ -41,6 +43,7 @@ export const ItemSphere: React.FC<ItemSphereProps> = ({ onIconClick, visible }) 
     persistentState,
     mountTime,
     onIconClick,
+    onIconHover: setHoveredIconPosition,
     visible,
   });
 

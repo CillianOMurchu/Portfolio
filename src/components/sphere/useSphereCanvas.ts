@@ -19,6 +19,7 @@ interface UseSphereCanvasOptions {
   persistentState: SphereState;
   mountTime: number;
   onIconClick?: (name: string) => void;
+  onIconHover?: (pos: { x: number; y: number } | null) => void;
   fadeInDuration?: number;
   fadeInStagger?: number;
   visible?: boolean;
@@ -33,6 +34,7 @@ export function useSphereCanvas({
   persistentState,
   mountTime,
   onIconClick,
+  onIconHover,
   fadeInDuration = 400,
   fadeInStagger = 60,
   visible = true,
@@ -50,11 +52,16 @@ export function useSphereCanvas({
     rz: 0,
   });
   const onIconClickRef = useRef(onIconClick);
+  const onIconHoverRef = useRef(onIconHover);
   const isVisibleRef = useRef(visible);
 
   useEffect(() => {
     onIconClickRef.current = onIconClick;
   }, [onIconClick]);
+
+  useEffect(() => {
+    onIconHoverRef.current = onIconHover;
+  }, [onIconHover]);
 
   useEffect(() => {
     isVisibleRef.current = visible;
@@ -112,6 +119,7 @@ export function useSphereCanvas({
       dragStartRef.current = null;
       dragCurrentRef.current = null;
       canvas.style.cursor = "default";
+      onIconHoverRef.current?.(null);
     };
 
     const handleMouseDown = (e: MouseEvent) => {
@@ -127,6 +135,7 @@ export function useSphereCanvas({
         rz: persistentState.rz,
       };
       canvas.style.cursor = "grabbing";
+      onIconHoverRef.current?.(null);
     };
 
     const handleMouseMove = (e: MouseEvent) => {
@@ -141,6 +150,9 @@ export function useSphereCanvas({
       } else {
         const hit = findIconAt(x, y, projectedRef.current);
         canvas.style.cursor = hit ? "pointer" : "grab";
+        onIconHoverRef.current?.(
+          hit ? { x: rect.left + hit.x2d, y: rect.top + hit.y2d } : null
+        );
       }
     };
 
