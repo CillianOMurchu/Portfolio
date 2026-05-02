@@ -3,6 +3,7 @@ import { generateFibonacciSphere } from "../fibonacciSphere";
 import { rotatePoint } from "../rotation";
 import { findIconAt, getDistanceToNearestIcon } from "../hitTest";
 import { getIconSize } from "../responsive";
+import { projectToScreen } from "../useSphereCanvas";
 import type { ProjectedIcon } from "../types";
 
 // ─── generateFibonacciSphere ──────────────────────────────────────────────────
@@ -161,6 +162,37 @@ describe("getDistanceToNearestIcon", () => {
     const a = icon("a", 0, 0, 0, 0);
     // cursor at (25, 0): dist=25, slowdownRadius=50 → 25/50 = 0.5
     expect(getDistanceToNearestIcon(25, 0, [a], 50)).toBeCloseTo(0.5, 10);
+  });
+});
+
+// ─── projectToScreen ─────────────────────────────────────────────────────────
+
+describe("projectToScreen", () => {
+  it("projects a point at x=y=0 to the canvas center regardless of z", () => {
+    const { x2d, y2d } = projectToScreen({ x: 0, y: 0, z: 0 }, 400, 60);
+    expect(x2d).toBeCloseTo(200, 10);
+    expect(y2d).toBeCloseTo(200, 10);
+  });
+
+  it("scales icon size by perspective (z=0 gives perspective = 1.2/1.6 = 0.75)", () => {
+    const { scaledIconSize } = projectToScreen({ x: 0, y: 0, z: 0 }, 400, 60);
+    expect(scaledIconSize).toBeCloseTo(60 * (1.2 / 1.6), 10);
+  });
+
+  it("icons closer to viewer (higher z) appear larger than icons farther away", () => {
+    const front = projectToScreen({ x: 0, y: 0, z: 0.8 }, 400, 60);
+    const back = projectToScreen({ x: 0, y: 0, z: -0.8 }, 400, 60);
+    expect(front.scaledIconSize).toBeGreaterThan(back.scaledIconSize);
+  });
+
+  it("a point at positive x projects to the right of center", () => {
+    const { x2d } = projectToScreen({ x: 1, y: 0, z: 0 }, 400, 60);
+    expect(x2d).toBeGreaterThan(200);
+  });
+
+  it("a point at positive y projects below center", () => {
+    const { y2d } = projectToScreen({ x: 0, y: 1, z: 0 }, 400, 60);
+    expect(y2d).toBeGreaterThan(200);
   });
 });
 

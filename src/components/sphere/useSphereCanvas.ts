@@ -10,6 +10,19 @@ const PERSPECTIVE_NEAR = 1.2;
 const PERSPECTIVE_FAR = 1.6;
 const SPHERE_PROJECTION_SCALE = 0.36;
 
+export function projectToScreen(
+  pos: Position3D,
+  canvasSize: number,
+  iconSize: number,
+): { x2d: number; y2d: number; scaledIconSize: number } {
+  const perspective = PERSPECTIVE_NEAR / (PERSPECTIVE_FAR - pos.z);
+  return {
+    x2d: canvasSize / 2 + pos.x * canvasSize * SPHERE_PROJECTION_SCALE * perspective,
+    y2d: canvasSize / 2 + pos.y * canvasSize * SPHERE_PROJECTION_SCALE * perspective,
+    scaledIconSize: iconSize * perspective,
+  };
+}
+
 interface UseSphereCanvasOptions {
   canvasRef: MutableRefObject<HTMLCanvasElement | null>;
   containerRef: MutableRefObject<HTMLDivElement | null>;
@@ -266,10 +279,7 @@ export function useSphereCanvas({
       const hitTestData: ProjectedIcon[] = [];
 
       for (const icon of projected) {
-        const perspective = PERSPECTIVE_NEAR / (PERSPECTIVE_FAR - icon.z);
-        const x2d = size / 2 + icon.x * size * SPHERE_PROJECTION_SCALE * perspective;
-        const y2d = size / 2 + icon.y * size * SPHERE_PROJECTION_SCALE * perspective;
-        const scaledIconSize = iconSize * perspective;
+        const { x2d, y2d, scaledIconSize } = projectToScreen(icon, size, iconSize);
 
         hitTestData.push({
           name: icon.name,
