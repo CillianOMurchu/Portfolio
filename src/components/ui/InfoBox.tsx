@@ -25,9 +25,20 @@ const InfoBox: React.FC<InfoBoxProps> = ({ text, displayedText, className = "", 
         style={{
           textShadow: "0 0 3px rgba(16,185,129,0.5)",
           fontFamily: "system-ui, -apple-system, sans-serif",
+          whiteSpace: "pre-line",
         }}
       >
-        {shown}
+        {(() => {
+          const idx = shown.indexOf("\n");
+          if (idx === -1) return shown;
+          return (
+            <>
+              <strong>{shown.slice(0, idx)}</strong>
+              {"\n"}
+              {shown.slice(idx + 1)}
+            </>
+          );
+        })()}
         {isTyping && (
           <span className="inline-block w-[2px] h-[1em] bg-accent ml-[2px] animate-pulse" />
         )}

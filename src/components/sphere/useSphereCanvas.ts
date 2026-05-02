@@ -54,6 +54,7 @@ export function useSphereCanvas({
   const onIconClickRef = useRef(onIconClick);
   const onIconHoverRef = useRef(onIconHover);
   const isVisibleRef = useRef(visible);
+  const prevHoveredNameRef = useRef<string | null>(null);
 
   useEffect(() => {
     onIconClickRef.current = onIconClick;
@@ -119,7 +120,10 @@ export function useSphereCanvas({
       dragStartRef.current = null;
       dragCurrentRef.current = null;
       canvas.style.cursor = "default";
-      onIconHoverRef.current?.(null);
+      if (prevHoveredNameRef.current !== null) {
+        prevHoveredNameRef.current = null;
+        onIconHoverRef.current?.(null);
+      }
     };
 
     const handleMouseDown = (e: MouseEvent) => {
@@ -135,7 +139,10 @@ export function useSphereCanvas({
         rz: persistentState.rz,
       };
       canvas.style.cursor = "grabbing";
-      onIconHoverRef.current?.(null);
+      if (prevHoveredNameRef.current !== null) {
+        prevHoveredNameRef.current = null;
+        onIconHoverRef.current?.(null);
+      }
     };
 
     const handleMouseMove = (e: MouseEvent) => {
@@ -150,9 +157,13 @@ export function useSphereCanvas({
       } else {
         const hit = findIconAt(x, y, projectedRef.current);
         canvas.style.cursor = hit ? "pointer" : "grab";
-        onIconHoverRef.current?.(
-          hit ? { x: rect.left + hit.x2d, y: rect.top + hit.y2d, name: hit.name } : null
-        );
+        const hitName = hit?.name ?? null;
+        if (hitName !== prevHoveredNameRef.current) {
+          prevHoveredNameRef.current = hitName;
+          onIconHoverRef.current?.(
+            hit ? { x: rect.left + hit.x2d, y: rect.top + hit.y2d, name: hit.name } : null
+          );
+        }
       }
     };
 

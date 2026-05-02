@@ -61,6 +61,8 @@ Vite glob import in `sphere/iconLoader.ts` uses `"../../assets/programming-icons
 
 **CSS styling:** Use `theme.css` utility classes (`.neon`, `.text-accent`, `.border-accent-subtle`, `.surface`, `.timeline-card-*`, etc.) before writing inline styles. CSS custom properties are in `styles/theme.css`. Tailwind is not extended via config — custom classes live in `theme.css`.
 
+**Info boxes:** Use `components/ui/InfoBox.tsx` (generic). Pass `text` (full string) and optionally `displayedText` (partial, for typing cursor). `className` accepts positional and sizing overrides. Do not recreate info-box styling inline.
+
 **Component size:** Keep components under 150 lines. If a component grows beyond that, extract sub-components into the same folder.
 
 **No new dependencies** without a clear reason. The bundle was already cleaned of ~650KB of unused deps (three.js, react-hook-form, etc.).

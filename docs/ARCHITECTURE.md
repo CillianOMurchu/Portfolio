@@ -7,7 +7,7 @@ Single-page application. No SSR, no API routes. Data is either static (experienc
 ```
 main.tsx
   └── BrowserRouter
-        └── OrbOriginProvider          (context: Ó-character screen position)
+        └── OrbOriginProvider          (context: Ó position + hovered icon state)
               └── App.tsx
                     ├── Navbar          (fixed top, Name widget + mobile menu)
                     ├── PageRouter      (thin wrapper)
@@ -16,7 +16,8 @@ main.tsx
                     │           ├── /about      About
                     │           ├── /streaming  Streaming
                     │           └── /…          (stubs)
-                    └── Footer          (fixed bottom, social links)
+                    ├── Footer          (fixed bottom, social links)
+                    └── SphereOrb       (position: fixed overlay — orb + line + info box)
 ```
 
 ---
@@ -77,7 +78,7 @@ When `visible=false`, the draw function replaces `requestAnimationFrame(draw)` w
 Name.tsx
   ├── NameDisplay.tsx   staggered letter fade-in, ref on Ó character
   ├── OrbTrace.tsx      animated orb div, positioned at Ó percentage coords
-  └── NameInfoBox.tsx   bio text box with typing cursor
+  └── InfoBox           generic info box (components/ui/InfoBox.tsx) with className="info-box absolute left-0 mt-8 h-24"
 ```
 
 ### OrbOriginContext flow
@@ -85,17 +86,43 @@ Name.tsx
 ```
 Name.tsx (useLayoutEffect)
   → oCharRef.getBoundingClientRect()
-  → setOrbOrigin({ x, y })       (absolute screen coords)
+  → setOrbOrigin({ x, y })       (absolute screen coords of Ó center)
   → setOCharPosition({ x, y })   (same)
 
-OrbTrace.tsx
-  → uses orbStart state (percentage within Name container)
-  → positions the orb div with left/top percentages
+ItemSphere.tsx
+  → useSphereCanvas onIconHover callback
+  → setHoveredIcon({ x, y, name })   (screen coords of icon center + icon slug)
+
+SphereOrb.tsx (position: fixed, zIndex 9999)
+  → reads orbOrigin for initial spawn position
+  → reads hoveredIcon for orb target + line/box content
 ```
 
 ### Typing effect
 
 `useEffect` watching `showText`. On true: sets interval at `TYPING_INTERVAL_MS=30ms`, slices `BIO_TEXT` one character at a time into `displayedText`. Cursor blinks while `displayedText.length < BIO_TEXT.length`.
+
+---
+
+## SphereOrb — Icon Hover Feature
+
+When the user hovers an icon on the sphere, three things happen in sequence:
+
+```
+1. Orb spawns at orbOrigin (Ó center), flies to icon center — spring animation, 0.12s delay
+2. 450ms after hoveredIcon.name first sets (SETTLE_DELAY_MS) → settled = true
+3. Line grows right from orb (56px, 0.25s), then InfoBox fades in (0.2s delay)
+4. Typing effect starts: iconDescriptions[name] at 22ms/char
+```
+
+**Files:**
+- `components/name/SphereOrb.tsx` — component, settled state machine, typing effect
+- `data/icon-descriptions.ts` — slug → description map for all 21 icons
+- `components/ui/InfoBox.tsx` — reusable info box (also used by Name widget)
+
+**Why 450ms delay, not onAnimationComplete:** The sphere position updates on every mousemove (sphere rotates slightly), so `animate` props keep changing. `onAnimationComplete` would fire unreliably. A 450ms timeout after the icon name settles is stable and gives the orb spring time to arrive (~0.4s including the 0.12s delay).
+
+**Key constraint:** `positions` in `ItemSphere.tsx` is module-level (not computed inside the component). This prevents re-renders triggered by `hoveredIcon` context updates from restarting the `useSphereCanvas` effect and flickering the sphere.
 
 ---
 
@@ -131,7 +158,7 @@ No global state library. Three sources of truth:
 | Source | What it holds |
 |---|---|
 | React local state | Per-component UI state (hover, scroll, selected item) |
-| `OrbOriginContext` | Ó character screen position (read by Name widget sub-components) |
+| `OrbOriginContext` | Ó screen position (`orbOrigin`, `oCharPosition`) + active icon hover state (`hoveredIcon: {x,y,name}\|null`) |
 | Module-level vars | Sphere rotation state (`persistentState`), mount time (`globalMountTime`) |
 
 `useAuth` hook has its own Supabase session state but nothing in the UI consumes it.
