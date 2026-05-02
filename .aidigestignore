@@ -13,9 +13,6 @@ src/assets/about/*.png
 src/assets/about/*.jpg
 src/assets/apex-legends-icon.svg
 
-# Old/archived asset folder — replaced by programming-icons/
-src/assets/old/
-
 # Test setup boilerplate
 src/test/setup.ts
 
