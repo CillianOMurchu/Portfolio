@@ -1,9 +1,9 @@
+import { AnimatePresence, motion } from "framer-motion";
 import React, { Suspense, useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { useOrbOrigin } from "../../context/OrbOriginContext";
 import { iconDemos } from "../../data/icon-demos";
-import { CUSTOM_DEMOS } from "./demos/index";
 import GenericDemo from "./demos/GenericDemo";
+import { CUSTOM_DEMOS } from "./demos/index";
 
 const ICON_SIZE = 72;
 const TARGET_Y = 64;
@@ -71,7 +71,7 @@ const IconShowcase: React.FC = () => {
             width: ICON_SIZE,
             height: ICON_SIZE,
             left: 0,
-            top: 0,
+            top: '4rem',
             zIndex: 10001,
             borderRadius: 12,
             pointerEvents: "none",

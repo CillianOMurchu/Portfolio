@@ -1,112 +1,99 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
-interface Theme {
-  name: string;
-  bg: string;
-  accent: string;
-  border: string;
-  badge: string;
-  badgeText: string;
+interface ClassToggle {
+  cls: string;
+  label: string;
+  default: boolean;
 }
 
-const THEMES: Theme[] = [
-  {
-    name: "Emerald",
-    bg: "linear-gradient(135deg, #0a1a12, #0d2018)",
-    accent: "#10b981",
-    border: "rgba(16,185,129,0.3)",
-    badge: "rgba(16,185,129,0.15)",
-    badgeText: "#10b981",
-  },
-  {
-    name: "Sky",
-    bg: "linear-gradient(135deg, #0a101a, #0d1528)",
-    accent: "#38bdf8",
-    border: "rgba(56,189,248,0.3)",
-    badge: "rgba(56,189,248,0.15)",
-    badgeText: "#38bdf8",
-  },
-  {
-    name: "Violet",
-    bg: "linear-gradient(135deg, #130a1a, #1a0d28)",
-    accent: "#a78bfa",
-    border: "rgba(167,139,250,0.3)",
-    badge: "rgba(167,139,250,0.15)",
-    badgeText: "#a78bfa",
-  },
-  {
-    name: "Amber",
-    bg: "linear-gradient(135deg, #1a130a, #281a0d)",
-    accent: "#f59e0b",
-    border: "rgba(245,158,11,0.3)",
-    badge: "rgba(245,158,11,0.15)",
-    badgeText: "#f59e0b",
-  },
+const TOGGLES: ClassToggle[] = [
+  { cls: "rounded-2xl", label: "rounded-2xl", default: true },
+  { cls: "shadow-xl", label: "shadow-xl", default: true },
+  { cls: "border", label: "border", default: false },
+  { cls: "ring-2", label: "ring-2 ring-emerald-400", default: false },
+  { cls: "scale-105", label: "scale-105", default: false },
+  { cls: "backdrop-blur-sm", label: "backdrop-blur-sm", default: false },
+  { cls: "opacity-75", label: "opacity-75", default: false },
+  { cls: "rotate-1", label: "rotate-1", default: false },
 ];
 
-const SKILLS = ["React", "TypeScript", "Node.js", "Tailwind"];
+export default function TailwindDemo() {
+  const [active, setActive] = useState<Set<string>>(
+    new Set(TOGGLES.filter((t) => t.default).map((t) => t.cls))
+  );
 
-const TailwindDemo: React.FC = () => {
-  const [themeIdx, setThemeIdx] = useState(0);
-  const theme = THEMES[themeIdx];
+  const toggle = (cls: string) =>
+    setActive((prev) => {
+      const next = new Set(prev);
+      next.has(cls) ? next.delete(cls) : next.add(cls);
+      return next;
+    });
+
+  const classStr = [...active].join(" ");
+
+  const cardClass = [
+    ...active,
+    "p-6 transition-all duration-300",
+  ].join(" ");
 
   return (
-    <div className="flex flex-col gap-4 w-full max-w-md mx-auto">
-      <p className="text-xs text-gray-400 text-center">Switch themes on Cillian's profile card</p>
+    <div className="flex flex-col gap-5 w-full max-w-lg mx-auto">
+      <p className="text-xs text-gray-400 text-center">
+        Toggle utilities and watch the card update in real time
+      </p>
+
+      <div className="flex justify-center py-4">
+        <div
+          className={cardClass}
+          style={{
+            background: active.has("backdrop-blur-sm")
+              ? "rgba(56,189,248,0.08)"
+              : "rgba(56,189,248,0.12)",
+            borderColor: "rgba(56,189,248,0.3)",
+            outline: active.has("ring-2") ? "2px solid #34d399" : undefined,
+            width: 200,
+          }}
+        >
+          <p className="text-sm font-semibold text-white">Cillian.tsx</p>
+          <p className="text-xs text-gray-400 mt-1">Senior Frontend Dev</p>
+          <span
+            className="inline-block mt-2 text-xs px-2 py-0.5 rounded-full"
+            style={{ background: "rgba(56,189,248,0.2)", color: "#38bdf8" }}
+          >
+            Available
+          </span>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-2">
+        {TOGGLES.map((t) => {
+          const on = active.has(t.cls);
+          return (
+            <button
+              key={t.cls}
+              onClick={() => toggle(t.cls)}
+              className="rounded px-3 py-2 text-left text-xs font-mono transition-all"
+              style={{
+                background: on ? "rgba(56,189,248,0.1)" : "rgba(255,255,255,0.03)",
+                border: `1px solid ${on ? "rgba(56,189,248,0.4)" : "rgba(255,255,255,0.07)"}`,
+                color: on ? "#38bdf8" : "#6b7280",
+              }}
+            >
+              {on ? "✓ " : "  "}{t.label}
+            </button>
+          );
+        })}
+      </div>
 
       <div
-        className="rounded-xl p-5 transition-all duration-500"
-        style={{ background: theme.bg, border: `1px solid ${theme.border}` }}
+        className="rounded-lg px-3 py-2 font-mono text-xs break-all"
+        style={{ background: "#0d1117", border: "1px solid rgba(56,189,248,0.2)", color: "#38bdf8" }}
       >
-        <div className="flex items-center gap-4 mb-4">
-          <div
-            className="w-12 h-12 rounded-full flex items-center justify-center text-lg font-bold"
-            style={{ background: theme.badge, color: theme.accent, border: `2px solid ${theme.border}` }}
-          >
-            CÓM
-          </div>
-          <div>
-            <p className="text-white font-semibold text-sm">Cillian Ó Murchú</p>
-            <p className="text-xs" style={{ color: theme.accent }}>Senior Frontend Developer</p>
-          </div>
-        </div>
-        <p className="text-gray-400 text-xs mb-4 leading-relaxed">
-          Building fast, accessible UIs across SaaS, hospitality & iGaming.
-        </p>
-        <div className="flex flex-wrap gap-2">
-          {SKILLS.map((s) => (
-            <span
-              key={s}
-              className="text-xs px-2 py-1 rounded-full transition-all duration-500"
-              style={{ background: theme.badge, color: theme.badgeText, border: `1px solid ${theme.border}` }}
-            >
-              {s}
-            </span>
-          ))}
-        </div>
+        <span className="text-gray-500">className=</span>
+        <span className="text-yellow-400">"</span>
+        {classStr || <span className="text-gray-600">no classes</span>}
+        <span className="text-yellow-400">"</span>
       </div>
-
-      <div className="flex gap-2 justify-center">
-        {THEMES.map((t, i) => (
-          <button
-            key={t.name}
-            onClick={() => setThemeIdx(i)}
-            className="w-8 h-8 rounded-full transition-all border-2"
-            title={t.name}
-            style={{
-              background: t.accent,
-              borderColor: i === themeIdx ? "#fff" : "transparent",
-              transform: i === themeIdx ? "scale(1.2)" : "scale(1)",
-            }}
-          />
-        ))}
-      </div>
-
-      <p className="text-xs text-gray-600 text-center">
-        Current theme: <span style={{ color: theme.accent }}>{theme.name}</span>
-      </p>
     </div>
   );
-};
-
-export default TailwindDemo;
+}

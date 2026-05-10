@@ -1,14 +1,26 @@
 import type React from "react";
-import type { IconDemoMeta } from "../../../data/icon-demos";
-
-export type DemoComponent =
-  | React.ComponentType
-  | React.ComponentType<{ name: string; meta: IconDemoMeta }>;
 
 export const CUSTOM_DEMOS: Record<string, () => Promise<{ default: React.ComponentType }>> = {
-  react: () => import("./ReactDemo"),
-  "node-js": () => import("./NodeDemo"),
-  typescript: () => import("./TypeScriptDemo"),
-  jest: () => import("./JestDemo"),
+  react:       () => import("./ReactDemo"),
+  typescript:  () => import("./TypeScriptDemo"),
+  javascript:  () => import("./JavaScriptDemo"),
+  "node-js":   () => import("./NodeDemo"),
+  express:     () => import("./ExpressDemo"),
   tailwindcss: () => import("./TailwindDemo"),
+  sass:        () => import("./SassDemo"),
+  angular:     () => import("./AngularDemo"),
+  mongodb:     () => import("./MongoDBDemo"),
+  firebase:    () => import("./FirebaseDemo"),
+  figma:       () => import("./FigmaDemo"),
+  github:      () => import("./GitHubDemo"),
+  gitlab:      () => import("./GitLabDemo"),
+  jest:        () => import("./JestDemo"),
+  cypress:     () => import("./CypressDemo"),
+  jira:        () => import("./JiraDemo"),
+  postman:     () => import("./PostmanDemo"),
+  puppeteer:   () => import("./PuppeteerDemo"),
+  rxjs:        () => import("./RxJSDemo"),
+  storybook:   () => import("./StorybookDemo"),
+  stencil:     () => import("./StencilDemo"),
+  rust:        () => import("./RustDemo"),
 };
