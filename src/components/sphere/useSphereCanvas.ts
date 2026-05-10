@@ -31,12 +31,15 @@ interface UseSphereCanvasOptions {
   images: Record<string, HTMLImageElement>;
   persistentState: SphereState;
   mountTime: number;
-  onIconClick?: (name: string) => void;
+  onIconClick?: (name: string, screenX: number, screenY: number) => void;
   onIconHover?: (data: { x: number; y: number; name: string } | null) => void;
   fadeInDuration?: number;
   fadeInStagger?: number;
   visible?: boolean;
+  highlightedIcon?: string | null;
 }
+
+const HIGHLIGHT_FADE_DURATION = 300;
 
 export function useSphereCanvas({
   canvasRef,
@@ -51,6 +54,7 @@ export function useSphereCanvas({
   fadeInDuration = 400,
   fadeInStagger = 60,
   visible = true,
+  highlightedIcon = null,
 }: UseSphereCanvasOptions) {
   const sizeRef = useRef(100);
   const screenSizeRef = useRef({ width: 0, height: 0 });
@@ -68,6 +72,8 @@ export function useSphereCanvas({
   const onIconHoverRef = useRef(onIconHover);
   const isVisibleRef = useRef(visible);
   const prevHoveredNameRef = useRef<string | null>(null);
+  const highlightedIconRef = useRef<string | null>(highlightedIcon);
+  const highlightStartTimeRef = useRef<number | null>(null);
 
   useEffect(() => {
     onIconClickRef.current = onIconClick;
@@ -80,6 +86,16 @@ export function useSphereCanvas({
   useEffect(() => {
     isVisibleRef.current = visible;
   }, [visible]);
+
+  useEffect(() => {
+    const prev = highlightedIconRef.current;
+    highlightedIconRef.current = highlightedIcon;
+    if (highlightedIcon && !prev) {
+      highlightStartTimeRef.current = performance.now();
+    } else if (!highlightedIcon) {
+      highlightStartTimeRef.current = null;
+    }
+  }, [highlightedIcon]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -202,7 +218,9 @@ export function useSphereCanvas({
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
         const hit = findIconAt(x, y, projectedRef.current);
-        if (hit && onIconClickRef.current) onIconClickRef.current(hit.name);
+        if (hit && onIconClickRef.current) {
+          onIconClickRef.current(hit.name, rect.left + hit.x2d, rect.top + hit.y2d);
+        }
       }
 
       isDraggingRef.current = false;
@@ -249,10 +267,17 @@ export function useSphereCanvas({
         distanceMultiplier = Math.pow(distanceToIcon, 2);
       }
 
+      const highlighted = highlightedIconRef.current;
+      const highlightStart = highlightStartTimeRef.current;
+      const highlightProgress = highlighted && highlightStart
+        ? Math.min(1, (nowVal - highlightStart) / HIGHLIGHT_FADE_DURATION)
+        : 0;
+
       if (!isDraggingRef.current) {
         const hoverSlowdown = isHoveringRef.current ? distanceMultiplier : 1;
-        const targetVx = state.baseVx * hoverSlowdown;
-        const targetVy = state.baseVy * hoverSlowdown;
+        const stopMultiplier = highlighted ? (1 - highlightProgress) : 1;
+        const targetVx = state.baseVx * hoverSlowdown * stopMultiplier;
+        const targetVy = state.baseVy * hoverSlowdown * stopMultiplier;
         state.vx += (targetVx - state.vx) * 0.05;
         state.vy += (targetVy - state.vy) * 0.05;
 
@@ -296,7 +321,11 @@ export function useSphereCanvas({
           Math.max(0, (elapsed - icon.index * fadeInStagger) / fadeInDuration),
         );
         const fade3d = 0.4 + 0.6 * ((icon.z + 1) / 2);
-        const finalAlpha = icon.z > 0.8 ? 1 : fade3d * fadeInAlpha;
+        const base = icon.z > 0.8 ? 1 : fade3d * fadeInAlpha;
+        const highlightMultiplier = highlighted && icon.name !== highlighted
+          ? 1 - highlightProgress
+          : 1;
+        const finalAlpha = base * highlightMultiplier;
 
         if (img && img.complete && finalAlpha > 0.01) {
           ctx.save();

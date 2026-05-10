@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import React, { useState } from "react";
 import HeroSection, { type ItemType } from "../components/HeroSection/HeroSection";
 import ToggleSphere from "../components/sphere/ToggleSphere";
+import IconShowcase from "../components/IconShowcase/IconShowcase";
 
 interface ThemeConfig {
   background: string;
@@ -86,6 +87,8 @@ const HomeScreen: React.FC = () => {
       <ToggleSphere toggled={showSphere} setToggled={setShowSphere} />
 
       <HeroSection selectedItem={selectedItem} showSphere={showSphere} />
+
+      <IconShowcase />
 
       {selectedItem && scrollY < 50 && (
         <motion.div

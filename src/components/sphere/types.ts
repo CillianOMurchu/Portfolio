@@ -7,8 +7,9 @@ export interface ProjectedIcon {
 }
 
 export interface ItemSphereProps {
-  onIconClick?: (name: string) => void;
+  onIconClick?: (name: string, screenX: number, screenY: number) => void;
   visible?: boolean;
+  highlightedIcon?: string | null;
 }
 
 export interface Position3D {
