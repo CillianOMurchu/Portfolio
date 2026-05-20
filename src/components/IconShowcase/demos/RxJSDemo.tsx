@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 interface Event { id: number; value: number; t: number; }
 
@@ -33,13 +33,20 @@ export default function RxJSDemo() {
       const processAndSet = () => setResult(applyPipeline(next));
       if (ops.has("debounce")) {
         clearTimeout(debounceRef.current);
-        debounceRef.current = setTimeout(processAndSet, 500);
+        debounceRef.current = setTimeout(processAndSet, 100);
       } else {
         processAndSet();
       }
       return next;
     });
   }, [applyPipeline, ops]);
+
+  useEffect(() => {
+    return () => {
+      clearInterval(intervalRef.current);
+      clearTimeout(debounceRef.current);
+    };
+  }, []);
 
   useEffect(() => {
     if (isLive) {

@@ -4,7 +4,7 @@ const METHODS = ["GET", "POST", "PUT", "DELETE"] as const;
 type Method = (typeof METHODS)[number];
 
 const ENDPOINTS: Record<string, string> = {
-  "/v1/profile": JSON.stringify({ name: "Cillian Ó Murchú", role: "Senior Frontend Developer", location: "Spain/Ireland/Somewhere Amazing", available: true, stack: ["React", "TypeScript", "Node.js"] }, null, 2),
+  "/v1/profile": JSON.stringify({ name: "Cillian Ó Murchú", role: "Senior Frontend Developer", location: "Spain/Ireland/Somewhere Amazing", available: true, stack: ["MEAN"] }, null, 2),
   "/v1/projects": JSON.stringify([{ id: 1, name: "Portfolio", tech: "React + Vite", status: "live" }, { id: 2, name: "iGaming Platform", tech: "Angular + RxJS", status: "deployed" }], null, 2),
   "/v1/skills": JSON.stringify({ frontend: ["React", "Angular", "TypeScript", "Tailwind"], backend: ["Node.js", "Express", "MongoDB"], tools: ["Jest", "Cypress", "Figma", "GitHub"] }, null, 2),
 };
