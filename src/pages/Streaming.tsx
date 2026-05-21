@@ -37,12 +37,13 @@ function loadTwitchEmbedScript() {
     });
 }
 
+type StreamStatus = "checking" | "live" | "offline";
+
 const Streaming = () => {
-    const [isLive, setIsLive] = useState(false);
+    const [status, setStatus] = useState<StreamStatus>("checking");
     const playerRef = useRef<TwitchPlayer | null>(null);
-    
+
     useEffect(() => {
-        // 2. Load the script and initialize the player once
         loadTwitchEmbedScript().then(() => {
             if (window.Twitch) {
                 initializePlayer();
@@ -50,31 +51,27 @@ const Streaming = () => {
         });
 
         function initializePlayer() {
-            // Prevent initialization if a player is already attached to this component
             if (playerRef.current) {
-                return; 
+                return;
             }
-            
-            // 3. Initialize the Twitch Player, targeting the div ID
+
             const playerInstance = new window.Twitch.Player(PLAYER_EMBED_ID, {
                 width: '100%',
                 height: '100%',
                 channel: TWITCH_CHANNEL_NAME,
-                parent: ALLOWED_PARENTS, 
-                autoplay: true, 
-                muted: true 
+                parent: ALLOWED_PARENTS,
+                autoplay: true,
+                muted: true
             });
 
-            // 4. Store the instance in the ref
-            playerRef.current = playerInstance; 
-            
-            // 5. Attach event listeners directly to the player instance
+            playerRef.current = playerInstance;
+
             playerInstance.addEventListener(window.Twitch.Player.ONLINE, () => {
-                setIsLive(true);
+                setStatus("live");
             });
 
             playerInstance.addEventListener(window.Twitch.Player.OFFLINE, () => {
-                setIsLive(false);
+                setStatus("offline");
             });
         }
 
@@ -95,51 +92,44 @@ const Streaming = () => {
             
             {/* 🔴 LIVE INDICATOR - Animated Position */}
             <AnimatePresence mode="wait">
-                <motion.div 
-                    key={isLive ? "live" : "offline"}
+                <motion.div
+                    key={status}
                     className="flex items-center gap-2"
-                    initial={{
-                        opacity: 0,
-                        top: "50%",
-                        left: "50%",
-                        x: "-50%",
-                        y: "-50%"
-                    }}
+                    initial={{ opacity: 0, top: "50%", left: "50%", x: "-50%", y: "-50%" }}
                     animate={{
                         opacity: 1,
-                        top: isLive ? "70px" : "50%",
-                        right: isLive ? "16px" : "auto",
-                        left: isLive ? "auto" : "50%",
-                        x: isLive ? 0 : "-50%",
-                        y: isLive ? 0 : "-50%"
+                        top: status === "live" ? "70px" : "50%",
+                        right: status === "live" ? "16px" : "auto",
+                        left: status === "live" ? "auto" : "50%",
+                        x: status === "live" ? 0 : "-50%",
+                        y: status === "live" ? 0 : "-50%",
                     }}
-                    exit={{
-                        opacity: 0
-                    }}
-                    style={{
-                        position: "fixed"
-                    }}
-                    transition={{ 
-                        type: "spring",
-                        stiffness: 100,
-                        damping: 15,
-                        duration: 0.6
-                    }}
+                    exit={{ opacity: 0 }}
+                    style={{ position: "fixed" }}
+                    transition={{ type: "spring", stiffness: 100, damping: 15, duration: 0.6 }}
                 >
-                    <div className={`w-3 h-3 rounded-full animate-pulse ${isLive ? 'bg-emerald-400 shadow-lg shadow-emerald-400/60' : 'bg-red-400 shadow-lg shadow-red-400/40'}`} />
-                    <span className={`text-sm font-semibold ${isLive ? 'text-emerald-400' : 'text-red-400'}`}>
-                        {isLive ? "LIVE" : "OFFLINE"}
+                    <div className={`w-3 h-3 rounded-full animate-pulse ${
+                        status === "live"     ? "bg-emerald-400 shadow-lg shadow-emerald-400/60" :
+                        status === "checking" ? "bg-yellow-400 shadow-lg shadow-yellow-400/40" :
+                                               "bg-red-400 shadow-lg shadow-red-400/40"
+                    }`} />
+                    <span className={`text-sm font-semibold ${
+                        status === "live"     ? "text-emerald-400" :
+                        status === "checking" ? "text-yellow-400" :
+                                               "text-red-400"
+                    }`}>
+                        {status === "live" ? "LIVE" : status === "checking" ? "CHECKING..." : "OFFLINE"}
                     </span>
                 </motion.div>
             </AnimatePresence>
-            
+
             {/* 📺 VIDEO PLAYER CONTAINER - Fades in when live */}
             <motion.div
                 className="w-full max-w-7xl aspect-video"
                 initial={{ opacity: 0 }}
-                animate={{ opacity: isLive ? 1 : 0 }}
-                transition={{ 
-                    delay: isLive ? 1.2 : 0,
+                animate={{ opacity: status === "live" ? 1 : 0 }}
+                transition={{
+                    delay: status === "live" ? 1.2 : 0,
                     duration: 0.6
                 }}
             >
