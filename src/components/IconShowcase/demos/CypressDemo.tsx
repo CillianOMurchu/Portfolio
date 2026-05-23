@@ -82,16 +82,16 @@ export default function CypressDemo() {
           <span style={{ color: "#10b981" }}>{passed}/{STEPS.length}</span>
         </div>
         {steps.map((s, i) => (
-          <div key={i} className="px-3 py-1 flex items-center gap-2"
+          <div key={i} className="px-3 py-1 flex items-center gap-2 min-w-0"
             style={{ background: s.status === "running" ? "rgba(245,158,11,0.06)" : "transparent" }}>
-            <span style={{ color: STATUS[s.status] }}>
+            <span className="shrink-0" style={{ color: STATUS[s.status] }}>
               {s.status === "pending" ? "○" : s.status === "running" ? "◌" : s.status === "passed" ? "✓" : "✗"}
             </span>
-            <span style={{ color: s.status === "running" ? "#f59e0b" : s.status === "passed" ? "#9ca3af" : "#4b5563" }}>
+            <div className="truncate min-w-0 flex-1" style={{ color: s.status === "running" ? "#f59e0b" : s.status === "passed" ? "#9ca3af" : "#4b5563" }}>
               <span style={{ color: s.status === "running" || s.status === "passed" ? "#38bdf8" : "#4b5563" }}>{s.cmd}</span>
               {s.target}
-            </span>
-            {s.status === "passed" && <span className="ml-auto text-gray-600">{s.duration}</span>}
+            </div>
+            {s.status === "passed" && <span className="ml-auto shrink-0 text-gray-600">{s.duration}</span>}
           </div>
         ))}
       </div>

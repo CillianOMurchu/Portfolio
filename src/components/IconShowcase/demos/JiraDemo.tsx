@@ -120,7 +120,7 @@ export default function JiraDemo() {
                         style={{ background: PRIORITY_COLOR[t.priority] }}
                       />
                     </div>
-                    <p className="text-xs text-gray-300 leading-tight">
+                    <p className="text-xs text-gray-300 leading-tight line-clamp-2">
                       {t.title}
                     </p>
                     <div className="flex gap-1 mt-0.5">

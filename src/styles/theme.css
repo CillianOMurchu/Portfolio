@@ -259,7 +259,10 @@
 
 .showcase-backdrop {
   position: fixed;
-  inset: 0;
+  top: 4rem;      /* below navbar (h-16) */
+  right: 0;
+  bottom: 3.5rem; /* above footer (py-2 + content ≈ 56px) */
+  left: 0;
   z-index: 10000;
   background: rgba(10, 14, 26, 0.96);
   backdrop-filter: blur(16px);
@@ -267,12 +270,12 @@
   flex-direction: column;
   align-items: center;
   overflow-y: auto;
-  padding-bottom: 3rem;
+  padding-bottom: 2rem;
 }
 
 .showcase-close {
   position: fixed;
-  top: 1.25rem;
+  top: calc(4rem + 0.75rem); /* 4rem navbar + gap inside backdrop */
   right: 1.5rem;
   z-index: 10002;
   width: 2rem;
@@ -300,7 +303,7 @@
   flex-direction: column;
   align-items: center;
   padding: 1rem 1.5rem 0;
-  margin-top: 7rem;
+  margin-top: 3rem;
   text-align: center;
 }
 

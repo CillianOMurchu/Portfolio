@@ -84,7 +84,7 @@ const NodeDemo: React.FC = () => {
             key={cmd}
             onClick={() => run(cmd)}
             disabled={ran.has(cmd)}
-            className="rounded px-3 py-2 text-xs font-mono text-left transition-all"
+            className="rounded px-3 py-2 text-xs font-mono text-left transition-all truncate"
             style={{
               background: ran.has(cmd) ? "rgba(255,255,255,0.02)" : "rgba(104,160,99,0.1)",
               border: `1px solid ${ran.has(cmd) ? "rgba(255,255,255,0.05)" : "#68a06355"}`,

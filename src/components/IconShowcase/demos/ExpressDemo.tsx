@@ -41,7 +41,7 @@ export default function ExpressDemo() {
           blocked = true;
           setResponse("401 Unauthorized");
         } else if (i === enabled.length - 1) {
-          setTimeout(() => setResponse('200 OK\n{ "name": "Cillian", "role": "Senior FE Dev", "available": true }'), 300);
+          setTimeout(() => setResponse('200 OK\n{\n  "name": "Cillian",\n  "role": "Senior FE Dev",\n  "available": true\n}'), 300);
         }
       }, i * 400));
     });

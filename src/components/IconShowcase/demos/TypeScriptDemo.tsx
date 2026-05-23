@@ -35,12 +35,12 @@ const TypeScriptDemo: React.FC = () => {
       </p>
 
       <div
-        className="rounded-lg p-4 font-mono text-sm"
+        className="rounded-lg p-4 font-mono text-xs"
         style={{ background: "#0d1117", border: "1px solid rgba(49,120,198,0.3)" }}
       >
         <div className="text-blue-400 mb-1">const cillian: &#123;</div>
         {FIELDS.map((field) => (
-          <div key={field.key} className="flex items-center gap-2 ml-4 mb-2">
+          <div key={field.key} className="flex items-center gap-2 ml-4 mb-2 min-w-0 overflow-hidden">
             <span style={{ color: "#9cdcfe" }}>{field.key}</span>
             <span className="text-gray-500">:</span>
             <select
@@ -60,7 +60,7 @@ const TypeScriptDemo: React.FC = () => {
               ))}
             </select>
             <span className="text-gray-500">{"// "}</span>
-            <span className="text-gray-600 text-xs">{field.value}</span>
+            <span className="text-gray-600 text-xs truncate min-w-0">{field.value}</span>
             {submitted && (
               <span style={{ color: answers[field.key] === field.correct ? "#10b981" : "#ef4444" }}>
                 {answers[field.key] === field.correct ? "✓" : `✗ (${field.correct})`}
