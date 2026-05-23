@@ -1,5 +1,4 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import "./HeroTitle.anim.css";
 
 type ItemType = "SASS" | "Hospitality" | "iGaming" | null;
@@ -15,14 +14,7 @@ const HERO_ITEMS = [
   { text: "iGaming", className: "text-8xl lg:text-[12rem] xl:text-[14rem]" },
 ] as const;
 
-const ROUTES: Record<string, string> = {
-  SASS: "/sass",
-  Hospitality: "/hospitality",
-  iGaming: "/igaming",
-};
-
 const HeroTitle: React.FC<HeroTitleProps> = ({ selectedItem }) => {
-  const navigate = useNavigate();
   const itemRefs = React.useRef<Record<string, HTMLButtonElement | null>>({});
 
   React.useEffect(() => {
@@ -38,7 +30,6 @@ const HeroTitle: React.FC<HeroTitleProps> = ({ selectedItem }) => {
         btn.style.color = "";
       }
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedItem]);
 
   const handleMouseEnter = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -73,8 +64,7 @@ const HeroTitle: React.FC<HeroTitleProps> = ({ selectedItem }) => {
                 animationDelay: `${i * 0.15}s`,
               }}
               aria-label={item.text}
-              title={`Explore ${item.text} work`}
-              onClick={() => navigate(ROUTES[item.text])}
+              title={item.text}
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
             >
