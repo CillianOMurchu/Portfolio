@@ -1,6 +1,6 @@
 import { useState } from "react";
-import DemoShell from "./components/DemoShell";
 import CodePanel from "./components/CodePanel";
+import DemoShell from "./components/DemoShell";
 
 const FIGMA_ACCENT = "#f24e1e";
 
@@ -48,8 +48,8 @@ const ELEMENTS = [
     py: 4,
     fontWeight: 600,
     fontSize: 12,
-    display:'grid',
-    alignItems:'center',
+    display: "grid",
+    alignItems: "center",
   },
 ];
 
@@ -152,7 +152,10 @@ font-weight: ${selected.fontWeight};`;
         </div>
       </div>
 
-      <CodePanel accent={FIGMA_ACCENT} className="p-3 font-mono text-xs leading-5 text-gray-400">
+      <CodePanel
+        accent={FIGMA_ACCENT}
+        className="p-3 font-mono text-xs leading-5 text-gray-400"
+      >
         <p className="text-gray-600 mb-1">{"/* CSS export */"}</p>
         {css.split("\n").map((line, i) => {
           const [prop, val] = line.split(": ");

@@ -31,7 +31,8 @@ const Navbar: React.FC = () => {
           {NAV_LINKS.map(({ href, icon: Icon, label }) => (
             <button
               key={href}
-              onClick={() => goTo(href)}
+              onClick={() => pathname !== href && goTo(href)}
+              disabled={pathname === href}
               className={`navbar-link ${
                 pathname === href
                   ? "navbar-link--active"
@@ -61,7 +62,8 @@ const Navbar: React.FC = () => {
             {NAV_LINKS.map(({ href, icon: Icon, label }) => (
               <button
                 key={href}
-                onClick={() => goTo(href)}
+                onClick={() => pathname !== href && goTo(href)}
+                disabled={pathname === href}
                 className={`navbar-mobile-link ${
                   pathname === href
                     ? "navbar-mobile-link--active"
