@@ -287,7 +287,7 @@
 
 .showcase-close {
   position: fixed;
-  top: calc(4rem + 0.75rem); /* 4rem navbar + gap inside backdrop */
+  top: 1rem; 
   right: 1.5rem;
   z-index: 10002;
   width: 2rem;
