@@ -5,27 +5,29 @@ import CodePanel from "./components/CodePanel";
 import { PASS_COLOR, MUTED_COLOR } from "./constants";
 
 const RXJS_ACCENT = "#b7178c";
+const DEBOUNCE_MS = 2000;
 
 interface Event { id: number; value: number; t: number; }
 interface Line { x1: number; y1: number; x2: number; y2: number; }
 
 const OPERATORS = [
-  { id: "map", label: "map(x => x * 2)", apply: (v: number) => v * 2 },
-  { id: "filter", label: "filter(x => x % 2 === 0)", apply: (v: number, _: number, keep: boolean) => keep ? v : null },
-  { id: "debounce", label: "debounceTime(100ms)", apply: null },
-];
+  { id: "map",      label: "map(x => x * 2)" },
+  { id: "filter",   label: "filter(x => x % 2 === 0)" },
+  { id: "debounce", label: "debounceTime(2000ms)" },
+] as const;
 
 const FLOAT_DUR = [1.7, 2.1, 1.5, 2.3, 1.9, 1.6, 2.0, 1.8];
 const MAX = 12;
-const MARBLE_STEP = 28; // w-6 (24px) + 4px gap
+const MARBLE_STEP = 28;
 const STREAM_WIDTH = MAX * MARBLE_STEP;
 
 export default function RxJSDemo() {
   const [source, setSource] = useState<Event[]>([]);
   const [result, setResult] = useState<Event[]>([]);
-  const [ops, setOps] = useState<Set<string>>(new Set());
+  const [activeOps, setActiveOps] = useState<Set<string>>(new Set());
   const [isLive, setIsLive] = useState(false);
   const [lines, setLines] = useState<Line[]>([]);
+  const [isInfoOpen, setIsInfoOpen] = useState(false);
 
   const counter = useRef(0);
   const intervalRef = useRef<ReturnType<typeof setInterval> | undefined>(undefined);
@@ -36,32 +38,30 @@ export default function RxJSDemo() {
 
   const applyPipeline = useCallback((events: Event[]) => {
     let out = [...events];
-    if (ops.has("filter")) out = out.filter(e => e.value % 2 === 0);
-    if (ops.has("map")) out = out.map(e => ({ ...e, value: e.value * 2 }));
+    if (activeOps.has("filter")) out = out.filter(e => e.value % 2 === 0);
+    if (activeOps.has("map")) out = out.map(e => ({ ...e, value: e.value * 2 }));
     return out;
-  }, [ops]);
+  }, [activeOps]);
 
   const emit = useCallback(() => {
     const val = Math.floor(Math.random() * 9) + 1;
     const event: Event = { id: counter.current++, value: val, t: Date.now() };
     setSource(prev => {
       const next = [...prev, event].slice(-MAX);
-      const processAndSet = () => setResult(applyPipeline(next));
-      if (ops.has("debounce")) {
+      const commit = () => setResult(applyPipeline(next));
+      if (activeOps.has("debounce")) {
         clearTimeout(debounceRef.current);
-        debounceRef.current = setTimeout(processAndSet, 100);
+        debounceRef.current = setTimeout(commit, DEBOUNCE_MS);
       } else {
-        processAndSet();
+        commit();
       }
       return next;
     });
-  }, [applyPipeline, ops]);
+  }, [applyPipeline, activeOps]);
 
-  useEffect(() => {
-    return () => {
-      clearInterval(intervalRef.current);
-      clearTimeout(debounceRef.current);
-    };
+  useEffect(() => () => {
+    clearInterval(intervalRef.current);
+    clearTimeout(debounceRef.current);
   }, []);
 
   useEffect(() => {
@@ -75,7 +75,7 @@ export default function RxJSDemo() {
 
   useEffect(() => {
     setResult(applyPipeline(source));
-  }, [ops, source, applyPipeline]);
+  }, [activeOps, source, applyPipeline]);
 
   useLayoutEffect(() => {
     if (!containerRef.current) return;
@@ -97,11 +97,17 @@ export default function RxJSDemo() {
     setLines(nextLines);
   }, [source, result]);
 
-  const toggleOp = (id: string) => setOps(prev => {
+  const toggleOp = (id: string) => setActiveOps(prev => {
     const next = new Set(prev);
     if (next.has(id)) { next.delete(id); } else { next.add(id); }
     return next;
   });
+
+  const resetDemo = () => {
+    clearTimeout(debounceRef.current);
+    setSource([]);
+    setResult([]);
+  };
 
   const renderStream = (
     events: Event[],
@@ -148,56 +154,73 @@ export default function RxJSDemo() {
     );
   };
 
+  const activeOpList = OPERATORS.filter(op => activeOps.has(op.id));
+
   return (
     <DemoShell>
-      <CodePanel accent={RXJS_ACCENT}>
-        <div ref={containerRef} style={{ position: "relative" }}>
-          <p className="text-gray-500 mb-2">{"// source$"}</p>
-          {renderStream(source, RXJS_ACCENT, sourceRefs)}
+      <div ref={containerRef} style={{ position: "relative" }} className="flex flex-col gap-1">
 
-          {[...ops].length > 0 && (
-            <div className="my-3 pl-2 border-l-2 border-gray-800 space-y-1">
-              {[...ops].map(id => {
-                const op = OPERATORS.find(o => o.id === id);
-                return op && <p key={id} className="text-xs" style={{ color: "#8b5cf6" }}>  .pipe({op.label})</p>;
-              })}
-            </div>
-          )}
-
-          <p className="text-gray-500 mt-2 mb-2">{"// result$"}</p>
-          {renderStream(result, PASS_COLOR, resultRefs)}
-
-          {lines.length > 0 && (
-            <svg
-              style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none", overflow: "visible" }}
-            >
-              {lines.map((l, i) => (
-                <motion.line
-                  key={i}
-                  x1={l.x1} y1={l.y1} x2={l.x2} y2={l.y2}
-                  stroke="rgba(139,92,246,0.32)"
-                  strokeWidth="1"
-                  strokeDasharray="4 4"
-                  // dashes flow downward: source → through operators → result
-                  animate={{ strokeDashoffset: [8, 0] }}
-                  transition={{ repeat: Infinity, duration: 0.65, ease: "linear" }}
-                />
-              ))}
-            </svg>
-          )}
+        {/* source$ row */}
+        <div className="flex items-center gap-3">
+          <div className="flex flex-col items-end shrink-0 w-16">
+            <span className="text-xs font-semibold" style={{ color: RXJS_ACCENT }}>source$</span>
+            <span className="text-gray-600 text-xs">→</span>
+          </div>
+          <CodePanel accent={RXJS_ACCENT} className="p-3 font-mono text-xs flex-1 min-w-0">
+            {renderStream(source, RXJS_ACCENT, sourceRefs)}
+          </CodePanel>
         </div>
-      </CodePanel>
+
+        {/* operators */}
+        {activeOpList.length > 0 && (
+          <div className="flex items-start gap-3">
+            <div className="shrink-0 w-16" />
+            <div className="pl-2 border-l-2 border-gray-800 space-y-1 py-1 flex-1">
+              {activeOpList.map(op => (
+                <p key={op.id} className="text-xs font-mono" style={{ color: "#8b5cf6" }}>.pipe({op.label})</p>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* result$ row */}
+        <div className="flex items-center gap-3">
+          <div className="flex flex-col items-end shrink-0 w-16">
+            <span className="text-xs font-semibold" style={{ color: PASS_COLOR }}>result$</span>
+            <span className="text-gray-600 text-xs">→</span>
+          </div>
+          <CodePanel accent={PASS_COLOR} className="p-3 font-mono text-xs flex-1 min-w-0">
+            {renderStream(result, PASS_COLOR, resultRefs)}
+          </CodePanel>
+        </div>
+
+        {lines.length > 0 && (
+          <svg style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none", overflow: "visible" }}>
+            {lines.map((l, i) => (
+              <motion.line
+                key={i}
+                x1={l.x1} y1={l.y1} x2={l.x2} y2={l.y2}
+                stroke="rgba(139,92,246,0.32)"
+                strokeWidth="1"
+                strokeDasharray="4 4"
+                animate={{ strokeDashoffset: [8, 0] }}
+                transition={{ repeat: Infinity, duration: 0.65, ease: "linear" }}
+              />
+            ))}
+          </svg>
+        )}
+      </div>
 
       <div className="flex flex-col gap-2">
         {OPERATORS.map(op => (
           <button key={op.id} onClick={() => toggleOp(op.id)}
             className="rounded px-3 py-2 text-xs font-mono text-left transition-all"
             style={{
-              background: ops.has(op.id) ? "rgba(139,92,246,0.12)" : "rgba(255,255,255,0.03)",
-              border: `1px solid ${ops.has(op.id) ? "rgba(139,92,246,0.4)" : "rgba(255,255,255,0.08)"}`,
-              color: ops.has(op.id) ? "#a78bfa" : MUTED_COLOR,
+              background: activeOps.has(op.id) ? "rgba(139,92,246,0.12)" : "rgba(255,255,255,0.03)",
+              border: `1px solid ${activeOps.has(op.id) ? "rgba(139,92,246,0.4)" : "rgba(255,255,255,0.08)"}`,
+              color: activeOps.has(op.id) ? "#a78bfa" : MUTED_COLOR,
             }}>
-            {ops.has(op.id) ? "✓ " : "  "}.pipe({op.label})
+            {activeOps.has(op.id) ? "✓ " : "  "}.pipe({op.label})
           </button>
         ))}
       </div>
@@ -209,7 +232,36 @@ export default function RxJSDemo() {
           {isLive ? "⏹ unsubscribe()" : "▶ subscribe()"}
         </button>
         <button onClick={emit} className="rounded-lg px-4 py-2 text-sm" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)", color: "#9ca3af" }}>emit</button>
-        <button onClick={() => { setSource([]); setResult([]); }} className="rounded-lg px-4 py-2 text-sm" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", color: MUTED_COLOR }}>↺</button>
+        <button onClick={resetDemo} className="rounded-lg px-4 py-2 text-sm" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", color: MUTED_COLOR }}>↺</button>
+      </div>
+
+      <div className="flex flex-col items-center gap-2">
+        <button
+          onClick={() => setIsInfoOpen(o => !o)}
+          className="w-6 h-6 rounded-full text-xs flex items-center justify-center transition-all"
+          style={{
+            background: isInfoOpen ? "rgba(183,23,140,0.15)" : "rgba(255,255,255,0.05)",
+            border: `1px solid ${isInfoOpen ? "rgba(183,23,140,0.4)" : "rgba(255,255,255,0.1)"}`,
+            color: isInfoOpen ? RXJS_ACCENT : MUTED_COLOR,
+          }}
+          aria-label="What is an RxJS stream?"
+        >
+          ℹ
+        </button>
+        <AnimatePresence>
+          {isInfoOpen && (
+            <motion.p
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.25 }}
+              className="text-xs text-center overflow-hidden"
+              style={{ color: MUTED_COLOR, maxWidth: "28rem", lineHeight: 1.6 }}
+            >
+              A stream is like a river of events over time — clicks, keystrokes, API responses — anything that happens more than once. RxJS lets you attach operators to that river to transform, filter, or delay the values before they reach your code.
+            </motion.p>
+          )}
+        </AnimatePresence>
       </div>
     </DemoShell>
   );
