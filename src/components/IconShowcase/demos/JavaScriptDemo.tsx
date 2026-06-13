@@ -1,4 +1,8 @@
 import { useState } from "react";
+import CodePanel from "./components/CodePanel";
+import { PASS_COLOR, FAIL_COLOR } from "./constants";
+
+const JS_ACCENT = "#f7df1e";
 
 interface Question {
   code: string;
@@ -40,11 +44,11 @@ export default function JavaScriptDemo() {
 
   if (done) return (
     <div className="flex flex-col items-center gap-4 py-6">
-      <p className="text-4xl font-bold" style={{ color: score >= 4 ? "#f7df1e" : "#f59e0b" }}>{score}/{QUESTIONS.length}</p>
+      <p className="text-4xl font-bold" style={{ color: score >= 4 ? JS_ACCENT : "#f59e0b" }}>{score}/{QUESTIONS.length}</p>
       <p className="text-gray-400 text-sm">
         {score === 5 ? "You've clearly read the spec. Or suffered enough." : score >= 3 ? "Solid. JS quirks are a survival skill." : "That's fine. Linters exist for a reason."}
       </p>
-      <button onClick={reset} className="text-xs px-4 py-2 rounded" style={{ background: "rgba(247,223,30,0.1)", border: "1px solid rgba(247,223,30,0.3)", color: "#f7df1e" }}>
+      <button onClick={reset} className="text-xs px-4 py-2 rounded" style={{ background: "rgba(247,223,30,0.1)", border: "1px solid rgba(247,223,30,0.3)", color: JS_ACCENT }}>
         Try again
       </button>
     </div>
@@ -54,13 +58,13 @@ export default function JavaScriptDemo() {
     <div className="flex flex-col gap-4 w-full max-w-md mx-auto">
       <div className="flex justify-between text-xs text-gray-500">
         <span>Question {idx + 1} / {QUESTIONS.length}</span>
-        <span style={{ color: "#f7df1e" }}>Score: {score}</span>
+        <span style={{ color: JS_ACCENT }}>Score: {score}</span>
       </div>
 
-      <div className="rounded-lg px-4 py-3 font-mono text-center" style={{ background: "#0d1117", border: "1px solid rgba(247,223,30,0.25)" }}>
+      <CodePanel accent={JS_ACCENT} className="px-4 py-3 font-mono text-center">
         <span className="text-gray-500">{">"} </span>
-        <span style={{ color: "#f7df1e" }}>{q.code}</span>
-      </div>
+        <span style={{ color: JS_ACCENT }}>{q.code}</span>
+      </CodePanel>
 
       <div className="grid grid-cols-2 gap-2">
         {q.options.map((opt) => {
@@ -70,8 +74,8 @@ export default function JavaScriptDemo() {
           let border = "rgba(255,255,255,0.08)";
           let color = "#d1d5db";
           if (selected) {
-            if (isRight) { bg = "rgba(16,185,129,0.15)"; border = "#10b981"; color = "#10b981"; }
-            else if (isPicked) { bg = "rgba(239,68,68,0.15)"; border = "#ef4444"; color = "#ef4444"; }
+            if (isRight) { bg = "rgba(16,185,129,0.15)"; border = PASS_COLOR; color = PASS_COLOR; }
+            else if (isPicked) { bg = "rgba(239,68,68,0.15)"; border = FAIL_COLOR; color = FAIL_COLOR; }
           }
           return (
             <button key={opt} onClick={() => pick(opt)} className="rounded-lg py-3 text-sm font-mono transition-all"
@@ -90,7 +94,7 @@ export default function JavaScriptDemo() {
 
       {selected && (
         <button onClick={next} className="rounded-lg py-2 text-sm transition-all"
-          style={{ background: "rgba(247,223,30,0.1)", border: "1px solid rgba(247,223,30,0.3)", color: "#f7df1e" }}>
+          style={{ background: "rgba(247,223,30,0.1)", border: "1px solid rgba(247,223,30,0.3)", color: JS_ACCENT }}>
           {idx + 1 < QUESTIONS.length ? "Next →" : "See results"}
         </button>
       )}

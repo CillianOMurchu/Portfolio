@@ -1,10 +1,15 @@
 import { useState, useEffect, useRef } from "react";
+import DemoShell from "./components/DemoShell";
+import CodePanel from "./components/CodePanel";
+import { PASS_COLOR, WARN_COLOR, MUTED_COLOR, DARK_MUTED } from "./constants";
 
 interface Doc { visitors: number; coffeeConsumed: number; lastSeen: string; status: "online" | "away" | "offline"; projectsBuilt: number; }
 
+const FIREBASE_ACCENT = "#ffca28";
+
 const STATUSES: Doc["status"][] = ["online", "away", "online", "online", "online", "away"];
 const LAST_SEEN = ["just now", "2 seconds ago", "just now", "just now", "just now", "1 minute ago"];
-const STATUS_COLOR = { online: "#10b981", away: "#f59e0b", offline: "#6b7280" };
+const STATUS_COLOR: Record<Doc["status"], string> = { online: PASS_COLOR, away: WARN_COLOR, offline: MUTED_COLOR };
 
 export default function FirebaseDemo() {
   const [doc, setDoc] = useState<Doc>({ visitors: 1247, coffeeConsumed: 1892, lastSeen: "just now", status: "online", projectsBuilt: 47 });
@@ -54,7 +59,7 @@ export default function FirebaseDemo() {
   );
 
   return (
-    <div className="flex flex-col gap-4 w-full max-w-lg mx-auto">
+    <DemoShell>
       <div className="rounded-lg overflow-hidden font-mono text-xs" style={{ border: "1px solid rgba(255,202,40,0.2)" }}>
         <div className="px-3 py-2 flex items-center gap-2" style={{ background: "#1a1200", borderBottom: "1px solid rgba(255,202,40,0.15)" }}>
           <span className="text-yellow-400">firestore</span>
@@ -63,8 +68,8 @@ export default function FirebaseDemo() {
           <span className="text-gray-600">/</span>
           <span className="text-green-400">cillian</span>
           <div className="ml-auto flex items-center gap-1.5">
-            <div className="w-1.5 h-1.5 rounded-full" style={{ background: listening ? "#10b981" : "#4b5563", boxShadow: listening ? "0 0 6px #10b981" : "none" }} />
-            <span style={{ color: listening ? "#10b981" : "#6b7280" }}>{listening ? "live" : "off"}</span>
+            <div className="w-1.5 h-1.5 rounded-full" style={{ background: listening ? PASS_COLOR : DARK_MUTED, boxShadow: listening ? `0 0 6px ${PASS_COLOR}` : "none" }} />
+            <span style={{ color: listening ? PASS_COLOR : MUTED_COLOR }}>{listening ? "live" : "off"}</span>
           </div>
         </div>
         <div className="p-3 space-y-0.5" style={{ background: "#0d1117" }}>
@@ -76,18 +81,18 @@ export default function FirebaseDemo() {
         </div>
       </div>
 
-      <div className="rounded-lg px-3 py-2 font-mono text-xs" style={{ background: "#0d1117", border: "1px solid rgba(255,202,40,0.12)" }}>
+      <CodePanel accent={FIREBASE_ACCENT} className="px-3 py-2 font-mono text-xs">
         <span className="text-purple-400">onSnapshot</span>
         <span className="text-gray-500">(docRef, (doc) {"=>"} {"{"}</span>
         <div className="ml-4 text-gray-500">setData(doc.<span className="text-blue-400">data</span>())</div>
         <span className="text-gray-500">{"}"} )</span>
-      </div>
+      </CodePanel>
 
       <button onClick={() => setListening(l => !l)}
         className="rounded-lg py-2.5 text-sm font-semibold transition-all"
         style={{ background: listening ? "rgba(255,202,40,0.12)" : "rgba(255,202,40,0.06)", border: `1px solid ${listening ? "rgba(255,202,40,0.4)" : "rgba(255,202,40,0.2)"}`, color: listening ? "#ffca28" : "#9ca3af" }}>
         {listening ? "⏹ Unsubscribe listener" : "▶ Subscribe to document"}
       </button>
-    </div>
+    </DemoShell>
   );
 }

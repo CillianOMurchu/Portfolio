@@ -1,4 +1,7 @@
 import { useState, useRef } from "react";
+import DemoShell from "./components/DemoShell";
+import DemoButton from "./components/DemoButton";
+import { PASS_COLOR, FAIL_COLOR, WARN_COLOR, DARK_MUTED } from "./constants";
 
 interface Step {
   cmd: string;
@@ -31,6 +34,13 @@ const BROWSER_STATES = [
   "✓ Test passed",
 ];
 
+const STATUS_COLOR: Record<Step["status"], string> = {
+  pending: DARK_MUTED,
+  running: WARN_COLOR,
+  passed: PASS_COLOR,
+  failed: FAIL_COLOR,
+};
+
 export default function CypressDemo() {
   const [steps, setSteps] = useState(STEPS);
   const [browserState, setBrowserState] = useState("Awaiting test run");
@@ -60,10 +70,9 @@ export default function CypressDemo() {
   const reset = () => { timers.current.forEach(clearTimeout); setSteps(STEPS); setBrowserState("Awaiting test run"); setRunning(false); };
 
   const passed = steps.filter(s => s.status === "passed").length;
-  const STATUS = { pending: "#4b5563", running: "#f59e0b", passed: "#10b981", failed: "#ef4444" };
 
   return (
-    <div className="flex flex-col gap-4 w-full max-w-lg mx-auto">
+    <DemoShell>
       <div className="rounded-lg overflow-hidden" style={{ border: "1px solid rgba(23,32,44,1)", background: "#0d1117" }}>
         <div className="flex items-center gap-1.5 px-3 py-2" style={{ background: "#1c2128", borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
           <div className="w-2.5 h-2.5 rounded-full bg-red-500/60" />
@@ -72,23 +81,23 @@ export default function CypressDemo() {
           <span className="ml-2 text-xs text-gray-500">localhost:5173</span>
         </div>
         <div className="px-4 py-6 text-center min-h-[80px] flex items-center justify-center">
-          <p className="text-sm" style={{ color: running ? "#10b981" : "#9ca3af" }}>{browserState}</p>
+          <p className="text-sm" style={{ color: running ? PASS_COLOR : "#9ca3af" }}>{browserState}</p>
         </div>
       </div>
 
       <div className="rounded-lg overflow-hidden font-mono text-xs" style={{ background: "#0d1117", border: "1px solid rgba(23,32,44,0.8)" }}>
         <div className="px-3 py-2 flex items-center justify-between" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
           <span className="text-gray-500">Tests: portfolio.cy.ts</span>
-          <span style={{ color: "#10b981" }}>{passed}/{STEPS.length}</span>
+          <span style={{ color: PASS_COLOR }}>{passed}/{STEPS.length}</span>
         </div>
         {steps.map((s, i) => (
           <div key={i} className="px-3 py-1 flex items-center gap-2 min-w-0"
             style={{ background: s.status === "running" ? "rgba(245,158,11,0.06)" : "transparent" }}>
-            <span className="shrink-0" style={{ color: STATUS[s.status] }}>
+            <span className="shrink-0" style={{ color: STATUS_COLOR[s.status] }}>
               {s.status === "pending" ? "○" : s.status === "running" ? "◌" : s.status === "passed" ? "✓" : "✗"}
             </span>
-            <div className="truncate min-w-0 flex-1" style={{ color: s.status === "running" ? "#f59e0b" : s.status === "passed" ? "#9ca3af" : "#4b5563" }}>
-              <span style={{ color: s.status === "running" || s.status === "passed" ? "#38bdf8" : "#4b5563" }}>{s.cmd}</span>
+            <div className="truncate min-w-0 flex-1" style={{ color: s.status === "running" ? WARN_COLOR : s.status === "passed" ? "#9ca3af" : DARK_MUTED }}>
+              <span style={{ color: s.status === "running" || s.status === "passed" ? "#38bdf8" : DARK_MUTED }}>{s.cmd}</span>
               {s.target}
             </div>
             {s.status === "passed" && <span className="ml-auto shrink-0 text-gray-600">{s.duration}</span>}
@@ -97,12 +106,11 @@ export default function CypressDemo() {
       </div>
 
       <div className="flex gap-2">
-        <button onClick={run} disabled={running} className="flex-1 rounded-lg py-2 text-sm transition-all"
-          style={{ background: "rgba(16,185,129,0.1)", border: "1px solid rgba(16,185,129,0.3)", color: running ? "#4b5563" : "#10b981", cursor: running ? "default" : "pointer" }}>
+        <DemoButton color={PASS_COLOR} disabled={running} onClick={run} className="flex-1 py-2 text-sm">
           {running ? "Running tests…" : "▶ cypress run"}
-        </button>
-        <button onClick={reset} className="rounded-lg px-4 py-2 text-sm" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", color: "#6b7280" }}>↺</button>
+        </DemoButton>
+        <DemoButton variant="ghost" onClick={reset} className="px-4 py-2 text-sm">↺</DemoButton>
       </div>
-    </div>
+    </DemoShell>
   );
 }

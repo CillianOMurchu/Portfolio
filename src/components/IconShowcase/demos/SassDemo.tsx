@@ -1,4 +1,8 @@
 import { useState } from "react";
+import DemoShell from "./components/DemoShell";
+import CodePanel from "./components/CodePanel";
+
+const SASS_ACCENT = "#cc6699";
 
 const PRESETS = [
   { name: "Emerald", primary: "#10b981", secondary: "#059669" },
@@ -23,7 +27,7 @@ $font-size: ${fontSize}px;
 .card { border-color: rgba($primary, 0.3); }`;
 
   return (
-    <div className="flex flex-col gap-5 w-full max-w-lg mx-auto">
+    <DemoShell className="gap-5">
       <p className="text-xs text-gray-400 text-center">Edit Sass variables and watch the cascade</p>
 
       <div className="grid grid-cols-2 gap-4">
@@ -65,15 +69,14 @@ $font-size: ${fontSize}px;
         </button>
       </div>
 
-      <div className="rounded-lg p-3 font-mono text-xs leading-5 text-gray-400 whitespace-pre overflow-x-auto"
-        style={{ background: "#0d1117", border: "1px solid rgba(204,102,153,0.2)" }}>
+      <CodePanel accent={SASS_ACCENT} className="p-3 font-mono text-xs leading-5 text-gray-400 whitespace-pre overflow-x-auto">
         {scss.split("\n").map((line, i) => (
-          <div key={i} style={{ color: line.includes("$") ? "#cc6699" : line.startsWith(".") ? "#38bdf8" : "#9ca3af" }}>
+          <div key={i} style={{ color: line.includes("$") ? SASS_ACCENT : line.startsWith(".") ? "#38bdf8" : "#9ca3af" }}>
             {line}
           </div>
         ))}
-      </div>
-    </div>
+      </CodePanel>
+    </DemoShell>
   );
 }
 

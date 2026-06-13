@@ -1,4 +1,9 @@
 import { useState } from "react";
+import DemoShell from "./components/DemoShell";
+import CodePanel from "./components/CodePanel";
+import { MUTED_COLOR } from "./constants";
+
+const TAILWIND_ACCENT = "#38bdf8";
 
 interface ClassToggle {
   cls: string;
@@ -37,7 +42,7 @@ export default function TailwindDemo() {
   ].join(" ");
 
   return (
-    <div className="flex flex-col gap-5 w-full max-w-lg mx-auto">
+    <DemoShell className="gap-5">
       <p className="text-xs text-gray-400 text-center">
         Toggle utilities and watch the card update in real time
       </p>
@@ -58,7 +63,7 @@ export default function TailwindDemo() {
           <p className="text-xs text-gray-400 mt-1">Senior Frontend Dev</p>
           <span
             className="inline-block mt-2 text-xs px-2 py-0.5 rounded-full"
-            style={{ background: "rgba(56,189,248,0.2)", color: "#38bdf8" }}
+            style={{ background: "rgba(56,189,248,0.2)", color: TAILWIND_ACCENT }}
           >
             Available
           </span>
@@ -76,7 +81,7 @@ export default function TailwindDemo() {
               style={{
                 background: on ? "rgba(56,189,248,0.1)" : "rgba(255,255,255,0.03)",
                 border: `1px solid ${on ? "rgba(56,189,248,0.4)" : "rgba(255,255,255,0.07)"}`,
-                color: on ? "#38bdf8" : "#6b7280",
+                color: on ? TAILWIND_ACCENT : MUTED_COLOR,
               }}
             >
               {on ? "✓ " : "  "}{t.label}
@@ -85,15 +90,12 @@ export default function TailwindDemo() {
         })}
       </div>
 
-      <div
-        className="rounded-lg px-3 py-2 font-mono text-xs break-all"
-        style={{ background: "#0d1117", border: "1px solid rgba(56,189,248,0.2)", color: "#38bdf8" }}
-      >
+      <CodePanel accent={TAILWIND_ACCENT} className="px-3 py-2 font-mono text-xs break-all" >
         <span className="text-gray-500">className=</span>
         <span className="text-yellow-400">"</span>
-        {classStr || <span className="text-gray-600">no classes</span>}
+        <span style={{ color: TAILWIND_ACCENT }}>{classStr || <span className="text-gray-600">no classes</span>}</span>
         <span className="text-yellow-400">"</span>
-      </div>
-    </div>
+      </CodePanel>
+    </DemoShell>
   );
 }

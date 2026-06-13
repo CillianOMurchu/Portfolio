@@ -1,7 +1,12 @@
 import { useState } from "react";
+import DemoShell from "./components/DemoShell";
+import CodePanel from "./components/CodePanel";
+import { MUTED_COLOR } from "./constants";
 
 type Variant = "solid" | "outline" | "ghost";
 type Size = "sm" | "md" | "lg";
+
+const STENCIL_ACCENT = "#4c50bf";
 
 const SIZE_STYLES: Record<Size, { px: string; py: string; text: string; icon: string }> = {
   sm: { px: "12px", py: "6px", text: "12px", icon: "24px" },
@@ -14,7 +19,7 @@ export default function StencilDemo() {
   const [size, setSize] = useState<Size>("md");
   const [glow, setGlow] = useState(true);
   const [label, setLabel] = useState("Cillian");
-  const [color, setColor] = useState("#4c50bf");
+  const [color, setColor] = useState(STENCIL_ACCENT);
 
   const s = SIZE_STYLES[size];
 
@@ -44,8 +49,8 @@ export default function StencilDemo() {
 </cillian-badge>`;
 
   return (
-    <div className="flex flex-col gap-5 w-full max-w-lg mx-auto">
-      <div className="flex justify-center py-6 rounded-xl" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(76,80,191,0.2)" }}>
+    <DemoShell className="gap-5">
+      <div className="flex justify-center py-6 rounded-xl" style={{ background: "rgba(255,255,255,0.02)", border: `1px solid ${STENCIL_ACCENT}33` }}>
         <div style={previewStyle}>
           <div style={{ width: s.icon, height: s.icon, borderRadius: 6, background: "rgba(255,255,255,0.15)", flexShrink: 0 }} />
           {label || "Badge"}
@@ -58,7 +63,7 @@ export default function StencilDemo() {
           <div className="flex gap-1">
             {(["solid", "outline", "ghost"] as Variant[]).map(v => (
               <button key={v} onClick={() => setVariant(v)} className="flex-1 py-1 rounded text-xs transition-all"
-                style={{ background: variant === v ? "rgba(76,80,191,0.2)" : "rgba(255,255,255,0.04)", border: `1px solid ${variant === v ? "#4c50bf" : "rgba(255,255,255,0.08)"}`, color: variant === v ? "#a5b4fc" : "#6b7280" }}>
+                style={{ background: variant === v ? `${STENCIL_ACCENT}33` : "rgba(255,255,255,0.04)", border: `1px solid ${variant === v ? STENCIL_ACCENT : "rgba(255,255,255,0.08)"}`, color: variant === v ? "#a5b4fc" : MUTED_COLOR }}>
                 {v}
               </button>
             ))}
@@ -66,10 +71,10 @@ export default function StencilDemo() {
 
           <p className="text-xs text-gray-500 uppercase tracking-wider mt-1">size</p>
           <div className="flex gap-1">
-            {(["sm", "md", "lg"] as Size[]).map(s => (
-              <button key={s} onClick={() => setSize(s)} className="flex-1 py-1 rounded text-xs transition-all"
-                style={{ background: size === s ? "rgba(76,80,191,0.2)" : "rgba(255,255,255,0.04)", border: `1px solid ${size === s ? "#4c50bf" : "rgba(255,255,255,0.08)"}`, color: size === s ? "#a5b4fc" : "#6b7280" }}>
-                {s}
+            {(["sm", "md", "lg"] as Size[]).map(sz => (
+              <button key={sz} onClick={() => setSize(sz)} className="flex-1 py-1 rounded text-xs transition-all"
+                style={{ background: size === sz ? `${STENCIL_ACCENT}33` : "rgba(255,255,255,0.04)", border: `1px solid ${size === sz ? STENCIL_ACCENT : "rgba(255,255,255,0.08)"}`, color: size === sz ? "#a5b4fc" : MUTED_COLOR }}>
+                {sz}
               </button>
             ))}
           </div>
@@ -78,13 +83,13 @@ export default function StencilDemo() {
         <div className="flex flex-col gap-2">
           <p className="text-xs text-gray-500 uppercase tracking-wider">color</p>
           <div className="flex gap-1.5 flex-wrap">
-            {["#4c50bf", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6", "#38bdf8"].map(c => (
+            {[STENCIL_ACCENT, "#10b981", "#f59e0b", "#ef4444", "#8b5cf6", "#38bdf8"].map(c => (
               <button key={c} onClick={() => setColor(c)} className="w-6 h-6 rounded-full border-2 transition-all"
                 style={{ background: c, borderColor: color === c ? "#fff" : "transparent", transform: color === c ? "scale(1.2)" : "scale(1)" }} />
             ))}
           </div>
           <label className="flex items-center gap-2 mt-2 cursor-pointer">
-            <input type="checkbox" checked={glow} onChange={e => setGlow(e.target.checked)} style={{ accentColor: "#4c50bf" }} />
+            <input type="checkbox" checked={glow} onChange={e => setGlow(e.target.checked)} style={{ accentColor: STENCIL_ACCENT }} />
             <span className="text-xs text-gray-400">glow attribute</span>
           </label>
           <p className="text-xs text-gray-500 uppercase tracking-wider mt-1">label</p>
@@ -94,9 +99,9 @@ export default function StencilDemo() {
         </div>
       </div>
 
-      <pre className="rounded-lg p-3 text-xs font-mono text-gray-400 leading-5" style={{ background: "#0d1117", border: "1px solid rgba(76,80,191,0.2)" }}>
+      <CodePanel accent={STENCIL_ACCENT} className="p-3 font-mono text-xs text-gray-400 leading-5">
         {html}
-      </pre>
-    </div>
+      </CodePanel>
+    </DemoShell>
   );
 }

@@ -1,6 +1,8 @@
 import { Fragment, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import gitlabSvg from "../../../assets/programming-icons/gitlab.svg";
+import DemoButton from "./components/DemoButton";
+import { PASS_COLOR, FAIL_COLOR, WARN_COLOR, MUTED_COLOR, DARK_MUTED } from "./constants";
 
 interface Job {
   id: string;
@@ -10,6 +12,8 @@ interface Job {
   duration?: string;
   log?: string;
 }
+
+const GITLAB_ACCENT = "#fc6d26";
 
 const STAGES = ["build", "test", "lint", "staging", "production"];
 
@@ -23,11 +27,11 @@ const INITIAL_JOBS: Job[] = [
 ];
 
 const STATUS_COLOR: Record<Job["status"], string> = {
-  pending: "#6b7280",
-  running: "#f59e0b",
-  passed: "#10b981",
-  failed: "#ef4444",
-  skipped: "#4b5563",
+  pending: MUTED_COLOR,
+  running: WARN_COLOR,
+  passed: PASS_COLOR,
+  failed: FAIL_COLOR,
+  skipped: DARK_MUTED,
 };
 
 const STATUS_ICON: Record<Job["status"], string> = {
@@ -121,30 +125,10 @@ export default function GitLabDemo() {
           <span className="text-xs text-gray-500">main → production</span>
         </div>
         <div className="flex gap-2">
-          <button
-            onClick={runPipeline}
-            disabled={running}
-            className="text-xs px-3 py-1 rounded transition-all"
-            style={{
-              background: "rgba(252,109,38,0.15)",
-              border: "1px solid rgba(252,109,38,0.3)",
-              color: running ? "#4b5563" : "#fc6d26",
-              cursor: running ? "default" : "pointer",
-            }}
-          >
+          <DemoButton color={GITLAB_ACCENT} disabled={running} onClick={runPipeline} className="px-3 py-1 text-xs">
             {running ? "Running…" : "▶ Run"}
-          </button>
-          <button
-            onClick={reset}
-            className="text-xs px-3 py-1 rounded"
-            style={{
-              background: "rgba(255,255,255,0.04)",
-              border: "1px solid rgba(255,255,255,0.08)",
-              color: "#6b7280",
-            }}
-          >
-            ↺
-          </button>
+          </DemoButton>
+          <DemoButton variant="ghost" onClick={reset} className="px-3 py-1 text-xs">↺</DemoButton>
         </div>
       </div>
 
@@ -220,7 +204,7 @@ export default function GitLabDemo() {
               initial={{ opacity: 0, scale: 0 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.52, type: "spring", bounce: 0.7 }}
-              style={{ width: 10, height: 10, borderRadius: "50%", background: "#fc6d26", marginBottom: 18 }}
+              style={{ width: 10, height: 10, borderRadius: "50%", background: GITLAB_ACCENT, marginBottom: 18 }}
             />
 
             {/* Smile/frown — the pipeline curled into a curve */}
@@ -236,7 +220,7 @@ export default function GitLabDemo() {
               <motion.path
                 d={pipelinePassed ? "M 15,12 Q 70,52 125,12" : "M 15,43 Q 70,3 125,43"}
                 fill="none"
-                stroke={pipelinePassed ? "#10b981" : "#ef4444"}
+                stroke={pipelinePassed ? PASS_COLOR : FAIL_COLOR}
                 strokeWidth="3"
                 strokeLinecap="round"
                 initial={{ pathLength: 0 }}
@@ -271,7 +255,7 @@ export default function GitLabDemo() {
                 fontSize: 10,
                 fontFamily: "monospace",
                 letterSpacing: "0.15em",
-                color: pipelinePassed ? "#10b981" : "#ef4444",
+                color: pipelinePassed ? PASS_COLOR : FAIL_COLOR,
               }}
             >
               {pipelinePassed ? "deployed to production" : "pipeline blocked"}
@@ -286,7 +270,7 @@ export default function GitLabDemo() {
                 marginTop: 20,
                 fontSize: 10,
                 fontFamily: "monospace",
-                color: "#4b5563",
+                color: DARK_MUTED,
                 background: "none",
                 border: "none",
                 cursor: "pointer",

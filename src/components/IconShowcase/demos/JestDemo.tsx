@@ -1,4 +1,9 @@
 import { useState } from "react";
+import DemoShell from "./components/DemoShell";
+import CodePanel from "./components/CodePanel";
+import { PASS_COLOR, FAIL_COLOR } from "./constants";
+
+const JEST_ACCENT = "#c21325";
 
 interface TestCase {
   description: string;
@@ -45,20 +50,14 @@ const JestDemo: React.FC = () => {
   const failing = visible.filter((t) => !t.passes).length;
 
   return (
-    <div className="flex flex-col gap-4 w-full max-w-lg mx-auto">
-      <div
-        className="rounded-lg p-4 font-mono text-xs leading-6"
-        style={{
-          background: "#0d1117",
-          border: "1px solid rgba(194,19,37,0.3)",
-        }}
-      >
+    <DemoShell>
+      <CodePanel accent={JEST_ACCENT} className="p-4 font-mono text-xs leading-6">
         <p className="text-gray-500 mb-3">{SUITE}</p>
 
         {visible.map((t, i) => (
           <div key={i} className="flex items-start gap-2 ml-4 mb-1">
             <span
-              style={{ color: t.passes ? "#10b981" : "#ef4444", flexShrink: 0 }}
+              style={{ color: t.passes ? PASS_COLOR : FAIL_COLOR, flexShrink: 0 }}
             >
               {t.passes ? "✓" : "✗"}
             </span>
@@ -78,7 +77,7 @@ const JestDemo: React.FC = () => {
                 <div
                   key={`note-${i}`}
                   className="ml-4 mb-1"
-                  style={{ color: "#ef4444" }}
+                  style={{ color: FAIL_COLOR }}
                 >
                   <span className="text-gray-600">{"  ● "}</span>
                   {t.note}
@@ -87,13 +86,13 @@ const JestDemo: React.FC = () => {
           )}
 
         <p className="text-gray-500 mt-3">{"}"}</p>
-      </div>
+      </CodePanel>
 
       <div className="flex items-center justify-between px-1">
         <div className="flex gap-4 text-sm font-mono">
-          <span style={{ color: "#10b981" }}>{passing} passing</span>
+          <span style={{ color: PASS_COLOR }}>{passing} passing</span>
           {failing > 0 && (
-            <span style={{ color: "#ef4444" }}>{failing} failing</span>
+            <span style={{ color: FAIL_COLOR }}>{failing} failing</span>
           )}
         </div>
         {revealed < ALL_TESTS.length && (
@@ -105,14 +104,14 @@ const JestDemo: React.FC = () => {
             style={{
               background: "rgba(194,19,37,0.1)",
               border: "1px solid rgba(194,19,37,0.3)",
-              color: "#c21325",
+              color: JEST_ACCENT,
             }}
           >
             run more tests
           </button>
         )}
       </div>
-    </div>
+    </DemoShell>
   );
 };
 

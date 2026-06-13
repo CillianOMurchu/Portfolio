@@ -1,5 +1,6 @@
 import React from "react";
 import type { IconDemoMeta } from "../../../data/icon-demos";
+import DemoShell from "./components/DemoShell";
 
 interface GenericDemoProps {
   name: string;
@@ -8,7 +9,7 @@ interface GenericDemoProps {
 
 const GenericDemo: React.FC<GenericDemoProps> = ({ name, meta }) => {
   return (
-    <div className="flex flex-col gap-6 w-full max-w-lg mx-auto">
+    <DemoShell className="gap-6">
       <div
         className="rounded-xl p-6 border"
         style={{
@@ -53,7 +54,7 @@ const GenericDemo: React.FC<GenericDemoProps> = ({ name, meta }) => {
         <p className="text-xs text-gray-500 uppercase tracking-wider mb-2">used in</p>
         <p className="text-gray-300 text-sm">{meta.tagline}</p>
       </div>
-    </div>
+    </DemoShell>
   );
 };
 

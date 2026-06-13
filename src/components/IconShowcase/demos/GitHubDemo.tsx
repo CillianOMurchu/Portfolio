@@ -1,4 +1,6 @@
 import { useState } from "react";
+import DemoShell from "./components/DemoShell";
+import { PASS_COLOR, FAIL_COLOR, WARN_COLOR } from "./constants";
 
 const COMMITS = [
   { hash: "4a9f2c1", msg: "feat: icon click → showcase overlay with demos", branch: "main", ago: "2h ago", additions: 847, deletions: 12 },
@@ -9,10 +11,10 @@ const COMMITS = [
 ];
 
 const MILESTONES = [
-  { label: "First commit", col: 2, row: 3, color: "#10b981" },
+  { label: "First commit", col: 2, row: 3, color: PASS_COLOR },
   { label: "Launched portfolio", col: 18, row: 1, color: "#61dafb" },
   { label: "Added sphere", col: 30, row: 4, color: "#8b5cf6" },
-  { label: "Click showcase", col: 47, row: 2, color: "#f59e0b" },
+  { label: "Click showcase", col: 47, row: 2, color: WARN_COLOR },
 ];
 
 function buildGrid() {
@@ -28,7 +30,7 @@ function buildGrid() {
 
 const GRID = buildGrid();
 
-const LEVEL_COLORS = ["#161b22", "#0e4429", "#006d32", "#26a641", "#39d353", "#f59e0b"];
+const LEVEL_COLORS = ["#161b22", "#0e4429", "#006d32", "#26a641", "#39d353", WARN_COLOR];
 
 export default function GitHubDemo() {
   const [hovered, setHovered] = useState<{ col: number; row: number } | null>(null);
@@ -39,7 +41,7 @@ export default function GitHubDemo() {
     : null;
 
   return (
-    <div className="flex flex-col gap-4 w-full max-w-lg mx-auto">
+    <DemoShell>
       <div className="rounded-lg p-3 overflow-x-auto" style={{ background: "#0d1117", border: "1px solid rgba(255,255,255,0.1)" }}>
         <p className="text-xs text-gray-500 mb-2">Contribution graph — hover the glowing cells</p>
         <div className="flex gap-0.5">
@@ -73,19 +75,19 @@ export default function GitHubDemo() {
             className="rounded-lg px-3 py-2 text-left transition-all w-full"
             style={{ background: selectedCommit === i ? "rgba(255,255,255,0.06)" : "rgba(255,255,255,0.02)", border: `1px solid ${selectedCommit === i ? "rgba(255,255,255,0.15)" : "rgba(255,255,255,0.06)"}` }}>
             <div className="flex items-center gap-2">
-              <span className="font-mono text-xs" style={{ color: "#10b981" }}>{c.hash}</span>
+              <span className="font-mono text-xs" style={{ color: PASS_COLOR }}>{c.hash}</span>
               <span className="text-xs text-gray-300 flex-1 truncate">{c.msg}</span>
               <span className="text-xs text-gray-600 shrink-0">{c.ago}</span>
             </div>
             {selectedCommit === i && (
               <div className="flex gap-3 mt-1.5 text-xs font-mono">
-                <span style={{ color: "#10b981" }}>+{c.additions}</span>
-                <span style={{ color: "#ef4444" }}>-{c.deletions}</span>
+                <span style={{ color: PASS_COLOR }}>+{c.additions}</span>
+                <span style={{ color: FAIL_COLOR }}>-{c.deletions}</span>
               </div>
             )}
           </button>
         ))}
       </div>
-    </div>
+    </DemoShell>
   );
 }

@@ -1,4 +1,9 @@
 import { useState } from "react";
+import DemoShell from "./components/DemoShell";
+import CodePanel from "./components/CodePanel";
+import { PASS_COLOR, FAIL_COLOR, WARN_COLOR, DARK_MUTED } from "./constants";
+
+const TS_ACCENT = "#3178c6";
 
 interface Field {
   key: string;
@@ -24,20 +29,17 @@ const TypeScriptDemo: React.FC = () => {
     : 0;
 
   const statusColor = (field: Field) => {
-    if (!submitted) return "#3178c6";
-    return answers[field.key] === field.correct ? "#10b981" : "#ef4444";
+    if (!submitted) return TS_ACCENT;
+    return answers[field.key] === field.correct ? PASS_COLOR : FAIL_COLOR;
   };
 
   return (
-    <div className="flex flex-col gap-4 w-full max-w-lg mx-auto">
+    <DemoShell>
       <p className="text-xs text-gray-400 text-center">
         Fill in the correct TypeScript types for Cillian's profile object
       </p>
 
-      <div
-        className="rounded-lg p-4 font-mono text-xs"
-        style={{ background: "#0d1117", border: "1px solid rgba(49,120,198,0.3)" }}
-      >
+      <CodePanel accent={TS_ACCENT}>
         <div className="text-blue-400 mb-1">const cillian: &#123;</div>
         {FIELDS.map((field) => (
           <div key={field.key} className="flex items-center gap-2 ml-4 mb-2 min-w-0 overflow-hidden">
@@ -62,14 +64,14 @@ const TypeScriptDemo: React.FC = () => {
             <span className="text-gray-500">{"// "}</span>
             <span className="text-gray-600 text-xs truncate min-w-0">{field.value}</span>
             {submitted && (
-              <span style={{ color: answers[field.key] === field.correct ? "#10b981" : "#ef4444" }}>
+              <span style={{ color: answers[field.key] === field.correct ? PASS_COLOR : FAIL_COLOR }}>
                 {answers[field.key] === field.correct ? "✓" : `✗ (${field.correct})`}
               </span>
             )}
           </div>
         ))}
         <div className="text-blue-400">&#125; = cillian</div>
-      </div>
+      </CodePanel>
 
       {!submitted ? (
         <button
@@ -78,8 +80,8 @@ const TypeScriptDemo: React.FC = () => {
           className="rounded-lg py-2 text-sm font-semibold transition-all"
           style={{
             background: allAnswered ? "rgba(49,120,198,0.2)" : "rgba(255,255,255,0.03)",
-            border: `1px solid ${allAnswered ? "#3178c6" : "rgba(255,255,255,0.08)"}`,
-            color: allAnswered ? "#3178c6" : "#4b5563",
+            border: `1px solid ${allAnswered ? TS_ACCENT : "rgba(255,255,255,0.08)"}`,
+            color: allAnswered ? TS_ACCENT : DARK_MUTED,
             cursor: allAnswered ? "pointer" : "default",
           }}
         >
@@ -89,7 +91,7 @@ const TypeScriptDemo: React.FC = () => {
         <div className="text-center">
           <p
             className="text-lg font-bold"
-            style={{ color: score === FIELDS.length ? "#10b981" : score >= 2 ? "#f59e0b" : "#ef4444" }}
+            style={{ color: score === FIELDS.length ? PASS_COLOR : score >= 2 ? WARN_COLOR : FAIL_COLOR }}
           >
             {score}/{FIELDS.length} correct
           </p>
@@ -108,7 +110,7 @@ const TypeScriptDemo: React.FC = () => {
           </button>
         </div>
       )}
-    </div>
+    </DemoShell>
   );
 };
 

@@ -1,4 +1,8 @@
 import { useState } from "react";
+import DemoShell from "./components/DemoShell";
+import { FAIL_COLOR, WARN_COLOR, MUTED_COLOR } from "./constants";
+
+const PASS_COLOR_JIRA = "#10b981";
 
 interface Ticket {
   id: string;
@@ -8,7 +12,7 @@ interface Ticket {
   col: "todo" | "inprogress" | "done";
 }
 
-const PRIORITY_COLOR = { high: "#ef4444", medium: "#f59e0b", low: "#6b7280" };
+const PRIORITY_COLOR = { high: FAIL_COLOR, medium: WARN_COLOR, low: MUTED_COLOR };
 const TYPE_ICON = { story: "📖", bug: "🐛", task: "✔" };
 
 const INITIAL: Ticket[] = [
@@ -57,9 +61,9 @@ const INITIAL: Ticket[] = [
 ];
 
 const COLUMNS: { id: Ticket["col"]; label: string; color: string }[] = [
-  { id: "todo", label: "To Do", color: "#6b7280" },
-  { id: "inprogress", label: "In Progress", color: "#f59e0b" },
-  { id: "done", label: "Done", color: "#10b981" },
+  { id: "todo", label: "To Do", color: MUTED_COLOR },
+  { id: "inprogress", label: "In Progress", color: WARN_COLOR },
+  { id: "done", label: "Done", color: PASS_COLOR_JIRA },
 ];
 
 export default function JiraDemo() {
@@ -78,7 +82,7 @@ export default function JiraDemo() {
   };
 
   return (
-    <div className="flex flex-col gap-3 w-full max-w-lg mx-auto">
+    <DemoShell className="gap-3">
       <p className="text-xs text-gray-400 text-center">
         Click arrows to move tickets across the board
       </p>
@@ -130,7 +134,7 @@ export default function JiraDemo() {
                           className="text-xs px-1.5 py-0.5 rounded"
                           style={{
                             background: "rgba(255,255,255,0.06)",
-                            color: "#6b7280",
+                            color: MUTED_COLOR,
                           }}
                         >
                           ←
@@ -142,7 +146,7 @@ export default function JiraDemo() {
                           className="text-xs px-1.5 py-0.5 rounded ml-auto"
                           style={{
                             background: "rgba(255,255,255,0.06)",
-                            color: "#6b7280",
+                            color: MUTED_COLOR,
                           }}
                         >
                           →
@@ -156,6 +160,6 @@ export default function JiraDemo() {
           );
         })}
       </div>
-    </div>
+    </DemoShell>
   );
 }

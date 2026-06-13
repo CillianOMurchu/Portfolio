@@ -1,4 +1,8 @@
 import { useState, useEffect, useRef } from "react";
+import DemoShell from "./components/DemoShell";
+import CodePanel from "./components/CodePanel";
+
+const REACT_ACCENT = "#61dafb";
 
 interface ComponentNode {
   id: string;
@@ -41,12 +45,12 @@ export default function ReactDemo() {
   useEffect(() => () => { if (timerRef.current) clearTimeout(timerRef.current); }, []);
 
   return (
-    <div className="flex flex-col gap-5 w-full max-w-lg mx-auto">
+    <DemoShell className="gap-5">
       <p className="text-xs text-gray-400 text-center">
         Watch which components re-render when state changes
       </p>
 
-      <div className="rounded-lg p-4 font-mono text-sm" style={{ background: "#0d1117", border: "1px solid rgba(97,218,251,0.2)" }}>
+      <CodePanel accent={REACT_ACCENT} className="p-4 font-mono text-sm">
         {TREE.map((node) => (
           <div
             key={node.id}
@@ -57,28 +61,28 @@ export default function ReactDemo() {
               border: flashing.has(node.id) ? "1px solid rgba(97,218,251,0.5)" : "1px solid transparent",
             }}
           >
-            <span style={{ color: node.pure ? "#9ca3af" : "#61dafb" }}>
+            <span style={{ color: node.pure ? "#9ca3af" : REACT_ACCENT }}>
               {"<"}{node.label}{">"}{node.children ? "" : " /"}
             </span>
             {flashing.has(node.id) && (
-              <span className="text-xs ml-auto" style={{ color: "#61dafb" }}>re-render</span>
+              <span className="text-xs ml-auto" style={{ color: REACT_ACCENT }}>re-render</span>
             )}
           </div>
         ))}
-      </div>
+      </CodePanel>
 
       <div className="flex gap-3">
         <button
           onClick={increment}
           className="flex-1 rounded-lg py-2 text-sm transition-all"
-          style={{ background: "rgba(97,218,251,0.1)", border: "1px solid rgba(97,218,251,0.3)", color: "#61dafb" }}
+          style={{ background: "rgba(97,218,251,0.1)", border: "1px solid rgba(97,218,251,0.3)", color: REACT_ACCENT }}
         >
           setCount({count} → {count + 1})
         </button>
         <button
           onClick={addItem}
           className="flex-1 rounded-lg py-2 text-sm transition-all"
-          style={{ background: "rgba(97,218,251,0.1)", border: "1px solid rgba(97,218,251,0.3)", color: "#61dafb" }}
+          style={{ background: "rgba(97,218,251,0.1)", border: "1px solid rgba(97,218,251,0.3)", color: REACT_ACCENT }}
         >
           setItems([...items])
         </button>
@@ -87,6 +91,6 @@ export default function ReactDemo() {
       <p className="text-xs text-center text-gray-600">
         Header is memoized — it never re-renders even when parent state changes
       </p>
-    </div>
+    </DemoShell>
   );
 }

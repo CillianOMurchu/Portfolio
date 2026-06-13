@@ -1,5 +1,10 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import DemoShell from "./components/DemoShell";
+import CodePanel from "./components/CodePanel";
+import { PASS_COLOR, MUTED_COLOR } from "./constants";
+
+const RXJS_ACCENT = "#b7178c";
 
 interface Event { id: number; value: number; t: number; }
 interface Line { x1: number; y1: number; x2: number; y2: number; }
@@ -10,8 +15,10 @@ const OPERATORS = [
   { id: "debounce", label: "debounceTime(100ms)", apply: null },
 ];
 
-// Varied float durations so items bob out of phase
 const FLOAT_DUR = [1.7, 2.1, 1.5, 2.3, 1.9, 1.6, 2.0, 1.8];
+const MAX = 12;
+const MARBLE_STEP = 28; // w-6 (24px) + 4px gap
+const STREAM_WIDTH = MAX * MARBLE_STEP;
 
 export default function RxJSDemo() {
   const [source, setSource] = useState<Event[]>([]);
@@ -26,7 +33,6 @@ export default function RxJSDemo() {
   const containerRef = useRef<HTMLDivElement>(null);
   const sourceRefs = useRef<Map<number, HTMLElement>>(new Map());
   const resultRefs = useRef<Map<number, HTMLElement>>(new Map());
-  const MAX = 12;
 
   const applyPipeline = useCallback((events: Event[]) => {
     let out = [...events];
@@ -93,66 +99,61 @@ export default function RxJSDemo() {
 
   const toggleOp = (id: string) => setOps(prev => {
     const next = new Set(prev);
-    next.has(id) ? next.delete(id) : next.add(id);
+    if (next.has(id)) { next.delete(id); } else { next.add(id); }
     return next;
   });
 
   const renderStream = (
     events: Event[],
     color: string,
-    refsMap: React.MutableRefObject<Map<number, HTMLElement>>,
-  ) => (
-    <div className="flex items-center gap-1 min-h-[28px] flex-wrap">
-      <span className="text-gray-600 text-xs mr-1">——</span>
-      <AnimatePresence initial={false}>
-        {events.map((e, i) => (
-          // outer: layout shift (items slide left as stream flows) + margin-top float
-          // margin-top for float avoids conflicting with layout's transform
-          <motion.div
-            key={e.id}
-            layout
-            ref={el => { if (el) refsMap.current.set(e.id, el); else refsMap.current.delete(e.id); }}
-            animate={{ marginTop: [-2, 2] }}
-            transition={{
-              layout: { type: "spring", stiffness: 380, damping: 32 },
-              marginTop: {
-                repeat: Infinity,
-                repeatType: "mirror",
-                duration: FLOAT_DUR[i % FLOAT_DUR.length],
-                ease: "easeInOut",
-                delay: (i % 6) * 0.18,
-              },
-            }}
-            style={{ display: "inline-flex" }}
-          >
-            {/* inner: drop-in entrance, slide-left exit */}
-            <motion.span
-              initial={{ opacity: 0, y: -14, scale: 0.55 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, x: -14, scale: 0.6 }}
-              transition={{ type: "spring", bounce: 0.3, duration: 0.3 }}
-              className="w-6 h-6 rounded-full text-xs flex items-center justify-center font-bold"
-              style={{ background: `${color}22`, border: `1px solid ${color}88`, color }}
-            >
-              {e.value}
-            </motion.span>
-          </motion.div>
-        ))}
-      </AnimatePresence>
-      {events.length === 0 && <span className="text-gray-700 text-xs italic">no events yet</span>}
-      <span className="text-gray-600 text-xs ml-1">——▶</span>
-    </div>
-  );
+    refsMap: { current: Map<number, HTMLElement> },
+  ) => {
+    const reversed = [...events].reverse();
+    return (
+      <div className="flex items-center gap-2 min-h-[28px]">
+        <span className="text-gray-600 text-xs">——</span>
+        <div style={{ position: "relative", height: 28, width: STREAM_WIDTH, flexShrink: 0 }}>
+          <AnimatePresence initial={false}>
+            {reversed.map((e, i) => (
+              <motion.div
+                key={e.id}
+                ref={el => { if (el) refsMap.current.set(e.id, el); else refsMap.current.delete(e.id); }}
+                initial={{ x: -MARBLE_STEP, opacity: 0, scale: 0.55 }}
+                animate={{ x: i * MARBLE_STEP, opacity: 1, scale: 1 }}
+                exit={{ x: STREAM_WIDTH + MARBLE_STEP, opacity: 0, scale: 0.6 }}
+                transition={{ type: "spring", stiffness: 120, damping: 18 }}
+                style={{ position: "absolute", top: 0, left: 0, display: "inline-flex" }}
+              >
+                <motion.span
+                  animate={{ marginTop: [-2, 2] }}
+                  transition={{
+                    repeat: Infinity,
+                    repeatType: "mirror",
+                    duration: FLOAT_DUR[i % FLOAT_DUR.length],
+                    ease: "easeInOut",
+                    delay: (i % 6) * 0.18,
+                  }}
+                  className="w-6 h-6 rounded-full text-xs flex items-center justify-center font-bold"
+                  style={{ background: `${color}22`, border: `1px solid ${color}88`, color }}
+                >
+                  {e.value}
+                </motion.span>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </div>
+        {events.length === 0 && <span className="text-gray-700 text-xs italic">no events yet</span>}
+        <span className="text-gray-600 text-xs">——▶</span>
+      </div>
+    );
+  };
 
   return (
-    <div className="flex flex-col gap-4 w-full max-w-lg mx-auto">
-      <div
-        className="rounded-lg p-4 font-mono text-xs"
-        style={{ background: "#0d1117", border: "1px solid rgba(183,23,140,0.25)" }}
-      >
+    <DemoShell>
+      <CodePanel accent={RXJS_ACCENT}>
         <div ref={containerRef} style={{ position: "relative" }}>
           <p className="text-gray-500 mb-2">{"// source$"}</p>
-          {renderStream(source, "#b7178c", sourceRefs)}
+          {renderStream(source, RXJS_ACCENT, sourceRefs)}
 
           {[...ops].length > 0 && (
             <div className="my-3 pl-2 border-l-2 border-gray-800 space-y-1">
@@ -164,7 +165,7 @@ export default function RxJSDemo() {
           )}
 
           <p className="text-gray-500 mt-2 mb-2">{"// result$"}</p>
-          {renderStream(result, "#10b981", resultRefs)}
+          {renderStream(result, PASS_COLOR, resultRefs)}
 
           {lines.length > 0 && (
             <svg
@@ -185,7 +186,7 @@ export default function RxJSDemo() {
             </svg>
           )}
         </div>
-      </div>
+      </CodePanel>
 
       <div className="flex flex-col gap-2">
         {OPERATORS.map(op => (
@@ -194,7 +195,7 @@ export default function RxJSDemo() {
             style={{
               background: ops.has(op.id) ? "rgba(139,92,246,0.12)" : "rgba(255,255,255,0.03)",
               border: `1px solid ${ops.has(op.id) ? "rgba(139,92,246,0.4)" : "rgba(255,255,255,0.08)"}`,
-              color: ops.has(op.id) ? "#a78bfa" : "#6b7280",
+              color: ops.has(op.id) ? "#a78bfa" : MUTED_COLOR,
             }}>
             {ops.has(op.id) ? "✓ " : "  "}.pipe({op.label})
           </button>
@@ -204,12 +205,12 @@ export default function RxJSDemo() {
       <div className="flex gap-2">
         <button onClick={() => setIsLive(l => !l)}
           className="flex-1 rounded-lg py-2 text-sm transition-all"
-          style={{ background: isLive ? "rgba(183,23,140,0.15)" : "rgba(255,255,255,0.04)", border: `1px solid ${isLive ? "rgba(183,23,140,0.4)" : "rgba(255,255,255,0.1)"}`, color: isLive ? "#b7178c" : "#9ca3af" }}>
+          style={{ background: isLive ? "rgba(183,23,140,0.15)" : "rgba(255,255,255,0.04)", border: `1px solid ${isLive ? "rgba(183,23,140,0.4)" : "rgba(255,255,255,0.1)"}`, color: isLive ? RXJS_ACCENT : "#9ca3af" }}>
           {isLive ? "⏹ unsubscribe()" : "▶ subscribe()"}
         </button>
         <button onClick={emit} className="rounded-lg px-4 py-2 text-sm" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)", color: "#9ca3af" }}>emit</button>
-        <button onClick={() => { setSource([]); setResult([]); }} className="rounded-lg px-4 py-2 text-sm" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", color: "#6b7280" }}>↺</button>
+        <button onClick={() => { setSource([]); setResult([]); }} className="rounded-lg px-4 py-2 text-sm" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", color: MUTED_COLOR }}>↺</button>
       </div>
-    </div>
+    </DemoShell>
   );
 }

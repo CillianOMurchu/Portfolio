@@ -1,4 +1,9 @@
 import { useState } from "react";
+import DemoShell from "./components/DemoShell";
+import CodePanel from "./components/CodePanel";
+import { FAIL_COLOR, DARK_MUTED } from "./constants";
+
+const NODE_ACCENT = "#68a063";
 
 interface Line {
   type: "input" | "output" | "error";
@@ -59,22 +64,19 @@ const NodeDemo: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col gap-4 w-full max-w-lg mx-auto">
-      <div
-        className="rounded-lg p-4 font-mono text-xs leading-5 min-h-[180px] max-h-[220px] overflow-y-auto"
-        style={{ background: "#0d1117", border: "1px solid rgba(255,255,255,0.1)" }}
-      >
+    <DemoShell>
+      <CodePanel accent={NODE_ACCENT} className="p-4 font-mono text-xs leading-5 min-h-[180px] max-h-[220px] overflow-y-auto">
         {lines.map((l, i) => (
           <div
             key={i}
             style={{
-              color: l.type === "input" ? "#68a063" : l.type === "error" ? "#ef4444" : "#c9d1d9",
+              color: l.type === "input" ? NODE_ACCENT : l.type === "error" ? FAIL_COLOR : "#c9d1d9",
             }}
           >
-            {l.text || " "}
+            {l.text || " "}
           </div>
         ))}
-      </div>
+      </CodePanel>
 
       <p className="text-xs text-gray-500 text-center">Click a method to run it</p>
 
@@ -88,7 +90,7 @@ const NodeDemo: React.FC = () => {
             style={{
               background: ran.has(cmd) ? "rgba(255,255,255,0.02)" : "rgba(104,160,99,0.1)",
               border: `1px solid ${ran.has(cmd) ? "rgba(255,255,255,0.05)" : "#68a06355"}`,
-              color: ran.has(cmd) ? "#4b5563" : "#68a063",
+              color: ran.has(cmd) ? DARK_MUTED : NODE_ACCENT,
               cursor: ran.has(cmd) ? "default" : "pointer",
             }}
           >
@@ -96,7 +98,7 @@ const NodeDemo: React.FC = () => {
           </button>
         ))}
       </div>
-    </div>
+    </DemoShell>
   );
 };
 

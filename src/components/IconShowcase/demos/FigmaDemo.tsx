@@ -1,4 +1,8 @@
 import { useState } from "react";
+import DemoShell from "./components/DemoShell";
+import CodePanel from "./components/CodePanel";
+
+const FIGMA_ACCENT = "#f24e1e";
 
 const ELEMENTS = [
   {
@@ -59,7 +63,7 @@ font-size: ${selected.fontSize}px;
 font-weight: ${selected.fontWeight};`;
 
   return (
-    <div className="flex flex-col gap-4 w-full max-w-lg mx-auto">
+    <DemoShell>
       <div className="grid grid-cols-[1fr_160px] gap-3">
         <div
           className="rounded-lg p-4 flex flex-col gap-3"
@@ -148,13 +152,7 @@ font-weight: ${selected.fontWeight};`;
         </div>
       </div>
 
-      <div
-        className="rounded-lg p-3 font-mono text-xs leading-5 text-gray-400"
-        style={{
-          background: "#0d1117",
-          border: "1px solid rgba(242,78,30,0.2)",
-        }}
-      >
+      <CodePanel accent={FIGMA_ACCENT} className="p-3 font-mono text-xs leading-5 text-gray-400">
         <p className="text-gray-600 mb-1">{"/* CSS export */"}</p>
         {css.split("\n").map((line, i) => {
           const [prop, val] = line.split(": ");
@@ -162,11 +160,11 @@ font-weight: ${selected.fontWeight};`;
             <div key={i}>
               <span className="text-blue-400">{prop}</span>
               <span className="text-gray-600">: </span>
-              <span style={{ color: "#f24e1e" }}>{val}</span>
+              <span style={{ color: FIGMA_ACCENT }}>{val}</span>
             </div>
           );
         })}
-      </div>
-    </div>
+      </CodePanel>
+    </DemoShell>
   );
 }

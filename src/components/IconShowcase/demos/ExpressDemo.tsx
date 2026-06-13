@@ -1,4 +1,6 @@
 import { useState, useRef } from "react";
+import DemoShell from "./components/DemoShell";
+import { PASS_COLOR, FAIL_COLOR, DARK_MUTED } from "./constants";
 
 interface Middleware {
   id: string;
@@ -15,7 +17,7 @@ const INITIAL: Middleware[] = [
   { id: "cors", name: "cors()", code: 'res.set("Access-Control-Allow-Origin", "*")', enabled: true, color: "#38bdf8", action: "CORS headers added" },
   { id: "auth", name: "auth", code: 'if (!req.headers.authorization) return 401', enabled: true, color: "#f59e0b", action: "authenticated", blocksOn: "disabled" },
   { id: "rateLimit", name: "rateLimit", code: "if (hits > 100) return 429", enabled: true, color: "#8b5cf6", action: "rate checked" },
-  { id: "handler", name: "GET /api/profile", code: 'res.json({ name: "Cillian", role: "Senior FE Dev" })', enabled: true, color: "#10b981", action: "200 OK" },
+  { id: "handler", name: "GET /api/profile", code: 'res.json({ name: "Cillian", role: "Senior FE Dev" })', enabled: true, color: PASS_COLOR, action: "200 OK" },
 ];
 
 export default function ExpressDemo() {
@@ -48,7 +50,7 @@ export default function ExpressDemo() {
   };
 
   return (
-    <div className="flex flex-col gap-4 w-full max-w-lg mx-auto">
+    <DemoShell>
       <p className="text-xs text-center text-gray-400">Toggle middleware on/off then send a request</p>
 
       <div className="flex flex-col gap-1">
@@ -58,10 +60,10 @@ export default function ExpressDemo() {
             <div key={m.id} className="flex items-center gap-3 rounded-lg px-3 py-2 transition-all duration-200"
               style={{ background: isActive ? `${m.color}18` : "rgba(255,255,255,0.03)", border: `1px solid ${isActive ? m.color : "rgba(255,255,255,0.07)"}` }}>
               <button onClick={() => toggle(m.id)} className="w-4 h-4 rounded border flex-shrink-0 text-xs flex items-center justify-center"
-                style={{ borderColor: m.enabled ? m.color : "#4b5563", background: m.enabled ? `${m.color}33` : "transparent" }}>
+                style={{ borderColor: m.enabled ? m.color : DARK_MUTED, background: m.enabled ? `${m.color}33` : "transparent" }}>
                 {m.enabled && <span style={{ color: m.color }}>✓</span>}
               </button>
-              <span className="font-mono text-xs flex-1" style={{ color: m.enabled ? m.color : "#4b5563" }}>
+              <span className="font-mono text-xs flex-1" style={{ color: m.enabled ? m.color : DARK_MUTED }}>
                 app.use(<span style={{ color: "#e5e7eb" }}>{m.name}</span>)
               </span>
               {isActive && <span className="text-xs" style={{ color: m.color }}>{m.action} ✓</span>}
@@ -77,10 +79,10 @@ export default function ExpressDemo() {
 
       {response && (
         <div className="rounded-lg px-3 py-2 font-mono text-xs whitespace-pre"
-          style={{ background: "#0d1117", border: `1px solid ${response.startsWith("200") ? "rgba(16,185,129,0.3)" : "rgba(239,68,68,0.3)"}`, color: response.startsWith("200") ? "#10b981" : "#ef4444" }}>
+          style={{ background: "#0d1117", border: `1px solid ${response.startsWith("200") ? "rgba(16,185,129,0.3)" : "rgba(239,68,68,0.3)"}`, color: response.startsWith("200") ? PASS_COLOR : FAIL_COLOR }}>
           {response}
         </div>
       )}
-    </div>
+    </DemoShell>
   );
 }
