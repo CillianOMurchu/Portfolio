@@ -19,13 +19,12 @@
   --neon-border: var(--border-thickness) solid var(--color-accent-primary);
 
   --neon-glow-primary:
-    0 0 5px rgba(16, 185, 129, 0.8), 0 0 10px rgba(16, 185, 129, 0.6),
-    0 0 15px rgba(16, 185, 129, 0.4), 0 0 20px rgba(16, 185, 129, 0.3);
+    0 0 4px rgba(16, 185, 129, 0.4), 0 0 8px rgba(16, 185, 129, 0.2);
   --neon-glow-hover:
-    0 0 8px var(--color-accent-primary), 0 0 20px var(--color-accent-light); /* Stronger hover glow */
+    0 0 6px rgba(16, 185, 129, 0.5), 0 0 12px rgba(16, 185, 129, 0.25);
 
   --neon-glow-secondary:
-    0 0 3px rgba(56, 189, 248, 0.7), 0 0 8px rgba(56, 189, 248, 0.4);
+    0 0 3px rgba(56, 189, 248, 0.4), 0 0 6px rgba(56, 189, 248, 0.2);
 
   /* --- FONT --- */
   --font-family-sans: "Inter", system-ui, -apple-system, sans-serif;
@@ -54,7 +53,6 @@
 /* Base Neon class with stronger glow */
 .neon {
   color: var(--color-accent-primary);
-  text-shadow: var(--neon-glow-primary);
 }
 .neon-glow {
   box-shadow: var(--neon-glow-primary);

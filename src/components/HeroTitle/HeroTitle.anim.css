@@ -22,8 +22,9 @@
 
 .hero-title-wrapper {
   width: 100vw;
-  height: 100vh;
   position: absolute;
+  top: 4rem;    /* navbar height */
+  bottom: 2.5rem; /* footer height */
   z-index: -1;
 }
 

@@ -19,6 +19,8 @@ interface OrbOriginContextType {
   setHoveredIcon: (icon: HoveredIcon) => void;
   clickedIcon: ClickedIcon;
   setClickedIcon: (icon: ClickedIcon) => void;
+  showSphere: boolean;
+  setShowSphere: (show: boolean) => void;
 }
 
 const OrbOriginContext = createContext<OrbOriginContextType | undefined>(
@@ -30,8 +32,9 @@ export function OrbOriginProvider({ children }: { children: ReactNode }) {
   const [oCharPosition, setOCharPosition] = useState<OCharPosition>(null);
   const [hoveredIcon, setHoveredIcon] = useState<HoveredIcon>(null);
   const [clickedIcon, setClickedIcon] = useState<ClickedIcon>(null);
+  const [showSphere, setShowSphere] = useState(false);
   return (
-    <OrbOriginContext.Provider value={{ orbOrigin, setOrbOrigin, oCharPosition, setOCharPosition, hoveredIcon, setHoveredIcon, clickedIcon, setClickedIcon }}>
+    <OrbOriginContext.Provider value={{ orbOrigin, setOrbOrigin, oCharPosition, setOCharPosition, hoveredIcon, setHoveredIcon, clickedIcon, setClickedIcon, showSphere, setShowSphere }}>
       {children}
     </OrbOriginContext.Provider>
   );

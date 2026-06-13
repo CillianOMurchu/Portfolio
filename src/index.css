@@ -26,7 +26,8 @@ body {
   font-family: inherit;
   background: #0a0e1a;
   color: inherit;
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

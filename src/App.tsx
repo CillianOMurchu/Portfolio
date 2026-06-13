@@ -11,9 +11,9 @@ function App() {
   const { currentPage } = usePageNavigation();
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col h-screen overflow-hidden">
       <Navbar />
-      <main className="flex-1 page-main pb-14">
+      <main className="page-main" style={{ paddingTop: "4rem", paddingBottom: "2.5rem", flex: 1, overflow: "hidden" }}>
         <PageRouter currentPage={currentPage} />
       </main>
       <Footer />
