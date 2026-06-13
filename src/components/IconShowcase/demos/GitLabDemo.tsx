@@ -70,7 +70,7 @@ export default function GitLabDemo() {
   const update = (id: string, status: Job["status"]) =>
     setJobs((prev) => prev.map((j) => (j.id === id ? { ...j, status } : j)));
 
-  const runPipeline = () => {
+  const runPipeline = (shouldFail: boolean = false) => {
     timerRef.current.forEach(clearTimeout);
     setJobs(INITIAL_JOBS);
     setRunning(true);
@@ -80,7 +80,7 @@ export default function GitLabDemo() {
       t += 600;
       timerRef.current.push(setTimeout(() => update(job.id, "running"), t + i * 80));
       t += 1200;
-      const fails = job.id === "j5";
+      const fails = shouldFail && job.id === "j5";
       timerRef.current.push(
         setTimeout(() => {
           update(job.id, fails ? "failed" : "passed");
@@ -116,43 +116,46 @@ export default function GitLabDemo() {
   const pipelinePassed = overall === "passed";
 
   return (
-    <div className="flex flex-col gap-4 w-full max-w-lg mx-auto" style={{ position: "relative", minHeight: 160 }}>
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <span className="text-xs" style={{ color: STATUS_COLOR[overall] }}>
+    <div className="gitlab-pipeline-container">
+      <div className="gitlab-details-row">
+        <div className="gitlab-pipeline-info">
+          <span className="gitlab-pipeline-status" style={{ color: STATUS_COLOR[overall] }}>
             ● Pipeline #{pipelineId}
           </span>
-          <span className="text-xs text-gray-500">main → production</span>
+          <span className="gitlab-pipeline-branch text-gray-500">main → production</span>
         </div>
-        <div className="flex gap-2">
-          <DemoButton color={GITLAB_ACCENT} disabled={running} onClick={runPipeline} className="px-3 py-1 text-xs">
-            {running ? "Running…" : "▶ Run"}
+        <div className="gitlab-actions">
+          <DemoButton color={PASS_COLOR} disabled={running} onClick={() => runPipeline(false)} className="px-3 py-1 text-xs">
+            {running ? "Running…" : "✓ Success"}
+          </DemoButton>
+          <DemoButton color={FAIL_COLOR} disabled={running} onClick={() => runPipeline(true)} className="px-3 py-1 text-xs">
+            ✗ Failure
           </DemoButton>
           <DemoButton variant="ghost" onClick={reset} className="px-3 py-1 text-xs">↺</DemoButton>
         </div>
       </div>
 
-      <div className="flex gap-1 items-center overflow-x-auto pb-1">
+      <div className="gitlab-stages-row">
         {STAGES.map((stage, i) => {
           const stageJobs = jobs.filter((j) => j.stage === stage);
           const sc = stageColor(jobs, stage);
           return (
             <Fragment key={stage}>
-              <div className="flex flex-col items-center gap-1 min-w-[72px]">
+              <div className="gitlab-stage-box">
                 <div
-                  className="rounded px-2 py-1 text-center w-full"
+                  className="gitlab-stage-header"
                   style={{ background: `${sc}18`, border: `1px solid ${sc}44` }}
                 >
                   <p className="text-xs font-semibold" style={{ color: sc }}>{stage}</p>
                   {stageJobs.map((j) => (
-                    <p key={j.id} className="text-xs mt-0.5" style={{ color: STATUS_COLOR[j.status] }}>
+                    <p key={j.id} className="gitlab-job-name" style={{ color: STATUS_COLOR[j.status] }}>
                       {STATUS_ICON[j.status]} {j.name}
                     </p>
                   ))}
                 </div>
               </div>
               {i < STAGES.length - 1 && (
-                <div className="text-gray-700 text-xs shrink-0">→</div>
+                <div className="gitlab-stage-separator">→</div>
               )}
             </Fragment>
           );

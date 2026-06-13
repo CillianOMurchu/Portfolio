@@ -274,9 +274,11 @@
   box-sizing: border-box;
 }
 
-/* Mobile: add horizontal padding and prevent overflow */
+/* Mobile: adjust padding and overflow */
 @media (max-width: 768px) {
   .showcase-backdrop {
+    padding-top: 0;
+    padding-bottom: 0;
     padding-left: 1rem;
     padding-right: 1rem;
     overflow-x: hidden;
@@ -338,6 +340,18 @@
   width: 100%;
   max-width: 36rem;
   padding: 2rem 1.5rem 1rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.showcase-content > * {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
 }
 
 /* --- NAVBAR COMPONENTS --- */
@@ -428,6 +442,153 @@
 .hero-title--deemphasised {
   opacity: 0.3;
   transform: scale(0.95);
+}
+
+/* --- GITLAB DEMO STYLING --- */
+
+.gitlab-pipeline-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  position: relative;
+  min-height: 160px;
+}
+
+.gitlab-details-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0.5rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.gitlab-pipeline-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+  flex-wrap: wrap;
+}
+
+.gitlab-pipeline-status {
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.gitlab-pipeline-branch {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+  white-space: nowrap;
+}
+
+.gitlab-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+/* Mobile: stack details and actions vertically */
+@media (max-width: 640px) {
+  .gitlab-details-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+    padding: 0.625rem;
+  }
+
+  .gitlab-pipeline-info {
+    gap: 0.5rem;
+    justify-content: flex-start;
+  }
+
+  .gitlab-pipeline-status {
+    font-size: 0.7rem;
+  }
+
+  .gitlab-pipeline-branch {
+    font-size: 0.7rem;
+  }
+
+  .gitlab-actions {
+    width: 100%;
+    justify-content: space-between;
+    gap: 0.375rem;
+  }
+}
+
+.gitlab-stages-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+  padding-bottom: 0.25rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.gitlab-stage-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+  min-width: 80px;
+  max-width: 100px;
+}
+
+.gitlab-stage-separator {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding: 0 0.25rem;
+}
+
+.gitlab-stage-header {
+  border-radius: 0.375rem;
+  padding: 0.5rem;
+  text-align: center;
+  width: 100%;
+  min-width: 80px;
+}
+
+.gitlab-job-name {
+  font-size: 0.75rem;
+  margin-top: 0.125rem;
+  word-break: break-word;
+  max-width: 100%;
+}
+
+/* Mobile: 2 items per row with larger spacing */
+@media (max-width: 768px) {
+  .gitlab-stages-row {
+    gap: 0.75rem;
+    max-width: 100%;
+  }
+
+  .gitlab-stage-box {
+    min-width: 90px;
+    max-width: 90px;
+    flex: 0 0 calc(50% - 0.375rem);
+  }
+
+  .gitlab-stage-separator {
+    display: none;
+  }
+
+  .gitlab-stage-header {
+    padding: 0.375rem;
+    min-width: 90px;
+  }
+
+  .gitlab-job-name {
+    font-size: 0.625rem;
+  }
 }
 
 /* --- SPHERE TOGGLE COMPONENTS --- */
