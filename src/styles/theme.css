@@ -681,6 +681,7 @@
   font-weight: 600;
   text-align: right;
   padding-top: 0.25rem;
+  color: var(--color-text-medium);
 }
 
 .rxjs-stream-display {

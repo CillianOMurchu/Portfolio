@@ -73,7 +73,7 @@ export default function RxJSDemo() {
 
   useEffect(() => {
     if (isLive) {
-      intervalRef.current = setInterval(emit, 800);
+      intervalRef.current = setInterval(emit, 1600);
     } else {
       clearInterval(intervalRef.current);
     }
