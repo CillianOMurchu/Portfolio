@@ -1,8 +1,4 @@
-.hero-section {
-  height: 100%;
-  position: relative;
-  z-index: 1;
-}
+/* HeroSection layout — sphere overlay only */
 
 .sphere-overlay {
   position: fixed;

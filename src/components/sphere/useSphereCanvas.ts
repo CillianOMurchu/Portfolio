@@ -371,5 +371,6 @@ export function useSphereCanvas({
     mountTime,
     fadeInDuration,
     fadeInStagger,
+    visible,
   ]);
 }

@@ -1,13 +1,13 @@
+import { AnimatePresence, motion } from "framer-motion";
 import React from "react";
-import { Routes, Route, useLocation } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
-import HomeScreen from "./HomeScreen";
+import { Route, Routes, useLocation } from "react-router-dom";
 import About from "./About";
+import Contact from "./Contact";
 import Fintech from "./Fintech";
-import Sass from "./Sass";
+import HomeScreen from "./HomeScreen";
 import Hospitality from "./Hospitality";
 import IGaming from "./iGaming";
-import Contact from "./Contact";
+import Sass from "./Sass";
 import Streaming from "./Streaming";
 
 const routes = [
@@ -39,7 +39,7 @@ export const AppRoutes: React.FC = () => {
           y: -12,
           transition: { duration: 0.25, ease: [0.4, 0, 1, 1] },
         }}
-        className="relative z-10"
+        className="relative z-10 h-full"
       >
         <Routes location={location}>
           {routes.map(({ path, key, screen }) => (

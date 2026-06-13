@@ -32,7 +32,7 @@ export function OrbOriginProvider({ children }: { children: ReactNode }) {
   const [oCharPosition, setOCharPosition] = useState<OCharPosition>(null);
   const [hoveredIcon, setHoveredIcon] = useState<HoveredIcon>(null);
   const [clickedIcon, setClickedIcon] = useState<ClickedIcon>(null);
-  const [showSphere, setShowSphere] = useState(false);
+  const [showSphere, setShowSphere] = useState(true);
   return (
     <OrbOriginContext.Provider value={{ orbOrigin, setOrbOrigin, oCharPosition, setOCharPosition, hoveredIcon, setHoveredIcon, clickedIcon, setClickedIcon, showSphere, setShowSphere }}>
       {children}

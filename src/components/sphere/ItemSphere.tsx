@@ -1,10 +1,10 @@
 import React, { useRef } from "react";
-import { usePreloadImages } from "./usePreloadImages";
-import { useSphereCanvas } from "./useSphereCanvas";
-import type { ItemSphereProps, SphereState } from "./types";
+import { useOrbOrigin } from "../../context/OrbOriginContext";
 import { generateFibonacciSphere } from "./fibonacciSphere";
 import { loadIconModules } from "./iconLoader";
-import { useOrbOrigin } from "../../context/OrbOriginContext";
+import type { ItemSphereProps, SphereState } from "./types";
+import { usePreloadImages } from "./usePreloadImages";
+import { useSphereCanvas } from "./useSphereCanvas";
 
 const { svgModules, iconNames } = loadIconModules();
 const positions = generateFibonacciSphere(iconNames.length);
@@ -64,9 +64,8 @@ export const ItemSphere: React.FC<ItemSphereProps> = ({ onIconClick, visible }) 
       className="sphere"
       style={{
         width: "100vw",
-        height: "100vh",
+        height: "100%",
         position: "absolute",
-        zIndex: -1,
       }}
     >
       <div

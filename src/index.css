@@ -28,6 +28,7 @@ body {
   color: inherit;
   height: 100vh;
   overflow: hidden;
+  margin: 0;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

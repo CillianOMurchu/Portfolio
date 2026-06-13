@@ -327,3 +327,137 @@
   max-width: 36rem;
   padding: 2rem 1.5rem 1rem;
 }
+
+/* --- NAVBAR COMPONENTS --- */
+
+.navbar-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition-property: color;
+  transition-duration: 200ms;
+}
+
+.navbar-link--active {
+  color: var(--color-accent-primary);
+}
+
+.navbar-link--inactive {
+  color: #9ca3af;
+}
+
+.navbar-link--inactive:hover {
+  color: #f3f4f6;
+}
+
+.navbar-mobile-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-align: left;
+  transition-property: color;
+  transition-duration: 200ms;
+  width: 100%;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.navbar-mobile-link--active {
+  color: var(--color-accent-primary);
+}
+
+.navbar-mobile-link--inactive {
+  color: #9ca3af;
+}
+
+.navbar-mobile-link--inactive:hover {
+  color: #f3f4f6;
+}
+
+/* --- HERO TITLE COMPONENTS --- */
+
+.hero-titles-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.hero-title {
+  transition-property: color, opacity, transform, text-shadow;
+  transition-duration: 0.2s, 0.3s, 0.3s, 0.2s;
+}
+
+.hero-title--hovered {
+  color: var(--color-accent-primary);
+  text-shadow: var(--neon-glow-primary);
+}
+
+.hero-title--deemphasised {
+  opacity: 0.3;
+  transform: scale(0.95);
+}
+
+/* --- SPHERE TOGGLE COMPONENTS --- */
+
+.sphere-toggle-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sphere-toggle-button {
+  border: none;
+  cursor: pointer;
+  outline: none;
+}
+
+.sphere-toggle-knob {
+  pointer-events: none;
+}
+
+.sphere-toggle-label {
+  pointer-events: none;
+}
+
+/* --- HOME SCREEN COMPONENTS --- */
+
+.home-screen {
+  position: relative;
+}
+
+.home-screen-toggle {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  z-index: 20;
+}
+
+.home-screen-sphere {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.home-screen-sphere--visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.home-screen-sphere--hidden {
+  opacity: 0;
+  pointer-events: none;
+}

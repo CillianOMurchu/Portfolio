@@ -1,24 +1,26 @@
 import React from "react";
-import { motion } from "framer-motion";
-import HeroSection, { type ItemType } from "../components/HeroSection/HeroSection";
+import HeroTitle from "../components/HeroTitle/HeroTitle";
 import IconShowcase from "../components/IconShowcase/IconShowcase";
+import ItemSphere from "../components/sphere/ItemSphere";
+import ToggleSphere from "../components/sphere/ToggleSphere";
 import { useOrbOrigin } from "../context/OrbOriginContext";
-
-const BACKGROUND = "linear-gradient(135deg, #0a0e1a 0%, #131a28 100%)";
-const selectedItem: ItemType = null;
 
 const HomeScreen: React.FC = () => {
   const { showSphere } = useOrbOrigin();
 
   return (
-    <motion.div
-      className="home-screen relative h-full"
-      animate={{ background: BACKGROUND }}
-      transition={{ duration: 0.8, ease: "easeInOut" }}
-    >
-      <HeroSection selectedItem={selectedItem} showSphere={showSphere} />
+    <div className="home-screen" style={{ width: "100%", height: "100%", background: "linear-gradient(135deg, #0a0e1a 0%, #131a28 100%)", position: "relative" }}>
+      <div className="home-screen-toggle" style={{ position: "absolute", top: "1.5rem", right: "1.5rem", zIndex: 20 }}>
+        <ToggleSphere />
+      </div>
+
+      <div className={`home-screen-sphere ${showSphere ? "home-screen-sphere--visible" : "home-screen-sphere--hidden"}`}>
+        <ItemSphere visible={showSphere} />
+      </div>
+
+      <HeroTitle />
       <IconShowcase />
-    </motion.div>
+    </div>
   );
 };
 

@@ -16,8 +16,9 @@ const ToggleSphere: React.FC = () => {
   const pillHeight = isSm ? PILL_HEIGHT_SM : PILL_HEIGHT;
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+    <div className="sphere-toggle-container" style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
       <button
+        className="sphere-toggle-button"
         onClick={() => setShowSphere(!showSphere)}
         aria-label={showSphere ? "Hide Tech Sphere" : "Show Tech Sphere"}
         style={{
@@ -25,8 +26,8 @@ const ToggleSphere: React.FC = () => {
           height: pillHeight,
           borderRadius: pillHeight / 2,
           border: `2px solid var(--color-accent-primary)`,
-          background: showSphere ? "var(--color-bg-surface)" : "var(--color-bg-primary)",
-          boxShadow: showSphere ? `var(--neon-glow-primary)` : `0 0 8px 2px var(--color-accent-primary)`,
+          background: showSphere ? "var(--color-bg-primary)" : "var(--color-bg-surface)",
+          boxShadow: showSphere ? `0 0 8px 2px var(--color-accent-primary)` : `var(--neon-glow-primary)`,
           display: "flex",
           alignItems: "center",
           position: "relative",
@@ -38,6 +39,7 @@ const ToggleSphere: React.FC = () => {
         }}
       >
         <span
+          className="sphere-toggle-knob"
           style={{
             position: "absolute",
             left: showSphere ? `calc(${pillWidth - pillHeight * 0.6 - 8}px)` : "4px",
@@ -54,6 +56,7 @@ const ToggleSphere: React.FC = () => {
         />
       </button>
       <span
+        className="sphere-toggle-label"
         style={{
           marginTop: "4px",
           fontSize: "0.65rem",
