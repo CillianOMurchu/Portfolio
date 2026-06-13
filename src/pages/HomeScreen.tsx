@@ -9,8 +9,8 @@ const HomeScreen: React.FC = () => {
   const { showSphere } = useOrbOrigin();
 
   return (
-    <div className="home-screen" style={{ width: "100%", height: "100%", background: "linear-gradient(135deg, #0a0e1a 0%, #131a28 100%)", position: "relative" }}>
-      <div className="home-screen-toggle" style={{ position: "absolute", top: "1.5rem", right: "1.5rem", zIndex: 20 }}>
+    <div className="home-screen">
+      <div className="home-screen-toggle">
         <ToggleSphere />
       </div>
 
