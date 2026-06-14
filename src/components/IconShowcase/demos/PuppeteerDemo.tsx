@@ -40,7 +40,7 @@ export default function PuppeteerDemo() {
 
   return (
     <DemoShell>
-      <CodePanel accent={PUPPETEER_ACCENT} className="overflow-hidden font-mono text-xs">
+      <CodePanel accent={PUPPETEER_ACCENT} className="overflow-hidden font-mono text-sm">
         <div className="px-3 py-2 flex items-center gap-2" style={{ background: "#081a14", borderBottom: "1px solid rgba(0,216,162,0.15)" }}>
           <div className="flex gap-1">
             <div className="w-2.5 h-2.5 rounded-full" style={{ background: FAIL_COLOR }} />
@@ -79,7 +79,7 @@ export default function PuppeteerDemo() {
 
       {done && (
         <div className="rounded-lg overflow-hidden" style={{ border: "1px solid rgba(0,216,162,0.25)" }}>
-          <div className="px-3 py-1.5 text-xs text-gray-500" style={{ background: "rgba(0,216,162,0.05)", borderBottom: "1px solid rgba(0,216,162,0.1)" }}>
+          <div className="px-3 py-1.5 text-sm text-gray-500" style={{ background: "rgba(0,216,162,0.05)", borderBottom: "1px solid rgba(0,216,162,0.1)" }}>
             sphere.png — 1280×720
           </div>
           <div className="p-4 flex items-center justify-center" style={{ background: "#0a0e1a", minHeight: 80 }}>
@@ -87,7 +87,7 @@ export default function PuppeteerDemo() {
               <div className="w-16 h-16 rounded-full mx-auto border-2 flex items-center justify-center" style={{ borderColor: PASS_COLOR, background: "rgba(16,185,129,0.05)" }}>
                 <span style={{ color: PASS_COLOR }}>🌐</span>
               </div>
-              <p className="text-xs text-gray-600">Portfolio screenshot captured</p>
+              <p className="text-sm text-gray-600">Portfolio screenshot captured</p>
             </div>
           </div>
         </div>

@@ -46,7 +46,7 @@ export default function ReactDemo() {
 
   return (
     <DemoShell className="gap-5">
-      <p className="text-xs text-gray-400 text-center">
+      <p className="text-sm text-gray-400 text-center">
         Watch which components re-render when state changes
       </p>
 
@@ -65,7 +65,7 @@ export default function ReactDemo() {
               {"<"}{node.label}{">"}{node.children ? "" : " /"}
             </span>
             {flashing.has(node.id) && (
-              <span className="text-xs ml-auto" style={{ color: REACT_ACCENT }}>re-render</span>
+              <span className="text-sm ml-auto" style={{ color: REACT_ACCENT }}>re-render</span>
             )}
           </div>
         ))}
@@ -88,7 +88,7 @@ export default function ReactDemo() {
         </button>
       </div>
 
-      <p className="text-xs text-center text-gray-600">
+      <p className="text-sm text-center text-gray-600">
         Header is memoized — it never re-renders even when parent state changes
       </p>
     </DemoShell>

@@ -5,9 +5,9 @@ import { iconDemos } from "../../data/icon-demos";
 import GenericDemo from "./demos/GenericDemo";
 import { CUSTOM_DEMOS } from "./demos/index";
 
-const ICON_SIZE = 72;
+const ICON_SIZE = 44;
 const NAVBAR_HEIGHT = 64; // px — matches top: 4rem on .showcase-backdrop
-const HEADER_ICON_TOP = 48; // px — margin-top on .showcase-header (3rem)
+const HEADER_ICON_TOP = 12; // px — margin-top on .showcase-header (0.75rem)
 const CONTENT_DELAY_MS = 550;
 
 const IconShowcase: React.FC = () => {
@@ -78,7 +78,7 @@ const IconShowcase: React.FC = () => {
             style={{
               width: ICON_SIZE,
               height: ICON_SIZE,
-              borderRadius: 12,
+              borderRadius: 8,
               pointerEvents: "none",
               flexShrink: 0,
             }}
@@ -89,7 +89,7 @@ const IconShowcase: React.FC = () => {
 
           {/* Title and tagline fade in after icon lands */}
           {contentVisible && (
-            <>
+            <div className="showcase-header-text">
               <motion.h2
                 className="showcase-title"
                 style={{ color: accentColor }}
@@ -109,7 +109,7 @@ const IconShowcase: React.FC = () => {
                   {meta.tagline}
                 </motion.p>
               )}
-            </>
+            </div>
           )}
         </div>
 

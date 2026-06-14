@@ -83,7 +83,7 @@ export default function JiraDemo() {
 
   return (
     <DemoShell className="gap-3">
-      <p className="text-xs text-gray-400 text-center">
+      <p className="text-sm text-gray-400 text-center">
         Click arrows to move tickets across the board
       </p>
       <div className="grid grid-cols-3 gap-2">
@@ -96,12 +96,12 @@ export default function JiraDemo() {
                 style={{ borderBottom: `2px solid ${col.color}44` }}
               >
                 <span
-                  className="text-xs font-semibold"
+                  className="text-sm font-semibold"
                   style={{ color: col.color }}
                 >
                   {col.label}
                 </span>
-                <span className="text-xs text-gray-600 ml-auto">
+                <span className="text-sm text-gray-600 ml-auto">
                   {colTickets.length}
                 </span>
               </div>
@@ -117,21 +117,21 @@ export default function JiraDemo() {
                     }}
                   >
                     <div className="flex items-center gap-1">
-                      <span className="text-xs">{TYPE_ICON[t.type]}</span>
-                      <span className="text-xs text-gray-500">{t.id}</span>
+                      <span className="text-sm">{TYPE_ICON[t.type]}</span>
+                      <span className="text-sm text-gray-500">{t.id}</span>
                       <span
                         className="ml-auto w-1.5 h-1.5 rounded-full"
                         style={{ background: PRIORITY_COLOR[t.priority] }}
                       />
                     </div>
-                    <p className="text-xs text-gray-300 leading-tight line-clamp-2">
+                    <p className="text-sm text-gray-300 leading-tight line-clamp-2">
                       {t.title}
                     </p>
                     <div className="flex gap-1 mt-0.5">
                       {colIdx > 0 && (
                         <button
                           onClick={() => move(t.id, -1)}
-                          className="text-xs px-1.5 py-0.5 rounded"
+                          className="text-sm px-1.5 py-0.5 rounded"
                           style={{
                             background: "rgba(255,255,255,0.06)",
                             color: MUTED_COLOR,
@@ -143,7 +143,7 @@ export default function JiraDemo() {
                       {colIdx < 2 && (
                         <button
                           onClick={() => move(t.id, 1)}
-                          className="text-xs px-1.5 py-0.5 rounded ml-auto"
+                          className="text-sm px-1.5 py-0.5 rounded ml-auto"
                           style={{
                             background: "rgba(255,255,255,0.06)",
                             color: MUTED_COLOR,

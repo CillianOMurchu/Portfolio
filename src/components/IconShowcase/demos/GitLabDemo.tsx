@@ -125,13 +125,13 @@ export default function GitLabDemo() {
           <span className="gitlab-pipeline-branch text-gray-500">main → production</span>
         </div>
         <div className="gitlab-actions">
-          <DemoButton color={PASS_COLOR} disabled={running} onClick={() => runPipeline(false)} className="px-3 py-1 text-xs">
+          <DemoButton color={PASS_COLOR} disabled={running} onClick={() => runPipeline(false)} className="px-3 py-1 text-sm">
             {running ? "Running…" : "✓ Success"}
           </DemoButton>
-          <DemoButton color={FAIL_COLOR} disabled={running} onClick={() => runPipeline(true)} className="px-3 py-1 text-xs">
+          <DemoButton color={FAIL_COLOR} disabled={running} onClick={() => runPipeline(true)} className="px-3 py-1 text-sm">
             ✗ Failure
           </DemoButton>
-          <DemoButton variant="ghost" onClick={reset} className="px-3 py-1 text-xs">↺</DemoButton>
+          <DemoButton variant="ghost" onClick={reset} className="px-3 py-1 text-sm">↺</DemoButton>
         </div>
       </div>
 
@@ -146,7 +146,7 @@ export default function GitLabDemo() {
                   className="gitlab-stage-header"
                   style={{ background: `${sc}18`, border: `1px solid ${sc}44` }}
                 >
-                  <p className="text-xs font-semibold" style={{ color: sc }}>{stage}</p>
+                  <p className="text-sm font-semibold" style={{ color: sc }}>{stage}</p>
                   {stageJobs.map((j) => (
                     <p key={j.id} className="gitlab-job-name" style={{ color: STATUS_COLOR[j.status] }}>
                       {STATUS_ICON[j.status]} {j.name}

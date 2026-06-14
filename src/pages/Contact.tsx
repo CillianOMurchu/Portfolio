@@ -52,7 +52,7 @@ const Contact = () => {
 
           {/* Footer Info */}
           <div className="self-end bg-slate-900/50 border-t border-accent-subtle px-6 py-3 text-center">
-            <p className="text-gray-500 text-xs">
+            <p className="text-gray-500 text-sm">
               💬 Let's chat about projects, ideas, or opportunities
             </p>
           </div>

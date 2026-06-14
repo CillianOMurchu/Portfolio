@@ -323,14 +323,23 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.75rem;
-  padding: 1rem 1.5rem 0;
-  margin-top: 3rem;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1.5rem 0;
+  margin-top: 0.75rem;
   text-align: center;
 }
 
+.showcase-header-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
 .showcase-title {
-  font-size: 2rem;
+  font-size: 1.35rem;
   font-weight: 800;
   letter-spacing: -0.02em;
   margin: 0;
@@ -338,17 +347,17 @@
 }
 
 .showcase-tagline {
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   color: var(--color-text-muted);
-  max-width: 28rem;
-  line-height: 1.5;
+  max-width: 16rem;
+  line-height: 1.4;
   margin: 0;
 }
 
 .showcase-content {
   width: 100%;
   max-width: 36rem;
-  padding: 2rem 1.5rem 1rem;
+  padding: 1rem 1.5rem 1rem;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -746,12 +755,170 @@
   font-family: monospace;
 }
 
-/* --- APP ROOT LAYOUT --- */
+/* RxJS info trigger + modal */
 
-.app-root {
-  height: 100vh; /* fallback for browsers without dvh */
-  height: 100dvh;
-  overflow: hidden;
+.rxjs-info-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--color-text-medium);
+  background: rgba(183, 23, 140, 0.08);
+  border: 1px solid rgba(183, 23, 140, 0.3);
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    border-color 0.2s,
+    transform 0.1s;
+}
+
+.rxjs-info-trigger:hover {
+  background: rgba(183, 23, 140, 0.16);
+  border-color: rgba(183, 23, 140, 0.55);
+  transform: translateY(-1px);
+}
+
+.rxjs-info-trigger-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.15rem;
+  height: 1.15rem;
+  border-radius: 50%;
+  font-size: 0.75rem;
+  font-style: italic;
+  color: #e879c4;
+  border: 1px solid rgba(232, 121, 196, 0.5);
+}
+
+.rxjs-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 10010;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background: rgba(6, 8, 16, 0.7);
+  backdrop-filter: blur(6px);
+}
+
+.rxjs-modal {
+  position: relative;
+  width: 100%;
+  max-width: 30rem;
+  padding: 2rem 1.75rem 1.75rem;
+  border-radius: 18px;
+  background:
+    radial-gradient(120% 120% at 0% 0%, rgba(183, 23, 140, 0.18) 0%, transparent 55%),
+    linear-gradient(160deg, #16101c 0%, #0d0f1a 100%);
+  border: 1px solid rgba(183, 23, 140, 0.35);
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.55),
+    0 0 0 1px rgba(255, 255, 255, 0.03) inset;
+  text-align: center;
+}
+
+.rxjs-modal-close {
+  position: absolute;
+  top: 0.85rem;
+  right: 0.85rem;
+  width: 1.9rem;
+  height: 1.9rem;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background 0.2s,
+    color 0.2s;
+}
+
+.rxjs-modal-close:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--color-text-high);
+}
+
+.rxjs-modal-badge {
+  width: 3rem;
+  height: 3rem;
+  margin: 0 auto 0.85rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #e879c4;
+  background: rgba(183, 23, 140, 0.14);
+  border: 1px solid rgba(183, 23, 140, 0.4);
+}
+
+.rxjs-modal-title {
+  margin: 0 0 0.9rem;
+  font-size: 1.4rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--color-text-high);
+}
+
+.rxjs-modal-body {
+  margin: 0 0 0.85rem;
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--color-text-medium);
+}
+
+.rxjs-modal-body strong {
+  color: #e879c4;
+  font-weight: 700;
+}
+
+.rxjs-modal-examples {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  text-align: left;
+}
+
+.rxjs-modal-example {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.95rem;
+  color: var(--color-text-medium);
+}
+
+.rxjs-modal-op {
+  flex-shrink: 0;
+  min-width: 4rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+  font-family: monospace;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-align: center;
+  color: #c4b5fd;
+  background: rgba(139, 92, 246, 0.14);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+}
+
+/* --- CYPRESS DEMO STYLING --- */
+
+.cypress-steps-list {
+  max-height: 11rem;
+  overflow-y: auto;
 }
 
 /* --- HOME SCREEN LAYOUT --- */

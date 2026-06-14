@@ -65,7 +65,7 @@ const NodeDemo: React.FC = () => {
 
   return (
     <DemoShell>
-      <CodePanel accent={NODE_ACCENT} className="p-4 font-mono text-xs leading-5 min-h-[180px] max-h-[220px] overflow-y-auto">
+      <CodePanel accent={NODE_ACCENT} className="p-4 font-mono text-sm leading-5 min-h-[180px] max-h-[220px] overflow-y-auto">
         {lines.map((l, i) => (
           <div
             key={i}
@@ -78,7 +78,7 @@ const NodeDemo: React.FC = () => {
         ))}
       </CodePanel>
 
-      <p className="text-xs text-gray-500 text-center">Click a method to run it</p>
+      <p className="text-sm text-gray-500 text-center">Click a method to run it</p>
 
       <div className="grid grid-cols-2 gap-2">
         {Object.keys(COMMANDS).map((cmd) => (
@@ -86,7 +86,7 @@ const NodeDemo: React.FC = () => {
             key={cmd}
             onClick={() => run(cmd)}
             disabled={ran.has(cmd)}
-            className="rounded px-3 py-2 text-xs font-mono text-left transition-all truncate"
+            className="rounded px-3 py-2 text-sm font-mono text-left transition-all truncate"
             style={{
               background: ran.has(cmd) ? "rgba(255,255,255,0.02)" : "rgba(104,160,99,0.1)",
               border: `1px solid ${ran.has(cmd) ? "rgba(255,255,255,0.05)" : "#68a06355"}`,

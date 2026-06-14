@@ -7,8 +7,8 @@ interface CodePanelProps {
   className?: string;
 }
 
-// className replaces the default "p-4 font-mono text-xs" — pass it explicitly when you need different padding, font, or overflow.
-export default function CodePanel({ accent, children, className = "p-4 font-mono text-xs" }: CodePanelProps) {
+// className replaces the default "p-4 font-mono text-sm" — pass it explicitly when you need different padding, font, or overflow.
+export default function CodePanel({ accent, children, className = "p-4 font-mono text-sm" }: CodePanelProps) {
   return (
     <div
       className={`rounded-lg ${className}`}

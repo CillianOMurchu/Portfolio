@@ -51,7 +51,7 @@ const JestDemo: React.FC = () => {
 
   return (
     <DemoShell>
-      <CodePanel accent={JEST_ACCENT} className="p-4 font-mono text-xs leading-6">
+      <CodePanel accent={JEST_ACCENT} className="p-4 font-mono text-sm leading-6">
         <p className="text-gray-500 mb-3">{SUITE}</p>
 
         {visible.map((t, i) => (
@@ -64,7 +64,7 @@ const JestDemo: React.FC = () => {
             <span style={{ color: t.passes ? "#9ca3af" : "#f87171" }}>
               {t.description}
             </span>
-            <span className="ml-auto text-gray-600 text-xs shrink-0">
+            <span className="ml-auto text-gray-600 text-sm shrink-0">
               ({t.duration})
             </span>
           </div>
@@ -100,7 +100,7 @@ const JestDemo: React.FC = () => {
             onClick={() =>
               setRevealed((r) => Math.min(r + 2, ALL_TESTS.length))
             }
-            className="text-xs px-3 py-1 rounded transition-all"
+            className="text-sm px-3 py-1 rounded transition-all"
             style={{
               background: "rgba(194,19,37,0.1)",
               border: "1px solid rgba(194,19,37,0.3)",

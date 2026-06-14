@@ -43,7 +43,7 @@ export default function TailwindDemo() {
 
   return (
     <DemoShell className="gap-5">
-      <p className="text-xs text-gray-400 text-center">
+      <p className="text-sm text-gray-400 text-center">
         Toggle utilities and watch the card update in real time
       </p>
 
@@ -60,9 +60,9 @@ export default function TailwindDemo() {
           }}
         >
           <p className="text-sm font-semibold text-white">Cillian.tsx</p>
-          <p className="text-xs text-gray-400 mt-1">Senior Frontend Dev</p>
+          <p className="text-sm text-gray-400 mt-1">Senior Frontend Dev</p>
           <span
-            className="inline-block mt-2 text-xs px-2 py-0.5 rounded-full"
+            className="inline-block mt-2 text-sm px-2 py-0.5 rounded-full"
             style={{ background: "rgba(56,189,248,0.2)", color: TAILWIND_ACCENT }}
           >
             Available
@@ -77,7 +77,7 @@ export default function TailwindDemo() {
             <button
               key={t.cls}
               onClick={() => toggle(t.cls)}
-              className="rounded px-3 py-2 text-left text-xs font-mono transition-all"
+              className="rounded px-3 py-2 text-left text-sm font-mono transition-all"
               style={{
                 background: on ? "rgba(56,189,248,0.1)" : "rgba(255,255,255,0.03)",
                 border: `1px solid ${on ? "rgba(56,189,248,0.4)" : "rgba(255,255,255,0.07)"}`,
@@ -90,7 +90,7 @@ export default function TailwindDemo() {
         })}
       </div>
 
-      <CodePanel accent={TAILWIND_ACCENT} className="px-3 py-2 font-mono text-xs break-all" >
+      <CodePanel accent={TAILWIND_ACCENT} className="px-3 py-2 font-mono text-sm break-all" >
         <span className="text-gray-500">className=</span>
         <span className="text-yellow-400">"</span>
         <span style={{ color: TAILWIND_ACCENT }}>{classStr || <span className="text-gray-600">no classes</span>}</span>

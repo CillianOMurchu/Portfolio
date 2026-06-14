@@ -45,15 +45,15 @@ export default function RustDemo() {
     <DemoShell className="gap-5">
       <div className="flex flex-col gap-2">
         <div className="flex items-center justify-between">
-          <p className="text-xs text-gray-400">fibonacci({n})</p>
-          <span className="text-xs font-mono" style={{ color: RUST_ACCENT }}>
+          <p className="text-sm text-gray-400">fibonacci({n})</p>
+          <span className="text-sm font-mono" style={{ color: RUST_ACCENT }}>
             {n >= 40 ? "🔥 borrow checker sweating" : n >= 35 ? "⚡ warming up" : "✓ trivial"}
           </span>
         </div>
         <div className="flex gap-2 flex-wrap">
           {STEPS.map(s => (
             <button key={s} onClick={() => { setN(s); setPhase("idle"); setRustTime(null); setJsTime(null); }}
-              className="px-3 py-1 rounded text-xs transition-all"
+              className="px-3 py-1 rounded text-sm transition-all"
               style={{ background: n === s ? "rgba(206,74,0,0.2)" : "rgba(255,255,255,0.04)", border: `1px solid ${n === s ? RUST_ACCENT : "rgba(255,255,255,0.08)"}`, color: n === s ? RUST_ACCENT : "#6b7280" }}>
               n={s}
             </button>
@@ -87,7 +87,7 @@ export default function RustDemo() {
       {phase === "done" && speedup && (
         <div className="rounded-lg px-4 py-3 text-center" style={{ background: "rgba(206,74,0,0.08)", border: "1px solid rgba(206,74,0,0.25)" }}>
           <p className="text-2xl font-bold" style={{ color: RUST_ACCENT }}>{speedup}×</p>
-          <p className="text-xs text-gray-400 mt-0.5">faster in Rust — same algorithm, zero GC pauses</p>
+          <p className="text-sm text-gray-400 mt-0.5">faster in Rust — same algorithm, zero GC pauses</p>
         </div>
       )}
 

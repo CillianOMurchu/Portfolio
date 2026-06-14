@@ -72,7 +72,7 @@ font-weight: ${selected.fontWeight};`;
             border: "1px solid rgba(255,255,255,0.1)",
           }}
         >
-          <p className="text-xs text-gray-500">Canvas</p>
+          <p className="text-sm text-gray-500">Canvas</p>
           <div className="flex flex-wrap gap-3 items-center">
             {ELEMENTS.map((el) => {
               const isSelected = selected.id === el.id;
@@ -111,7 +111,7 @@ font-weight: ${selected.fontWeight};`;
           }}
         >
           <div
-            className="px-3 py-2 text-xs text-gray-400"
+            className="px-3 py-2 text-sm text-gray-400"
             style={{
               borderBottom: "1px solid rgba(255,255,255,0.08)",
               background: "#3c3c3c",
@@ -119,7 +119,7 @@ font-weight: ${selected.fontWeight};`;
           >
             Inspect
           </div>
-          <div className="p-2 space-y-2 text-xs font-mono">
+          <div className="p-2 space-y-2 text-sm font-mono">
             <div>
               <span className="text-gray-500">Type</span>
               <br />
@@ -154,7 +154,7 @@ font-weight: ${selected.fontWeight};`;
 
       <CodePanel
         accent={FIGMA_ACCENT}
-        className="p-3 font-mono text-xs leading-5 text-gray-400"
+        className="p-3 font-mono text-sm leading-5 text-gray-400"
       >
         <p className="text-gray-600 mb-1">{"/* CSS export */"}</p>
         {css.split("\n").map((line, i) => {

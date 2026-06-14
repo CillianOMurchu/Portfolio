@@ -26,7 +26,7 @@ export default function MongoDBDemo() {
 
   return (
     <DemoShell>
-      <CodePanel accent={MONGODB_ACCENT} className="px-3 py-2 font-mono text-xs" >
+      <CodePanel accent={MONGODB_ACCENT} className="px-3 py-2 font-mono text-sm" >
         <span className="text-gray-600" style={{ color: MONGODB_ACCENT }}>
           <span className="text-gray-600">{">"} </span>{query}
           <span className="text-gray-600"> // {visible.length} document{visible.length !== 1 ? "s" : ""}</span>
@@ -36,7 +36,7 @@ export default function MongoDBDemo() {
       <div className="flex gap-2 flex-wrap">
         {FILTERS.map((f) => (
           <button key={f} onClick={() => setFilter(filter === f ? null : f)}
-            className="text-xs px-3 py-1 rounded-full transition-all"
+            className="text-sm px-3 py-1 rounded-full transition-all"
             style={{
               background: filter === f ? "rgba(71,162,72,0.2)" : "rgba(255,255,255,0.04)",
               border: `1px solid ${filter === f ? MONGODB_ACCENT : "rgba(255,255,255,0.1)"}`,
@@ -54,16 +54,16 @@ export default function MongoDBDemo() {
             style={{ background: "rgba(71,162,72,0.05)", border: `1px solid ${expanded === doc._id ? MONGODB_ACCENT : "rgba(71,162,72,0.15)"}` }}>
             <div className="flex items-center justify-between">
               <span className="text-sm text-white font-medium">{doc.name}</span>
-              <span className="text-xs" style={{ color: MONGODB_ACCENT }}>{doc.year}</span>
+              <span className="text-sm" style={{ color: MONGODB_ACCENT }}>{doc.year}</span>
             </div>
             {expanded === doc._id ? (
-              <pre className="mt-2 text-xs font-mono text-gray-400 whitespace-pre-wrap text-left">
+              <pre className="mt-2 text-sm font-mono text-gray-400 whitespace-pre-wrap text-left">
 {JSON.stringify(doc, null, 2)}
               </pre>
             ) : (
               <div className="flex gap-1 mt-1 flex-wrap">
                 {doc.stack.map((s) => (
-                  <span key={s} className="text-xs px-1.5 py-0.5 rounded text-gray-500"
+                  <span key={s} className="text-sm px-1.5 py-0.5 rounded text-gray-500"
                     style={{ background: "rgba(255,255,255,0.05)", color: filter === s ? MONGODB_ACCENT : "#9ca3af" }}>
                     {s}
                   </span>

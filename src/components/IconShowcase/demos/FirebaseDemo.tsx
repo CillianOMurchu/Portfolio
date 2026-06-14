@@ -50,17 +50,17 @@ export default function FirebaseDemo() {
   const Field = ({ k, v }: { k: string; v: string | number }) => (
     <div className="flex justify-between items-center py-1 px-2 rounded transition-all duration-300"
       style={{ background: flash.has(k) ? "rgba(255,202,40,0.12)" : "transparent", border: `1px solid ${flash.has(k) ? "rgba(255,202,40,0.3)" : "transparent"}` }}>
-      <span className="text-blue-400 text-xs font-mono">{k}:</span>
-      <span className="text-xs font-mono" style={{ color: k === "status" ? STATUS_COLOR[v as Doc["status"]] : "#f3f4f6" }}>
+      <span className="text-blue-400 text-sm font-mono">{k}:</span>
+      <span className="text-sm font-mono" style={{ color: k === "status" ? STATUS_COLOR[v as Doc["status"]] : "#f3f4f6" }}>
         {typeof v === "string" ? `"${v}"` : v.toLocaleString()}
-        {flash.has(k) && <span className="ml-1 text-yellow-400 text-xs">← updated</span>}
+        {flash.has(k) && <span className="ml-1 text-yellow-400 text-sm">← updated</span>}
       </span>
     </div>
   );
 
   return (
     <DemoShell>
-      <div className="rounded-lg overflow-hidden font-mono text-xs" style={{ border: "1px solid rgba(255,202,40,0.2)" }}>
+      <div className="rounded-lg overflow-hidden font-mono text-sm" style={{ border: "1px solid rgba(255,202,40,0.2)" }}>
         <div className="px-3 py-2 flex items-center gap-2" style={{ background: "#1a1200", borderBottom: "1px solid rgba(255,202,40,0.15)" }}>
           <span className="text-yellow-400">firestore</span>
           <span className="text-gray-600">/</span>
@@ -81,7 +81,7 @@ export default function FirebaseDemo() {
         </div>
       </div>
 
-      <CodePanel accent={FIREBASE_ACCENT} className="px-3 py-2 font-mono text-xs">
+      <CodePanel accent={FIREBASE_ACCENT} className="px-3 py-2 font-mono text-sm">
         <span className="text-purple-400">onSnapshot</span>
         <span className="text-gray-500">(docRef, (doc) {"=>"} {"{"}</span>
         <div className="ml-4 text-gray-500">setData(doc.<span className="text-blue-400">data</span>())</div>

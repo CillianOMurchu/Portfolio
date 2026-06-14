@@ -4,15 +4,14 @@ import DemoShell from "./components/DemoShell";
 import { PASS_COLOR, MUTED_COLOR } from "./constants";
 
 const RXJS_ACCENT = "#b7178c";
-const DEBOUNCE_MS = 2000;
 const EVENT_SLOT = 36; // event (28px) + gap (8px) — used to compute how many fit per line
 
 interface Event { id: number; value: number; t: number; }
 
 const OPERATORS = [
-  { id: "map",      label: "map(x => x * 2)" },
-  { id: "filter",   label: "filter(x => x % 2 === 0)" },
-  { id: "debounce", label: "debounceTime(2000ms)" },
+  { id: "map",    label: "map(x => x * 2)" },
+  { id: "filter", label: "filter(x => x % 2 === 0)" },
+  { id: "scan",   label: "scan((acc, x) => acc + x, 0)" },
 ] as const;
 
 export default function RxJSDemo() {
@@ -25,8 +24,10 @@ export default function RxJSDemo() {
 
   const counter = useRef(0);
   const intervalRef = useRef<ReturnType<typeof setInterval> | undefined>(undefined);
-  const debounceRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const displayRef = useRef<HTMLDivElement>(null);
+  const scanAcc = useRef(0); // running total for scan, persists across emissions
+  const activeOpsRef = useRef(activeOps); // latest ops, read at emit time
+  activeOpsRef.current = activeOps;
 
   // Measure how many events fit on one line so they never wrap or overflow
   useLayoutEffect(() => {
@@ -42,33 +43,32 @@ export default function RxJSDemo() {
     return () => observer.disconnect();
   }, []);
 
-  const applyPipeline = useCallback((events: Event[]) => {
-    let out = [...events];
-    if (activeOps.has("filter")) out = out.filter(e => e.value % 2 === 0);
-    if (activeOps.has("map")) out = out.map(e => ({ ...e, value: e.value * 2 }));
-    return out;
-  }, [activeOps]);
+  // Push one source value through the operators active *right now*.
+  // Returns the resulting event, or null if it was filtered out.
+  const runThroughPipeline = useCallback((event: Event): Event | null => {
+    const ops = activeOpsRef.current;
+    let value = event.value;
+    if (ops.has("filter") && value % 2 !== 0) return null;
+    if (ops.has("map")) value *= 2;
+    if (ops.has("scan")) value = scanAcc.current += value;
+    return { ...event, value };
+  }, []);
 
   const emit = useCallback(() => {
     const val = Math.floor(Math.random() * 9) + 1;
     const event: Event = { id: counter.current++, value: val, t: Date.now() };
-    setSource(prev => {
-      // Keep one extra so the overflowing event can animate out past the edge
-      const next = [...prev, event].slice(-(capacity + 1));
-      const commit = () => setResult(applyPipeline(next));
-      if (activeOps.has("debounce")) {
-        clearTimeout(debounceRef.current);
-        debounceRef.current = setTimeout(commit, DEBOUNCE_MS);
-      } else {
-        commit();
-      }
-      return next.slice(-(capacity + 1));
-    });
-  }, [applyPipeline, activeOps, capacity]);
+
+    // Keep one extra so the overflowing event can animate out past the edge
+    setSource(prev => [...prev, event].slice(-(capacity + 1)));
+
+    const processed = runThroughPipeline(event);
+    if (processed) {
+      setResult(prev => [...prev, processed].slice(-(capacity + 1)));
+    }
+  }, [capacity, runThroughPipeline]);
 
   useEffect(() => () => {
     clearInterval(intervalRef.current);
-    clearTimeout(debounceRef.current);
   }, []);
 
   useEffect(() => {
@@ -80,18 +80,16 @@ export default function RxJSDemo() {
     return () => clearInterval(intervalRef.current);
   }, [isLive, emit]);
 
-  useEffect(() => {
-    setResult(applyPipeline(source));
-  }, [activeOps, source, applyPipeline]);
-
   const toggleOp = (id: string) => setActiveOps(prev => {
     const next = new Set(prev);
     if (next.has(id)) { next.delete(id); } else { next.add(id); }
+    // scan starts a fresh running total each time it's switched on
+    if (id === "scan" && next.has("scan")) scanAcc.current = 0;
     return next;
   });
 
   const resetDemo = () => {
-    clearTimeout(debounceRef.current);
+    scanAcc.current = 0;
     setSource([]);
     setResult([]);
   };
@@ -161,7 +159,7 @@ export default function RxJSDemo() {
       <div className="flex flex-col gap-2">
         {OPERATORS.map(op => (
           <button key={op.id} onClick={() => toggleOp(op.id)}
-            className="rounded px-3 py-2 text-xs font-mono text-left transition-all"
+            className="rounded px-3 py-2 text-sm font-mono text-left transition-all"
             style={{
               background: activeOps.has(op.id) ? "rgba(139,92,246,0.12)" : "rgba(255,255,255,0.03)",
               border: `1px solid ${activeOps.has(op.id) ? "rgba(139,92,246,0.4)" : "rgba(255,255,255,0.08)"}`,
@@ -182,34 +180,73 @@ export default function RxJSDemo() {
         <button onClick={resetDemo} className="rounded-lg px-4 py-2 text-sm" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", color: MUTED_COLOR }}>↺</button>
       </div>
 
-      <div className="flex flex-col items-center gap-2">
+      <div className="flex justify-center">
         <button
-          onClick={() => setIsInfoOpen(o => !o)}
-          className="w-6 h-6 rounded-full text-xs flex items-center justify-center transition-all"
-          style={{
-            background: isInfoOpen ? "rgba(183,23,140,0.15)" : "rgba(255,255,255,0.05)",
-            border: `1px solid ${isInfoOpen ? "rgba(183,23,140,0.4)" : "rgba(255,255,255,0.1)"}`,
-            color: isInfoOpen ? RXJS_ACCENT : MUTED_COLOR,
-          }}
+          onClick={() => setIsInfoOpen(true)}
+          className="rxjs-info-trigger"
           aria-label="What is an RxJS stream?"
         >
-          ℹ
+          <span className="rxjs-info-trigger-icon">ℹ</span>
+          What is a stream?
         </button>
-        <AnimatePresence>
-          {isInfoOpen && (
-            <motion.p
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.25 }}
-              className="text-xs text-center overflow-hidden"
-              style={{ color: MUTED_COLOR, maxWidth: "28rem", lineHeight: 1.6 }}
-            >
-              A stream is like a river of events over time — clicks, keystrokes, API responses — anything that happens more than once. RxJS lets you attach operators to that river to transform, filter, or delay the values before they reach your code.
-            </motion.p>
-          )}
-        </AnimatePresence>
       </div>
+
+      <AnimatePresence>
+        {isInfoOpen && (
+          <motion.div
+            className="rxjs-modal-backdrop"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            onClick={() => setIsInfoOpen(false)}
+          >
+            <motion.div
+              className="rxjs-modal"
+              initial={{ opacity: 0, scale: 0.92, y: 16 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.92, y: 16 }}
+              transition={{ type: "spring", stiffness: 280, damping: 26 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                className="rxjs-modal-close"
+                onClick={() => setIsInfoOpen(false)}
+                aria-label="Close"
+              >
+                ✕
+              </button>
+
+              <div className="rxjs-modal-badge">~</div>
+              <h3 className="rxjs-modal-title">What is a stream?</h3>
+
+              <p className="rxjs-modal-body">
+                A <strong>stream</strong> is a river of events flowing over time —
+                clicks, keystrokes, API responses, anything that happens more than once.
+              </p>
+              <p className="rxjs-modal-body">
+                RxJS lets you attach <strong>operators</strong> to that river to
+                transform, filter, or combine values before they reach your code.
+              </p>
+
+              <div className="rxjs-modal-examples">
+                <div className="rxjs-modal-example">
+                  <span className="rxjs-modal-op">map</span>
+                  <span>reshapes each value</span>
+                </div>
+                <div className="rxjs-modal-example">
+                  <span className="rxjs-modal-op">filter</span>
+                  <span>lets only some through</span>
+                </div>
+                <div className="rxjs-modal-example">
+                  <span className="rxjs-modal-op">scan</span>
+                  <span>accumulates a running result</span>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </DemoShell>
   );
 }

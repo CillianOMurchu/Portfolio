@@ -48,7 +48,7 @@ export default function JavaScriptDemo() {
       <p className="text-gray-400 text-sm">
         {score === 5 ? "You've clearly read the spec. Or suffered enough." : score >= 3 ? "Solid. JS quirks are a survival skill." : "That's fine. Linters exist for a reason."}
       </p>
-      <button onClick={reset} className="text-xs px-4 py-2 rounded" style={{ background: "rgba(247,223,30,0.1)", border: "1px solid rgba(247,223,30,0.3)", color: JS_ACCENT }}>
+      <button onClick={reset} className="text-sm px-4 py-2 rounded" style={{ background: "rgba(247,223,30,0.1)", border: "1px solid rgba(247,223,30,0.3)", color: JS_ACCENT }}>
         Try again
       </button>
     </div>
@@ -56,7 +56,7 @@ export default function JavaScriptDemo() {
 
   return (
     <div className="flex flex-col gap-4 w-full max-w-md mx-auto">
-      <div className="flex justify-between text-xs text-gray-500">
+      <div className="flex justify-between text-sm text-gray-500">
         <span>Question {idx + 1} / {QUESTIONS.length}</span>
         <span style={{ color: JS_ACCENT }}>Score: {score}</span>
       </div>
@@ -87,7 +87,7 @@ export default function JavaScriptDemo() {
       </div>
 
       {selected && (
-        <div className="rounded-lg px-4 py-3 text-xs text-gray-400 leading-relaxed" style={{ background: "rgba(247,223,30,0.05)", border: "1px solid rgba(247,223,30,0.15)" }}>
+        <div className="rounded-lg px-4 py-3 text-sm text-gray-400 leading-relaxed" style={{ background: "rgba(247,223,30,0.05)", border: "1px solid rgba(247,223,30,0.15)" }}>
           {correct ? "✓ Correct. " : "✗ Wrong. "}{q.explanation}
         </div>
       )}

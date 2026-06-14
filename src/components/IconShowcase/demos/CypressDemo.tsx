@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import DemoShell from "./components/DemoShell";
 import DemoButton from "./components/DemoButton";
 import { PASS_COLOR, FAIL_COLOR, WARN_COLOR, DARK_MUTED } from "./constants";
@@ -46,6 +46,15 @@ export default function CypressDemo() {
   const [browserState, setBrowserState] = useState("Awaiting test run");
   const [running, setRunning] = useState(false);
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
+  const stepRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  const activeStep = steps.findIndex(s => s.status === "running");
+
+  // Keep the running step in view as the suite progresses
+  useEffect(() => {
+    if (activeStep < 0) return;
+    stepRefs.current[activeStep]?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }, [activeStep]);
 
   const run = () => {
     timers.current.forEach(clearTimeout);
@@ -78,20 +87,21 @@ export default function CypressDemo() {
           <div className="w-2.5 h-2.5 rounded-full bg-red-500/60" />
           <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/60" />
           <div className="w-2.5 h-2.5 rounded-full bg-green-500/60" />
-          <span className="ml-2 text-xs text-gray-500">localhost:5173</span>
+          <span className="ml-2 text-sm text-gray-500">localhost:5173</span>
         </div>
         <div className="px-4 py-6 text-center min-h-[80px] flex items-center justify-center">
           <p className="text-sm" style={{ color: running ? PASS_COLOR : "#9ca3af" }}>{browserState}</p>
         </div>
       </div>
 
-      <div className="rounded-lg overflow-hidden font-mono text-xs" style={{ background: "#0d1117", border: "1px solid rgba(23,32,44,0.8)" }}>
+      <div className="rounded-lg overflow-hidden font-mono text-sm" style={{ background: "#0d1117", border: "1px solid rgba(23,32,44,0.8)" }}>
         <div className="px-3 py-2 flex items-center justify-between" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
           <span className="text-gray-500">Tests: portfolio.cy.ts</span>
           <span style={{ color: PASS_COLOR }}>{passed}/{STEPS.length}</span>
         </div>
+        <div className="cypress-steps-list">
         {steps.map((s, i) => (
-          <div key={i} className="px-3 py-1 flex items-center gap-2 min-w-0"
+          <div key={i} ref={el => { stepRefs.current[i] = el; }} className="px-3 py-1 flex items-center gap-2 min-w-0"
             style={{ background: s.status === "running" ? "rgba(245,158,11,0.06)" : "transparent" }}>
             <span className="shrink-0" style={{ color: STATUS_COLOR[s.status] }}>
               {s.status === "pending" ? "○" : s.status === "running" ? "◌" : s.status === "passed" ? "✓" : "✗"}
@@ -103,6 +113,7 @@ export default function CypressDemo() {
             {s.status === "passed" && <span className="ml-auto shrink-0 text-gray-600">{s.duration}</span>}
           </div>
         ))}
+        </div>
       </div>
 
       <div className="flex gap-2">

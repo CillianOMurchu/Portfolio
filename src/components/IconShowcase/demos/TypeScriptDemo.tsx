@@ -35,7 +35,7 @@ const TypeScriptDemo: React.FC = () => {
 
   return (
     <DemoShell>
-      <p className="text-xs text-gray-400 text-center">
+      <p className="text-sm text-gray-400 text-center">
         Fill in the correct TypeScript types for Cillian's profile object
       </p>
 
@@ -49,7 +49,7 @@ const TypeScriptDemo: React.FC = () => {
               disabled={submitted}
               value={answers[field.key] ?? ""}
               onChange={(e) => setAnswers((prev) => ({ ...prev, [field.key]: e.target.value }))}
-              className="rounded px-2 py-0.5 text-xs font-mono outline-none"
+              className="rounded px-2 py-0.5 text-sm font-mono outline-none"
               style={{
                 background: "#161b22",
                 border: `1px solid ${statusColor(field)}55`,
@@ -62,7 +62,7 @@ const TypeScriptDemo: React.FC = () => {
               ))}
             </select>
             <span className="text-gray-500">{"// "}</span>
-            <span className="text-gray-600 text-xs truncate min-w-0">{field.value}</span>
+            <span className="text-gray-600 text-sm truncate min-w-0">{field.value}</span>
             {submitted && (
               <span style={{ color: answers[field.key] === field.correct ? PASS_COLOR : FAIL_COLOR }}>
                 {answers[field.key] === field.correct ? "✓" : `✗ (${field.correct})`}
@@ -95,7 +95,7 @@ const TypeScriptDemo: React.FC = () => {
           >
             {score}/{FIELDS.length} correct
           </p>
-          <p className="text-xs text-gray-500 mt-1">
+          <p className="text-sm text-gray-500 mt-1">
             {score === FIELDS.length
               ? "Zero type errors. TypeScript approves."
               : score >= 2
@@ -104,7 +104,7 @@ const TypeScriptDemo: React.FC = () => {
           </p>
           <button
             onClick={() => { setAnswers({}); setSubmitted(false); }}
-            className="mt-3 text-xs text-blue-400 underline"
+            className="mt-3 text-sm text-blue-400 underline"
           >
             reset
           </button>

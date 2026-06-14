@@ -40,10 +40,10 @@ function ButtonPreview({ args }: { args: Record<string, unknown> }) {
   return <button disabled={!!args.disabled} className={base} style={{ border: `1px solid ${PASS_COLOR}`, color: PASS_COLOR, background: "transparent", opacity: args.disabled ? 0.4 : 1 }}>{String(args.label)}</button>;
 }
 function BadgePreview({ args }: { args: Record<string, unknown> }) {
-  return <span className="px-3 py-1.5 rounded-full text-xs font-medium" style={{ background: `${args.color as string}22`, border: `1px solid ${args.color as string}55`, color: args.color as string }}>{String(args.label)}</span>;
+  return <span className="px-3 py-1.5 rounded-full text-sm font-medium" style={{ background: `${args.color as string}22`, border: `1px solid ${args.color as string}55`, color: args.color as string }}>{String(args.label)}</span>;
 }
 function CardPreview({ args }: { args: Record<string, unknown> }) {
-  return <div className="rounded-xl p-4 w-48" style={{ background: "rgba(255,255,255,0.04)", border: `1px solid ${args.accent as string}33` }}><p className="font-semibold text-white text-sm">{String(args.title)}</p><p className="text-xs mt-1" style={{ color: args.accent as string }}>{String(args.subtitle)}</p></div>;
+  return <div className="rounded-xl p-4 w-48" style={{ background: "rgba(255,255,255,0.04)", border: `1px solid ${args.accent as string}33` }}><p className="font-semibold text-white text-sm">{String(args.title)}</p><p className="text-sm mt-1" style={{ color: args.accent as string }}>{String(args.subtitle)}</p></div>;
 }
 
 export default function StorybookDemo() {
@@ -59,15 +59,15 @@ export default function StorybookDemo() {
       <div className="rounded-lg overflow-hidden" style={{ border: `1px solid ${STORYBOOK_ACCENT}33` }}>
         <div className="grid grid-cols-[140px_1fr]" style={{ minHeight: 240 }}>
           <div className="flex flex-col" style={{ borderRight: "1px solid rgba(255,255,255,0.07)", background: "#0d1117" }}>
-            <div className="px-3 py-2 text-xs text-gray-500 uppercase tracking-wider" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>Stories</div>
+            <div className="px-3 py-2 text-sm text-gray-500 uppercase tracking-wider" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>Stories</div>
             {COMPONENTS.map((c, i) => (
               <div key={c.name}>
-                <button onClick={() => { setCompIdx(i); setStoryId(c.stories[0].id); }} className="w-full text-left px-3 py-1.5 text-xs transition-all"
+                <button onClick={() => { setCompIdx(i); setStoryId(c.stories[0].id); }} className="w-full text-left px-3 py-1.5 text-sm transition-all"
                   style={{ color: i === compIdx ? STORYBOOK_ACCENT : "#9ca3af", background: i === compIdx ? `${STORYBOOK_ACCENT}14` : "transparent" }}>
                   {i === compIdx ? "▾" : "▸"} {c.name}
                 </button>
                 {i === compIdx && c.stories.map(s => (
-                  <button key={s.id} onClick={() => setStoryId(s.id)} className="w-full text-left pl-6 pr-3 py-1 text-xs transition-all"
+                  <button key={s.id} onClick={() => setStoryId(s.id)} className="w-full text-left pl-6 pr-3 py-1 text-sm transition-all"
                     style={{ color: s.id === storyId ? STORYBOOK_ACCENT : MUTED_COLOR, background: s.id === storyId ? `${STORYBOOK_ACCENT}0f` : "transparent" }}>
                     {s.label}
                   </button>
@@ -80,7 +80,7 @@ export default function StorybookDemo() {
             <div className="flex items-center justify-center flex-1 p-6" style={{ background: "rgba(255,255,255,0.02)", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
               <Preview args={story.args} />
             </div>
-            <div className="p-3 font-mono text-xs" style={{ background: "#0d1117" }}>
+            <div className="p-3 font-mono text-sm" style={{ background: "#0d1117" }}>
               <p className="text-gray-600 mb-1">Args</p>
               {Object.entries(story.args).map(([k, v]) => (
                 <div key={k} className="flex gap-2">

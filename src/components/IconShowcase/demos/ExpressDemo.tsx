@@ -51,7 +51,7 @@ export default function ExpressDemo() {
 
   return (
     <DemoShell>
-      <p className="text-xs text-center text-gray-400">Toggle middleware on/off then send a request</p>
+      <p className="text-sm text-center text-gray-400">Toggle middleware on/off then send a request</p>
 
       <div className="flex flex-col gap-1">
         {middleware.map((m) => {
@@ -59,14 +59,14 @@ export default function ExpressDemo() {
           return (
             <div key={m.id} className="flex items-center gap-3 rounded-lg px-3 py-2 transition-all duration-200"
               style={{ background: isActive ? `${m.color}18` : "rgba(255,255,255,0.03)", border: `1px solid ${isActive ? m.color : "rgba(255,255,255,0.07)"}` }}>
-              <button onClick={() => toggle(m.id)} className="w-4 h-4 rounded border flex-shrink-0 text-xs flex items-center justify-center"
+              <button onClick={() => toggle(m.id)} className="w-4 h-4 rounded border flex-shrink-0 text-sm flex items-center justify-center"
                 style={{ borderColor: m.enabled ? m.color : DARK_MUTED, background: m.enabled ? `${m.color}33` : "transparent" }}>
                 {m.enabled && <span style={{ color: m.color }}>✓</span>}
               </button>
-              <span className="font-mono text-xs flex-1" style={{ color: m.enabled ? m.color : DARK_MUTED }}>
+              <span className="font-mono text-sm flex-1" style={{ color: m.enabled ? m.color : DARK_MUTED }}>
                 app.use(<span style={{ color: "#e5e7eb" }}>{m.name}</span>)
               </span>
-              {isActive && <span className="text-xs" style={{ color: m.color }}>{m.action} ✓</span>}
+              {isActive && <span className="text-sm" style={{ color: m.color }}>{m.action} ✓</span>}
             </div>
           );
         })}
@@ -78,7 +78,7 @@ export default function ExpressDemo() {
       </button>
 
       {response && (
-        <div className="rounded-lg px-3 py-2 font-mono text-xs whitespace-pre"
+        <div className="rounded-lg px-3 py-2 font-mono text-sm whitespace-pre"
           style={{ background: "#0d1117", border: `1px solid ${response.startsWith("200") ? "rgba(16,185,129,0.3)" : "rgba(239,68,68,0.3)"}`, color: response.startsWith("200") ? PASS_COLOR : FAIL_COLOR }}>
           {response}
         </div>

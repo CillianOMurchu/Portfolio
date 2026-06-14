@@ -43,7 +43,7 @@ export default function GitHubDemo() {
   return (
     <DemoShell>
       <div className="rounded-lg p-3 overflow-x-auto" style={{ background: "#0d1117", border: "1px solid rgba(255,255,255,0.1)" }}>
-        <p className="text-xs text-gray-500 mb-2">Contribution graph — hover the glowing cells</p>
+        <p className="text-sm text-gray-500 mb-2">Contribution graph — hover the glowing cells</p>
         <div className="flex gap-0.5">
           {Array.from({ length: 52 }, (_, col) => (
             <div key={col} className="flex flex-col gap-0.5">
@@ -65,7 +65,7 @@ export default function GitHubDemo() {
           ))}
         </div>
         {milestone && (
-          <p className="text-xs mt-2" style={{ color: milestone.color }}>★ {milestone.label}</p>
+          <p className="text-sm mt-2" style={{ color: milestone.color }}>★ {milestone.label}</p>
         )}
       </div>
 
@@ -75,12 +75,12 @@ export default function GitHubDemo() {
             className="rounded-lg px-3 py-2 text-left transition-all w-full"
             style={{ background: selectedCommit === i ? "rgba(255,255,255,0.06)" : "rgba(255,255,255,0.02)", border: `1px solid ${selectedCommit === i ? "rgba(255,255,255,0.15)" : "rgba(255,255,255,0.06)"}` }}>
             <div className="flex items-center gap-2">
-              <span className="font-mono text-xs" style={{ color: PASS_COLOR }}>{c.hash}</span>
-              <span className="text-xs text-gray-300 flex-1 truncate">{c.msg}</span>
-              <span className="text-xs text-gray-600 shrink-0">{c.ago}</span>
+              <span className="font-mono text-sm" style={{ color: PASS_COLOR }}>{c.hash}</span>
+              <span className="text-sm text-gray-300 flex-1 truncate">{c.msg}</span>
+              <span className="text-sm text-gray-600 shrink-0">{c.ago}</span>
             </div>
             {selectedCommit === i && (
-              <div className="flex gap-3 mt-1.5 text-xs font-mono">
+              <div className="flex gap-3 mt-1.5 text-sm font-mono">
                 <span style={{ color: PASS_COLOR }}>+{c.additions}</span>
                 <span style={{ color: FAIL_COLOR }}>-{c.deletions}</span>
               </div>
