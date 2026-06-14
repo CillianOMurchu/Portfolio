@@ -267,7 +267,8 @@
   bottom: 0;
   left: 0;
   width: 100%;
-  height: calc(100vh - 8rem);
+  height: calc(100vh - 8rem); /* fallback for browsers without dvh */
+  height: calc(100dvh - 8rem);
   padding-top: 4rem;
   padding-bottom: 4rem;
   z-index: 10000;
@@ -743,6 +744,14 @@
 
 .rxjs-operator-text {
   font-family: monospace;
+}
+
+/* --- APP ROOT LAYOUT --- */
+
+.app-root {
+  height: 100vh; /* fallback for browsers without dvh */
+  height: 100dvh;
+  overflow: hidden;
 }
 
 /* --- HOME SCREEN LAYOUT --- */

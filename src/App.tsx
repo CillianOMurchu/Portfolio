@@ -14,7 +14,7 @@ function App() {
   const scrollable = currentPage === "/about";
 
   return (
-    <div style={{ height: "100vh", overflow: "hidden" }}>
+    <div className="app-root">
       <Navbar />
       <main
         style={{

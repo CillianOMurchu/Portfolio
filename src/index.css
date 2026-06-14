@@ -26,7 +26,8 @@ body {
   font-family: inherit;
   background: #0a0e1a;
   color: inherit;
-  height: 100vh;
+  height: 100vh; /* fallback for browsers without dvh */
+  height: 100dvh;
   overflow: hidden;
   margin: 0;
   text-rendering: optimizeLegibility;
