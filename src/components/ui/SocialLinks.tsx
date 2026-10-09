@@ -1,13 +1,13 @@
 import React from "react";
 import { SocialLink } from "./SocialLink";
-import { FaGithub, FaLinkedin } from "react-icons/fa";
+import { GithubIcon, LinkedinIcon } from "./BrandIcons";
 
 export const SocialLinks: React.FC = () => (
-  <div className="social-links flex gap-3 justify-center items-center">
-    <SocialLink href="https://github.com/CillianOMurchu" icon={FaGithub}>
-      Github
+  <div className="flex items-center justify-center gap-3">
+    <SocialLink href="https://github.com/CillianOMurchu" icon={GithubIcon}>
+      GitHub
     </SocialLink>
-    <SocialLink href="https://linkedin.com/in/CillianOMurchu" icon={FaLinkedin}>
+    <SocialLink href="https://linkedin.com/in/CillianOMurchu" icon={LinkedinIcon}>
       LinkedIn
     </SocialLink>
   </div>

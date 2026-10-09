@@ -1,83 +1,82 @@
 import React, { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import { FiHome, FiUser, FiRadio, FiMenu, FiX } from "react-icons/fi";
+import { NavLink } from "react-router-dom";
+import { House, Radio, User } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { MenuToggleIcon } from "@/components/ui/MenuToggleIcon";
 import { Name } from "../name/Name";
 
 const NAV_LINKS = [
-  { href: "/",          icon: FiHome,  label: "Home" },
-  { href: "/about",     icon: FiUser,  label: "About" },
-  { href: "/streaming", icon: FiRadio, label: "Streaming" },
+  { href: "/",          icon: House, label: "Home" },
+  { href: "/about",     icon: User,  label: "About" },
+  { href: "/streaming", icon: Radio, label: "Streaming" },
 ];
 
+// NavLink sets aria-current="page" on the active route.
+const LINK_CLASSES =
+  "text-muted-foreground hover:text-foreground aria-[current=page]:text-primary aria-[current=page]:pointer-events-none";
+
 const Navbar: React.FC = () => {
-  const navigate = useNavigate();
-  const { pathname } = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const goTo = (href: string) => {
-    navigate(href);
-    setMobileOpen(false);
-  };
-
   return (
-    <>
-      <header className="navbar fixed top-0 left-0 right-0 h-16 z-50 flex items-center justify-between px-6 bg-black/90 backdrop-blur-sm border-b border-emerald-500/20">
-        <div className="navbar-logo">
-          <Name />
-        </div>
+    <header className="fixed inset-x-0 top-0 z-60 flex h-16 items-center justify-between border-b bg-black/90 px-6 backdrop-blur-sm">
+      <Name />
 
-        {/* Desktop links */}
-        <nav className="navbar-desktop hidden md:flex items-center gap-8">
-          {NAV_LINKS.map(({ href, icon: Icon, label }) => (
-            <button
-              key={href}
-              onClick={() => pathname !== href && goTo(href)}
-              disabled={pathname === href}
-              className={`navbar-link ${
-                pathname === href
-                  ? "navbar-link--active"
-                  : "navbar-link--inactive"
-              }`}
-            >
-              <Icon className="w-4 h-4" />
+      <nav className="hidden items-center gap-2 md:flex">
+        {NAV_LINKS.map(({ href, icon: Icon, label }) => (
+          <Button key={href} asChild variant="ghost" className={LINK_CLASSES}>
+            <NavLink to={href} end>
+              <Icon />
               {label}
-            </button>
-          ))}
-        </nav>
+            </NavLink>
+          </Button>
+        ))}
+      </nav>
 
-        {/* Mobile hamburger */}
-        <button
-          className="navbar-hamburger md:hidden text-gray-400 hover:text-gray-100 transition-colors"
-          onClick={() => setMobileOpen(o => !o)}
-          aria-label="Toggle menu"
+      <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
+        <SheetTrigger asChild>
+          <Button
+            variant="ghost"
+            size="icon-lg"
+            className="md:hidden aria-expanded:bg-transparent"
+            aria-label={mobileOpen ? "Close menu" : "Open menu"}
+          >
+            <MenuToggleIcon isOpen={mobileOpen} />
+          </Button>
+        </SheetTrigger>
+        {/* Opens below the navbar so the toggle stays visible; clicking it while
+            open counts as an outside click, which closes the Sheet. */}
+        <SheetContent
+          side="right"
+          showCloseButton={false}
+          className="data-[side=right]:top-16 data-[side=right]:h-[calc(100dvh-4rem)]"
         >
-          {mobileOpen ? <FiX className="w-6 h-6" /> : <FiMenu className="w-6 h-6" />}
-        </button>
-      </header>
-
-      {/* Mobile dropdown */}
-      {mobileOpen && (
-        <div className="navbar-mobile fixed top-16 left-0 right-0 z-40 bg-black/95 border-b border-emerald-500/20 md:hidden">
-          <nav className="navbar-mobile-nav flex flex-col py-2">
+          <SheetHeader>
+            <SheetTitle>Menu</SheetTitle>
+          </SheetHeader>
+          <nav className="flex flex-col gap-1 px-2">
             {NAV_LINKS.map(({ href, icon: Icon, label }) => (
-              <button
-                key={href}
-                onClick={() => pathname !== href && goTo(href)}
-                disabled={pathname === href}
-                className={`navbar-mobile-link ${
-                  pathname === href
-                    ? "navbar-mobile-link--active"
-                    : "navbar-mobile-link--inactive"
-                }`}
-              >
-                <Icon className="w-4 h-4" />
-                {label}
-              </button>
+              <SheetClose key={href} asChild>
+                <Button asChild variant="ghost" size="lg" className={`justify-start ${LINK_CLASSES}`}>
+                  <NavLink to={href} end>
+                    <Icon />
+                    {label}
+                  </NavLink>
+                </Button>
+              </SheetClose>
             ))}
           </nav>
-        </div>
-      )}
-    </>
+        </SheetContent>
+      </Sheet>
+    </header>
   );
 };
 

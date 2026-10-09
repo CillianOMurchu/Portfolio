@@ -91,7 +91,7 @@ After any significant change, run `npm run build` to catch type errors.
 - Do not define animation variants locally in a component — use `utils/animations.ts`.
 - Do not create a new CSS file. Use Tailwind utilities; add tokens to `src/index.css`.
 - Do not hardcode hex/rgba colours in components — use the semantic tokens.
-- Icons: use `lucide-react` (shadcn's icon set). `react-icons` is being phased out.
+- Icons: use `lucide-react` only. Brand logos (GitHub, LinkedIn) live in `components/ui/BrandIcons.tsx` since lucide has none. Don't reinstall `react-icons`.
 - Do not use `any` types. The Twitch player interface pattern in `Streaming.tsx` shows how to type external scripts.
 - Do not add `console.log` to production code.
 - Do not use wildcard versions in `package.json`.

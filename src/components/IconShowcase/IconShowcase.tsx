@@ -1,5 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import React, { Suspense, useEffect, useState } from "react";
+import { X } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { useOrbOrigin } from "../../context/OrbOriginContext";
 import { iconDemos } from "../../data/icon-demos";
 import GenericDemo from "./demos/GenericDemo";
@@ -62,13 +64,15 @@ const IconShowcase: React.FC = () => {
         transition={{ duration: 0.3 }}
         onClick={(e) => { if (e.target === e.currentTarget) close(); }}
       >
-        <button
-          className="showcase-close"
+        <Button
+          variant="outline"
+          size="icon-sm"
+          className="fixed top-4 right-6 z-10002 rounded-full text-muted-foreground hover:text-foreground"
           onClick={close}
           aria-label="Close showcase"
         >
-          ✕
-        </button>
+          <X />
+        </Button>
 
         {/* Header — icon sits above the title as a normal flex item */}
         <div className="showcase-header">
@@ -123,7 +127,7 @@ const IconShowcase: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 0.1 }}
             >
-              <Suspense fallback={<p className="text-gray-500 text-sm text-center">Loading...</p>}>
+              <Suspense fallback={<p className="text-sm text-center text-muted-foreground">Loading...</p>}>
                 {DemoComponent ? (
                   <DemoComponent />
                 ) : (

@@ -32,7 +32,7 @@ src/
 │   ├── IconShowcase/   Per-technology demo overlays
 │   ├── HeroTitle/      Hero title
 │   ├── layout/         Navbar (incl. mobile menu), Footer
-│   ├── ui/             shadcn components + own atoms (InfoBox, SocialLink)
+│   ├── ui/             shadcn (button, card, badge, sheet) + own atoms (InfoBox, SocialLink, BrandIcons, MenuToggleIcon)
 │   └── TimelineItem.tsx
 ├── context/            OrbOriginContext
 ├── data/               experience-data, icon descriptions/demos (static)

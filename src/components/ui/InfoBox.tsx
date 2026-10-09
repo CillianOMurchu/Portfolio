@@ -13,7 +13,7 @@ const InfoBox: React.FC<InfoBoxProps> = ({ text, displayedText, className = "", 
 
   return (
     <div
-      className={`w-72 border border-accent-subtle bg-black/80 backdrop-blur-xs p-4 rounded-sm ${className}`}
+      className={`w-72 border border-primary/30 bg-black/80 backdrop-blur-xs p-4 rounded-sm ${className}`}
       style={{
         boxShadow:
           "0 0 10px rgba(16,185,129,0.3), 0 0 20px rgba(16,185,129,0.2), inset 0 0 20px rgba(16,185,129,0.05)",

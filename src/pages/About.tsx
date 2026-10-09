@@ -16,7 +16,7 @@ const ProfileHeader = () => (
 
 const About = () => {
   return (
-    <div className="bg-black min-h-screen pt-20 pb-16 flex flex-col items-center justify-start space-y-8 px-4">
+    <div className="min-h-screen pt-20 pb-16 flex flex-col items-center justify-start space-y-8 px-4">
       {/* Desktop Layout */}
       <div className="hidden md:flex w-full max-w-6xl gap-12 items-start">
         <motion.div
@@ -30,7 +30,7 @@ const About = () => {
           <img
             src={profileImage}
             alt="Portrait of Cillian O'Murchu"
-            className="w-80 h-80 rounded-full shadow-lg object-cover border-4 border-accent-subtle"
+            className="w-80 h-80 rounded-full shadow-lg object-cover border-4 border-primary/30"
           />
         </motion.div>
 
@@ -58,7 +58,7 @@ const About = () => {
         <img
           src={profileImage}
           alt="Portrait of Cillian O'Murchu"
-          className="w-full max-w-100 aspect-square rounded-full shadow-lg object-cover mb-6 border-4 border-white"
+          className="w-full max-w-100 aspect-square rounded-full shadow-lg object-cover mb-6 border-4 border-primary/30"
         />
         <div className="w-full">
           <ProfileHeader />

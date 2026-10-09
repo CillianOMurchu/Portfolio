@@ -1,13 +1,7 @@
 import { motion } from "framer-motion";
+import { Cog, Lightbulb, type LucideIcon } from "lucide-react";
+import { Card } from "@/components/ui/card";
 import { scrollVariants } from "../utils/animations";
-
-// Renders **bold** segments; the only markdown used in experience-data.
-const withBold = (text: string) =>
-  text.split(/\*\*(.+?)\*\*/g).map((part, i) =>
-    i % 2 === 1 ? <strong key={i}>{part}</strong> : part
-  );
-
-// --- INTERFACES (Updated) ---
 
 interface TimelineWork {
   id: string | number;
@@ -16,7 +10,6 @@ interface TimelineWork {
   dates: string;
   projectImage?: string;
   link?: string;
-  // UPDATED: Now an array for better presentation
   responsibilities?: string[];
   keyFeatures?: string[];
 }
@@ -26,110 +19,92 @@ interface TimelineItemProps {
   index: number;
 }
 
-// --- COMPONENT ---
+interface TimelineSectionProps {
+  icon: LucideIcon;
+  title: string;
+  bullet: string;
+  items?: string[];
+}
+
+// Renders **bold** segments; the only markdown used in experience-data.
+const withBold = (text: string) =>
+  text.split(/\*\*(.+?)\*\*/g).map((part, i) =>
+    i % 2 === 1 ? <strong key={i} className="text-foreground">{part}</strong> : part
+  );
+
+const TimelineSection = ({ icon: Icon, title, bullet, items }: TimelineSectionProps) => {
+  if (!items?.length) return null;
+
+  return (
+    <section className="rounded-lg border bg-black/20 p-4">
+      <h4 className="mb-3 flex items-center gap-2 border-b pb-2 font-semibold text-primary">
+        <Icon className="size-4" />
+        {title}
+      </h4>
+      <motion.ul className="space-y-3" variants={scrollVariants.listContainer}>
+        {items.map((item, i) => (
+          <motion.li key={i} variants={scrollVariants.listItem} className="flex gap-2 text-secondary-foreground">
+            <span className="shrink-0 text-lg font-extrabold leading-6 text-primary">{bullet}</span>
+            <p>{withBold(item)}</p>
+          </motion.li>
+        ))}
+      </motion.ul>
+    </section>
+  );
+};
 
 export const TimelineItem = ({ work, index }: TimelineItemProps) => {
+  const heading = (
+    <h3 className="text-2xl font-extrabold text-primary transition-colors group-hover:text-accent-foreground group-hover:underline">
+      {work.name}
+    </h3>
+  );
+
   return (
     <motion.div
-      key={work.id}
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.2 }}
       variants={scrollVariants.card}
       transition={{ delay: index * 0.1, duration: 0.3 }}
-      className="grid grid-cols-1 sm:grid-cols-3 gap-6 p-6 timeline-card"
     >
-      {/* 1. Image/Media Column */}
-      <div className="sm:col-span-1">
-        {work.projectImage && (
-          <a
-            href={work.link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="block group"
-            title={`Visit ${work.name} website`}
-          >
-            <img
-              src={work.projectImage}
-              alt={`Screenshot of ${work.name} tool`}
-              className="w-full h-auto sm:max-h-60 sm:w-auto mx-auto sm:mx-0 timeline-card-image"
-            />
-          </a>
-        )}
-      </div>
-
-      {/* 2. Content Column */}
-      <div className="sm:col-span-2 flex flex-col">
-        <div className="mb-4">
-          {work.link ? (
-            <a
-              href={work.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group"
-              title={`Visit ${work.name} website`}
-            >
-              <h3 className="timeline-card-title">
-                {work.name}
-              </h3>
+      <Card className="grid grid-cols-1 gap-6 bg-card/40 p-6 text-base ring-primary/30 backdrop-blur-md sm:grid-cols-3">
+        <div className="sm:col-span-1">
+          {work.projectImage && (
+            <a href={work.link} target="_blank" rel="noopener noreferrer" title={`Visit ${work.name} website`}>
+              <img
+                src={work.projectImage}
+                alt={`Screenshot of ${work.name}`}
+                className="mx-auto h-auto w-full rounded-lg object-cover shadow-xl transition hover:opacity-80 hover:shadow-primary/30 sm:mx-0 sm:max-h-60 sm:w-auto"
+              />
             </a>
-          ) : (
-            <h3 className="timeline-card-title">
-              {work.name}
-            </h3>
           )}
-          <p className="timeline-card-subtitle">
-            {work.title} ({work.dates})
-          </p>
         </div>
 
-        {/* --- Responsibilities Panel (Section 1) --- */}
-        {work.responsibilities && work.responsibilities.length > 0 && (
-          <div className="timeline-card-section">
-            <h4 className="timeline-card-section-title">
-              <span className="mr-2">💡</span>Primary Responsibilities
-            </h4>
-
-            <motion.ul
-              className="timeline-card-list"
-              variants={scrollVariants.listContainer}
-            >
-              {work.responsibilities.map((responsibility, i) => (
-                <motion.li
-                  key={`resp-${i}`}
-                  variants={scrollVariants.listItem}
-                >
-                  <span className="timeline-card-list-bullet">•</span>
-                  <p>{withBold(responsibility)}</p>
-                </motion.li>
-              ))}
-            </motion.ul>
+        <div className="flex flex-col gap-6 sm:col-span-2">
+          <div>
+            {work.link ? (
+              <a
+                href={work.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                title={`Visit ${work.name} website`}
+                className="group"
+              >
+                {heading}
+              </a>
+            ) : (
+              heading
+            )}
+            <p className="text-lg font-semibold text-foreground">
+              {work.title} <span className="font-normal text-muted-foreground">({work.dates})</span>
+            </p>
           </div>
-        )}
 
-        {/* --- Key Features/Highlights Panel (Section 2) --- */}
-        {work.keyFeatures && work.keyFeatures.length > 0 && (
-          <div className="timeline-card-section">
-            <h4 className="timeline-card-section-title">
-              <span className="mr-2">⚙️</span>Key Features & Contributions
-            </h4>
-            <motion.ul
-              className="timeline-card-list"
-              variants={scrollVariants.listContainer}
-            >
-              {work.keyFeatures.map((feature, i) => (
-                <motion.li
-                  key={`feat-${i}`}
-                  variants={scrollVariants.listItem}
-                >
-                  <span className="timeline-card-list-bullet">»</span>
-                  <p>{withBold(feature)}</p>
-                </motion.li>
-              ))}
-            </motion.ul>
-          </div>
-        )}
-      </div>
+          <TimelineSection icon={Lightbulb} title="Primary Responsibilities" bullet="•" items={work.responsibilities} />
+          <TimelineSection icon={Cog} title="Key Features & Contributions" bullet="»" items={work.keyFeatures} />
+        </div>
+      </Card>
     </motion.div>
   );
 };

@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(bash -c '/usr/bin/grep -oE \"data-open\\\\\\\\\\\\\\\\:animate-in[^}]*\\\\}|slide-in-from-right-10[^}]*\\\\}|--tw-enter-translate-x:[^;]*\" dist/assets/index-*.css | head -5')",
+      "Bash(bash -c '/usr/bin/grep -oE \"slide-in-from-right[^-0-9]|--tw-enter-translate-x:[^;]+\" node_modules/tw-animate-css/dist/tw-animate.css | sort -u | head; /usr/bin/grep -oE \"@utility slide-in-from-right[^{]*\\\\{[^}]*\\\\}\" node_modules/tw-animate-css/dist/tw-animate.css | head -3')",
+      "Bash(/usr/bin/grep -E \"error|built\")",
+      "Bash(bash -c '/usr/bin/grep -oE \"slide-in-from-right\\\\[data-side=right\\\\][^}]*\\\\}|data-open\\\\\\\\\\\\\\\\:duration-400[^}]*\\\\}\" dist/assets/index-*.css | head -3')",
+      "Bash(sed -i 's|<SheetContent side=\"right\" className=\"w-64\">|<SheetContent side=\"right\">|' src/components/layout/Navbar.tsx)",
+      "Bash(bash -c '/usr/bin/grep -n \"SheetContent side\" src/components/layout/Navbar.tsx')"
+    ]
+  }
+}

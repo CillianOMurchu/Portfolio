@@ -1,9 +1,9 @@
 import React from "react";
-import type { IconType } from "react-icons/lib";
+import { Button } from "@/components/ui/button";
 
 interface SocialLinkProps {
   href: string;
-  icon: IconType;
+  icon: React.ComponentType<{ className?: string }>;
   children: React.ReactNode;
 }
 
@@ -12,13 +12,10 @@ export const SocialLink: React.FC<SocialLinkProps> = ({
   icon: Icon,
   children,
 }) => (
-  <a
-    href={href}
-    target="_blank"
-    rel="noopener noreferrer"
-    className="social-link flex items-center gap-2 px-4 py-2 rounded-sm text-emerald-400 hover:text-emerald-200 transition-colors"
-  >
-    <Icon className="social-link-icon w-5 h-5" />
-    <span className="social-link-text text-sm font-medium">{children}</span>
-  </a>
+  <Button asChild variant="ghost" className="text-primary hover:text-accent-foreground">
+    <a href={href} target="_blank" rel="noopener noreferrer">
+      <Icon className="size-5" />
+      {children}
+    </a>
+  </Button>
 );
