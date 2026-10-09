@@ -83,8 +83,25 @@ export default MyComponent;
 3. **Legacy `theme.css` classes** — only where not yet migrated; don't add new ones
 4. **Inline `style` prop** — only for dynamic values that can't be expressed in CSS (animation state, calculated positions)
 
+### Type scale
+
+Font is Geist (variable, bundled via `@fontsource-variable/geist`). Use only these sizes:
+
+| Class | Size | Use |
+|---|---|---|
+| `text-xs` | 12px | labels, captions, badges, demo metadata — the minimum, nothing smaller |
+| `text-sm` | 14px | nav, buttons, secondary text |
+| `text-base` | 16px | body (default) |
+| `text-lg` | 18px | subtitles |
+| `text-2xl` | 24px | card / section titles |
+| `text-4xl` | 36px | page headings |
+| `clamp(4rem, 12vw, 10rem)` | 64–160px | hero display (`.hero-title`) only |
+
+Legacy `theme.css` rules use the same values in rem. Exception: IconShowcase demos may use other sizes when the size itself is what's being demonstrated (Figma, Sass, Stencil).
+
 ### Never
 
+- Use a font size outside the type scale, or set `font-family` (Geist for everything, `font-mono` for code)
 - Create new CSS files (use Tailwind; add tokens to `src/index.css`)
 - Use magic colour values — use semantic token utilities (`bg-primary`, `text-foreground`, …)
 - Add a `tailwind.config.js` — Tailwind v4 is configured in CSS (`@theme inline` in `src/index.css`)

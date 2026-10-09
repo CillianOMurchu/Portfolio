@@ -123,7 +123,7 @@
   color: var(--color-accent-primary);
   font-weight: var(--font-weight-extrabold);
   flex-shrink: 0;
-  font-size: 1.25rem;
+  font-size: 1.125rem;
 }
 
 /* --- TEXT COLOR UTILITIES --- */
@@ -195,7 +195,7 @@
   border: 1px solid rgba(255, 255, 255, 0.15);
   background: rgba(255, 255, 255, 0.06);
   color: var(--color-text-muted);
-  font-size: 0.85rem;
+  font-size: 0.875rem;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -231,7 +231,7 @@
 }
 
 .showcase-title {
-  font-size: 1.35rem;
+  font-size: 1.5rem;
   font-weight: 800;
   letter-spacing: -0.02em;
   margin: 0;
@@ -239,7 +239,7 @@
 }
 
 .showcase-tagline {
-  font-size: 0.8rem;
+  font-size: 0.875rem;
   color: var(--color-text-muted);
   max-width: 16rem;
   line-height: 1.4;
@@ -414,11 +414,11 @@
   }
 
   .gitlab-pipeline-status {
-    font-size: 0.7rem;
+    font-size: 0.75rem;
   }
 
   .gitlab-pipeline-branch {
-    font-size: 0.7rem;
+    font-size: 0.75rem;
   }
 
   .gitlab-actions {
@@ -492,7 +492,7 @@
   }
 
   .gitlab-job-name {
-    font-size: 0.625rem;
+    font-size: 0.75rem;
   }
 }
 
@@ -601,7 +601,7 @@
   align-items: center;
   justify-content: center;
   font-weight: 700;
-  font-size: 0.65rem;
+  font-size: 0.75rem;
 }
 
 .rxjs-empty {
@@ -609,7 +609,7 @@
   top: 50%;
   left: 0;
   transform: translateY(-50%);
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   color: #6b7280;
   font-style: italic;
 }
@@ -625,7 +625,7 @@
   display: flex;
   gap: 0.5rem;
   align-items: center;
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   color: #a78bfa;
   font-weight: 500;
 }
@@ -650,7 +650,7 @@
   gap: 0.5rem;
   padding: 0.5rem 1rem;
   border-radius: 9999px;
-  font-size: 0.85rem;
+  font-size: 0.875rem;
   font-weight: 500;
   color: var(--color-text-medium);
   background: rgba(183, 23, 140, 0.08);
@@ -719,7 +719,7 @@
   border: 1px solid rgba(255, 255, 255, 0.12);
   background: rgba(255, 255, 255, 0.05);
   color: var(--color-text-muted);
-  font-size: 0.8rem;
+  font-size: 0.875rem;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -742,7 +742,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.6rem;
+  font-size: 1.5rem;
   font-weight: 700;
   color: #e879c4;
   background: rgba(183, 23, 140, 0.14);
@@ -751,7 +751,7 @@
 
 .rxjs-modal-title {
   margin: 0 0 0.9rem;
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   font-weight: 800;
   letter-spacing: -0.01em;
   color: var(--color-text-high);
@@ -783,7 +783,7 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  font-size: 0.95rem;
+  font-size: 1rem;
   color: var(--color-text-medium);
 }
 
@@ -793,7 +793,7 @@
   padding: 0.2rem 0.6rem;
   border-radius: 6px;
   font-family: monospace;
-  font-size: 0.85rem;
+  font-size: 0.875rem;
   font-weight: 700;
   text-align: center;
   color: #c4b5fd;

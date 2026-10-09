@@ -65,6 +65,8 @@ Vite glob import in `sphere/iconLoader.ts` uses `"../../assets/programming-icons
 
 **Info boxes:** Use `components/ui/InfoBox.tsx` (generic). Pass `text` (full string) and optionally `displayedText` (partial, for typing cursor). `className` accepts positional and sizing overrides. Do not recreate info-box styling inline.
 
+**Typography:** Six-step type scale (`text-xs` 12px minimum → `text-4xl`), defined in docs/STYLE_GUIDE.md. No other sizes, no `font-family` overrides.
+
 **Component size:** Keep components under 150 lines. If a component grows beyond that, extract sub-components into the same folder.
 
 **No new dependencies** without a clear reason. The bundle was already cleaned of ~650KB of unused deps (three.js, react-hook-form, etc.).

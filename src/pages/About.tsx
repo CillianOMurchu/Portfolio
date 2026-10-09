@@ -6,13 +6,11 @@ import { scrollVariants, scrollViewport, scrollTiming } from "../utils/animation
 
 const ProfileHeader = () => (
   <>
-    <h1 className="text-5xl md:text-3xl font-extrabold text-accent mb-6">
+    <h1 className="text-4xl font-extrabold tracking-tight text-primary mb-6">
       Cillian
-      <p>Ó Murchú</p>
+      <span className="block">Ó Murchú</span>
     </h1>
-    <div className="mt-8 space-y-3">
-      <p className="text-accent text-sm"> Creative Engineer</p>
-    </div>
+    <p className="mt-8 text-lg text-muted-foreground">Creative Engineer</p>
   </>
 );
 

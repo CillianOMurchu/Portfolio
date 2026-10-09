@@ -254,9 +254,8 @@ export default function GitLabDemo() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 1.55 }}
+              className="text-xs font-mono"
               style={{
-                fontSize: 10,
-                fontFamily: "monospace",
                 letterSpacing: "0.15em",
                 color: pipelinePassed ? PASS_COLOR : FAIL_COLOR,
               }}
@@ -269,10 +268,9 @@ export default function GitLabDemo() {
               animate={{ opacity: 1 }}
               transition={{ delay: 2.0 }}
               onClick={reset}
+              className="text-xs font-mono"
               style={{
                 marginTop: 20,
-                fontSize: 10,
-                fontFamily: "monospace",
                 color: DARK_MUTED,
                 background: "none",
                 border: "none",

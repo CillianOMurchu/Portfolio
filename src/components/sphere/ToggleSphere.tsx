@@ -56,14 +56,8 @@ const ToggleSphere: React.FC = () => {
         />
       </button>
       <span
-        className="sphere-toggle-label"
+        className="sphere-toggle-label mt-1 text-xs font-bold tracking-wide text-primary"
         style={{
-          marginTop: "4px",
-          fontSize: "0.65rem",
-          fontFamily: "Orbitron, 'Montserrat', 'Segoe UI', sans-serif",
-          fontWeight: 700,
-          color: "var(--color-accent-primary)",
-          letterSpacing: "0.04em",
           opacity: showTitle ? 1 : 0,
           transition: "opacity 0.18s cubic-bezier(.4,0,.2,1)",
           pointerEvents: "none",

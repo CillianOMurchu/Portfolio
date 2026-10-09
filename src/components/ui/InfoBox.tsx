@@ -24,7 +24,6 @@ const InfoBox: React.FC<InfoBoxProps> = ({ text, displayedText, className = "", 
         className="text-accent text-sm tracking-wide leading-relaxed"
         style={{
           textShadow: "0 0 3px rgba(16,185,129,0.5)",
-          fontFamily: "system-ui, -apple-system, sans-serif",
           whiteSpace: "pre-line",
         }}
       >
