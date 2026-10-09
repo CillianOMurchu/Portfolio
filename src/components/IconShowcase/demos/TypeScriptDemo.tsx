@@ -49,7 +49,7 @@ const TypeScriptDemo: React.FC = () => {
               disabled={submitted}
               value={answers[field.key] ?? ""}
               onChange={(e) => setAnswers((prev) => ({ ...prev, [field.key]: e.target.value }))}
-              className="rounded px-2 py-0.5 text-sm font-mono outline-none"
+              className="rounded-sm px-2 py-0.5 text-sm font-mono outline-hidden"
               style={{
                 background: "#161b22",
                 border: `1px solid ${statusColor(field)}55`,

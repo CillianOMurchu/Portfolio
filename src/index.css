@@ -1,17 +1,79 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "@fontsource-variable/geist";
 
-html {
-  scroll-behavior: smooth;
+/* The site has a single dark palette, so shadcn's `dark:` tweaks always apply. */
+@custom-variant dark (&:where(*));
+
+/* shadcn tokens, mapped to the Neon Emerald palette (see styles/theme.css). */
+:root {
+  --background: #0a0e1a;
+  --foreground: #f3f4f6;
+  --card: #111827;
+  --card-foreground: #f3f4f6;
+  --popover: #192338;
+  --popover-foreground: #f3f4f6;
+  --primary: #10b981;
+  --primary-foreground: #0a0e1a;
+  --secondary: #192338;
+  --secondary-foreground: #e5e7eb;
+  --muted: #17252f;
+  --muted-foreground: #9ca3af;
+  --accent: rgb(16 185 129 / 0.15);
+  --accent-foreground: #4cffc1;
+  --destructive: #ef4444;
+  --border: rgb(16 185 129 / 0.2);
+  --input: rgb(255 255 255 / 0.12);
+  --ring: #10b981;
+  --radius: 0.5rem;
 }
 
-body {
-  background: #0a0e1a;
-  height: 100vh; /* fallback for browsers without dvh */
-  height: 100dvh;
-  overflow: hidden;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@theme inline {
+  --font-sans: "Geist Variable", system-ui, sans-serif;
+  --font-heading: var(--font-sans);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply font-sans;
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    height: 100vh; /* fallback for browsers without dvh */
+    height: 100dvh;
+    overflow: hidden;
+    text-rendering: optimizeLegibility;
+  }
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
 }

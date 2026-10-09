@@ -131,7 +131,7 @@ export default function JiraDemo() {
                       {colIdx > 0 && (
                         <button
                           onClick={() => move(t.id, -1)}
-                          className="text-sm px-1.5 py-0.5 rounded"
+                          className="text-sm px-1.5 py-0.5 rounded-sm"
                           style={{
                             background: "rgba(255,255,255,0.06)",
                             color: MUTED_COLOR,
@@ -143,7 +143,7 @@ export default function JiraDemo() {
                       {colIdx < 2 && (
                         <button
                           onClick={() => move(t.id, 1)}
-                          className="text-sm px-1.5 py-0.5 rounded ml-auto"
+                          className="text-sm px-1.5 py-0.5 rounded-sm ml-auto"
                           style={{
                             background: "rgba(255,255,255,0.06)",
                             color: MUTED_COLOR,

@@ -27,7 +27,7 @@ const About = () => {
           viewport={scrollViewport}
           variants={scrollVariants.slideInRight}
           transition={scrollTiming}
-          className="flex-shrink-0"
+          className="shrink-0"
         >
           <img
             src={profileImage}
@@ -60,7 +60,7 @@ const About = () => {
         <img
           src={profileImage}
           alt="Portrait of Cillian O'Murchu"
-          className="max-h-[25rem] w-100 h-100 rounded-full shadow-lg object-cover mb-6 border-4 border-white"
+          className="w-full max-w-100 aspect-square rounded-full shadow-lg object-cover mb-6 border-4 border-white"
         />
         <div className="w-full">
           <ProfileHeader />

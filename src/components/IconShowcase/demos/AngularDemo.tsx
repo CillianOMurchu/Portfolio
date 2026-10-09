@@ -13,7 +13,7 @@ const ROUTES = [
         <p className="text-gray-400 text-sm">This is the HomeComponent. It bootstrapped from AppModule.</p>
         <div className="flex gap-2 mt-2">
           {["Angular", "TypeScript", "RxJS"].map(t => (
-            <span key={t} className="text-sm px-2 py-0.5 rounded" style={{ background: "rgba(221,0,49,0.15)", color: ANGULAR_ACCENT }}>{t}</span>
+            <span key={t} className="text-sm px-2 py-0.5 rounded-sm" style={{ background: "rgba(221,0,49,0.15)", color: ANGULAR_ACCENT }}>{t}</span>
           ))}
         </div>
       </div>
@@ -26,7 +26,7 @@ const ROUTES = [
         <p className="text-white font-semibold">DashboardComponent</p>
         <div className="grid grid-cols-3 gap-2 mt-2">
           {[["Projects", "14"], ["Tests", "342"], ["Coverage", "87%"]].map(([k, v]) => (
-            <div key={k} className="rounded p-2 text-center" style={{ background: "rgba(221,0,49,0.08)" }}>
+            <div key={k} className="rounded-sm p-2 text-center" style={{ background: "rgba(221,0,49,0.08)" }}>
               <p className="text-lg font-bold" style={{ color: ANGULAR_ACCENT }}>{v}</p>
               <p className="text-sm text-gray-500">{k}</p>
             </div>

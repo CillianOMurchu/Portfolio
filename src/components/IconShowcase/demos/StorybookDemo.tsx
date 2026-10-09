@@ -35,7 +35,7 @@ const COMPONENTS: Component[] = [
 ];
 
 function ButtonPreview({ args }: { args: Record<string, unknown> }) {
-  const base = "px-4 py-2 rounded text-sm font-semibold transition-all";
+  const base = "px-4 py-2 rounded-sm text-sm font-semibold transition-all";
   if (args.variant === "primary") return <button disabled={!!args.disabled || !!args.loading} className={base} style={{ background: PASS_COLOR, color: "#fff", opacity: args.disabled ? 0.4 : 1 }}>{String(args.label)}</button>;
   return <button disabled={!!args.disabled} className={base} style={{ border: `1px solid ${PASS_COLOR}`, color: PASS_COLOR, background: "transparent", opacity: args.disabled ? 0.4 : 1 }}>{String(args.label)}</button>;
 }

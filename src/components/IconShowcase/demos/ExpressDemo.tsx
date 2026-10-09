@@ -59,7 +59,7 @@ export default function ExpressDemo() {
           return (
             <div key={m.id} className="flex items-center gap-3 rounded-lg px-3 py-2 transition-all duration-200"
               style={{ background: isActive ? `${m.color}18` : "rgba(255,255,255,0.03)", border: `1px solid ${isActive ? m.color : "rgba(255,255,255,0.07)"}` }}>
-              <button onClick={() => toggle(m.id)} className="w-4 h-4 rounded border flex-shrink-0 text-sm flex items-center justify-center"
+              <button onClick={() => toggle(m.id)} className="w-4 h-4 rounded-sm border shrink-0 text-sm flex items-center justify-center"
                 style={{ borderColor: m.enabled ? m.color : DARK_MUTED, background: m.enabled ? `${m.color}33` : "transparent" }}>
                 {m.enabled && <span style={{ color: m.color }}>✓</span>}
               </button>

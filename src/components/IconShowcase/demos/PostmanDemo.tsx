@@ -38,20 +38,20 @@ export default function PostmanDemo() {
     <DemoShell className="gap-3">
       <div className="flex gap-2">
         <select value={method} onChange={(e) => setMethod(e.target.value as Method)}
-          className="rounded px-2 py-2 text-sm font-semibold outline-none"
+          className="rounded-sm px-2 py-2 text-sm font-semibold outline-hidden"
           style={{ background: `${METHOD_COLOR[method]}22`, border: `1px solid ${METHOD_COLOR[method]}55`, color: METHOD_COLOR[method], minWidth: 76 }}>
           {METHODS.map(m => <option key={m} value={m}>{m}</option>)}
         </select>
 
-        <div className="flex-1 flex items-center rounded px-2" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)" }}>
+        <div className="flex-1 flex items-center rounded-sm px-2" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)" }}>
           <span className="text-sm text-gray-600 font-mono">api.cillian.dev</span>
-          <select value={path} onChange={(e) => setPath(e.target.value)} className="flex-1 bg-transparent outline-none text-sm font-mono ml-0.5" style={{ color: "#e5e7eb" }}>
+          <select value={path} onChange={(e) => setPath(e.target.value)} className="flex-1 bg-transparent outline-hidden text-sm font-mono ml-0.5" style={{ color: "#e5e7eb" }}>
             {Object.keys(ENDPOINTS).map(p => <option key={p} value={p}>{p}</option>)}
           </select>
         </div>
 
         <button onClick={send} disabled={loading}
-          className="px-4 rounded text-sm font-semibold transition-all"
+          className="px-4 rounded-sm text-sm font-semibold transition-all"
           style={{ background: loading ? "rgba(239,93,37,0.1)" : "rgba(239,93,37,0.2)", border: "1px solid rgba(239,93,37,0.4)", color: loading ? MUTED_COLOR : "#ef5b25" }}>
           {loading ? "…" : "Send"}
         </button>

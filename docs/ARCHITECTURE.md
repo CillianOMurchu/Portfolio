@@ -141,9 +141,15 @@ Two layers:
 
 ## Theming
 
-CSS custom properties in `styles/theme.css`. Tailwind is used for layout/spacing utilities. Custom semantic classes (`.neon`, `.surface`, `.timeline-card-*`, etc.) are plain CSS classes in `theme.css`, not Tailwind components or extended config.
+Tailwind v4 + shadcn/ui, configured in CSS (no `tailwind.config.js`, no PostCSS config — `@tailwindcss/vite` plugin).
 
-The design token that drives almost everything: `--color-accent-primary: #10b981` (emerald green).
+- `src/index.css` — imports Tailwind, `tw-animate-css`, `shadcn/tailwind.css`, and the Geist variable font (`@fontsource-variable/geist`). Defines shadcn's semantic tokens on `:root` (mapped to the Neon Emerald palette) and exposes them to Tailwind via `@theme inline`.
+- Single dark palette — no light/dark switching. `@custom-variant dark` always matches so shadcn's `dark:` refinements apply.
+- `components.json` — shadcn CLI config (style `radix-nova`, Radix primitives via `radix-ui`, `lucide` icons). Components land in `src/components/ui/`.
+- `src/lib/utils.ts` — re-exports `cn` (the `cn` package replaces clsx + tailwind-merge).
+- `src/styles/theme.css` — legacy custom properties and classes (`.neon`, `.timeline-card-*`, …), being migrated to tokens.
+
+The colour that drives almost everything: `--primary` / `--color-accent-primary` = `#10b981` (emerald).
 
 ---
 

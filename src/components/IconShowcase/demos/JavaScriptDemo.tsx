@@ -48,7 +48,7 @@ export default function JavaScriptDemo() {
       <p className="text-gray-400 text-sm">
         {score === 5 ? "You've clearly read the spec. Or suffered enough." : score >= 3 ? "Solid. JS quirks are a survival skill." : "That's fine. Linters exist for a reason."}
       </p>
-      <button onClick={reset} className="text-sm px-4 py-2 rounded" style={{ background: "rgba(247,223,30,0.1)", border: "1px solid rgba(247,223,30,0.3)", color: JS_ACCENT }}>
+      <button onClick={reset} className="text-sm px-4 py-2 rounded-sm" style={{ background: "rgba(247,223,30,0.1)", border: "1px solid rgba(247,223,30,0.3)", color: JS_ACCENT }}>
         Try again
       </button>
     </div>

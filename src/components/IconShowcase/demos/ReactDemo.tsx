@@ -54,7 +54,7 @@ export default function ReactDemo() {
         {TREE.map((node) => (
           <div
             key={node.id}
-            className="flex items-center gap-2 py-1 px-2 rounded mb-1 transition-all duration-150"
+            className="flex items-center gap-2 py-1 px-2 rounded-sm mb-1 transition-all duration-150"
             style={{
               marginLeft: INDENT[node.id] * 20,
               background: flashing.has(node.id) ? "rgba(97,218,251,0.18)" : "transparent",

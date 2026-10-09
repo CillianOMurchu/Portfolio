@@ -52,7 +52,7 @@ export default function GitHubDemo() {
                 const ms = MILESTONES.find((m) => m.col === col && m.row === r);
                 return (
                   <div key={r} onMouseEnter={() => setHovered({ col, row: r })} onMouseLeave={() => setHovered(null)}
-                    className="rounded-sm transition-all"
+                    className="rounded-xs transition-all"
                     style={{
                       width: 9, height: 9,
                       background: ms ? ms.color : LEVEL_COLORS[Math.min(level, 5)],

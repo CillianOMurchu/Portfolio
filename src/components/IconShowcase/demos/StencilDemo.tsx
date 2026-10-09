@@ -62,7 +62,7 @@ export default function StencilDemo() {
           <p className="text-sm text-gray-500 uppercase tracking-wider">variant</p>
           <div className="flex gap-1">
             {(["solid", "outline", "ghost"] as Variant[]).map(v => (
-              <button key={v} onClick={() => setVariant(v)} className="flex-1 py-1 rounded text-sm transition-all"
+              <button key={v} onClick={() => setVariant(v)} className="flex-1 py-1 rounded-sm text-sm transition-all"
                 style={{ background: variant === v ? `${STENCIL_ACCENT}33` : "rgba(255,255,255,0.04)", border: `1px solid ${variant === v ? STENCIL_ACCENT : "rgba(255,255,255,0.08)"}`, color: variant === v ? "#a5b4fc" : MUTED_COLOR }}>
                 {v}
               </button>
@@ -72,7 +72,7 @@ export default function StencilDemo() {
           <p className="text-sm text-gray-500 uppercase tracking-wider mt-1">size</p>
           <div className="flex gap-1">
             {(["sm", "md", "lg"] as Size[]).map(sz => (
-              <button key={sz} onClick={() => setSize(sz)} className="flex-1 py-1 rounded text-sm transition-all"
+              <button key={sz} onClick={() => setSize(sz)} className="flex-1 py-1 rounded-sm text-sm transition-all"
                 style={{ background: size === sz ? `${STENCIL_ACCENT}33` : "rgba(255,255,255,0.04)", border: `1px solid ${size === sz ? STENCIL_ACCENT : "rgba(255,255,255,0.08)"}`, color: size === sz ? "#a5b4fc" : MUTED_COLOR }}>
                 {sz}
               </button>
@@ -94,7 +94,7 @@ export default function StencilDemo() {
           </label>
           <p className="text-sm text-gray-500 uppercase tracking-wider mt-1">label</p>
           <input value={label} onChange={e => setLabel(e.target.value)} maxLength={16}
-            className="rounded px-2 py-1.5 text-sm font-mono outline-none"
+            className="rounded-sm px-2 py-1.5 text-sm font-mono outline-hidden"
             style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", color: "#e5e7eb" }} />
         </div>
       </div>

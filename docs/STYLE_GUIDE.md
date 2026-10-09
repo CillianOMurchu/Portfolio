@@ -78,15 +78,16 @@ export default MyComponent;
 
 ### Order of preference
 
-1. **`theme.css` utility classes** — `.neon`, `.text-accent`, `.border-accent-subtle`, `.surface`, `.timeline-card`, etc.
-2. **Tailwind utilities** — layout, spacing, flex, grid, responsive variants
-3. **Inline `style` prop** — only for dynamic values that can't be expressed in CSS (animation state, calculated positions)
+1. **shadcn components** (`components/ui/*.tsx`) — Button, Card, Badge, Sheet, …
+2. **Tailwind utilities with semantic tokens** — `bg-card`, `text-muted-foreground`, `border-border`, `text-primary`; plus layout/spacing/responsive utilities
+3. **Legacy `theme.css` classes** — only where not yet migrated; don't add new ones
+4. **Inline `style` prop** — only for dynamic values that can't be expressed in CSS (animation state, calculated positions)
 
 ### Never
 
-- Create new CSS files (add to `theme.css` or use Tailwind)
-- Use magic colour values — reference `var(--color-accent-primary)` etc.
-- Define Tailwind custom classes via `tailwind.config.js` — they go in `theme.css`
+- Create new CSS files (use Tailwind; add tokens to `src/index.css`)
+- Use magic colour values — use semantic token utilities (`bg-primary`, `text-foreground`, …)
+- Add a `tailwind.config.js` — Tailwind v4 is configured in CSS (`@theme inline` in `src/index.css`)
 
 ### CSS class naming
 

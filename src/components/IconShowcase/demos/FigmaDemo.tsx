@@ -130,7 +130,7 @@ font-weight: ${selected.fontWeight};`;
               <br />
               <span className="flex items-center gap-1">
                 <span
-                  className="w-3 h-3 rounded-sm inline-block"
+                  className="w-3 h-3 rounded-xs inline-block"
                   style={{ background: selected.fill }}
                 />
                 <span className="text-gray-300">{selected.fill}</span>

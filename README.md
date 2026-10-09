@@ -17,7 +17,7 @@
 
 ## Stack
 
-React 18 · TypeScript · Vite · React Router · Framer Motion · Tailwind CSS
+React 18 · TypeScript · Vite · React Router · Framer Motion · Tailwind CSS v4 · shadcn/ui
 
 ---
 
@@ -32,11 +32,13 @@ src/
 │   ├── IconShowcase/   Per-technology demo overlays
 │   ├── HeroTitle/      Hero title
 │   ├── layout/         Navbar (incl. mobile menu), Footer
-│   ├── ui/             Atoms (InfoBox, SocialLink)
+│   ├── ui/             shadcn components + own atoms (InfoBox, SocialLink)
 │   └── TimelineItem.tsx
 ├── context/            OrbOriginContext
 ├── data/               experience-data, icon descriptions/demos (static)
 ├── hooks/              General hooks (useNeonFlicker)
-├── styles/             theme.css (all CSS variables + utility classes)
-└── utils/              animations.ts
+├── lib/                utils.ts (shadcn `cn`)
+├── styles/             theme.css (legacy CSS variables + classes)
+├── utils/              animations.ts
+└── index.css           Tailwind v4 + shadcn tokens
 ```

@@ -21,7 +21,7 @@ const Navbar: React.FC = () => {
 
   return (
     <>
-      <header className="navbar fixed top-0 left-0 right-0 h-16 z-50 flex items-center justify-between px-6 bg-black/90 backdrop-blur border-b border-emerald-500/20">
+      <header className="navbar fixed top-0 left-0 right-0 h-16 z-50 flex items-center justify-between px-6 bg-black/90 backdrop-blur-sm border-b border-emerald-500/20">
         <div className="navbar-logo">
           <Name />
         </div>

@@ -53,7 +53,7 @@ export default function RustDemo() {
         <div className="flex gap-2 flex-wrap">
           {STEPS.map(s => (
             <button key={s} onClick={() => { setN(s); setPhase("idle"); setRustTime(null); setJsTime(null); }}
-              className="px-3 py-1 rounded text-sm transition-all"
+              className="px-3 py-1 rounded-sm text-sm transition-all"
               style={{ background: n === s ? "rgba(206,74,0,0.2)" : "rgba(255,255,255,0.04)", border: `1px solid ${n === s ? RUST_ACCENT : "rgba(255,255,255,0.08)"}`, color: n === s ? RUST_ACCENT : "#6b7280" }}>
               n={s}
             </button>

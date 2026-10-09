@@ -100,7 +100,7 @@ const JestDemo: React.FC = () => {
             onClick={() =>
               setRevealed((r) => Math.min(r + 2, ALL_TESTS.length))
             }
-            className="text-sm px-3 py-1 rounded transition-all"
+            className="text-sm px-3 py-1 rounded-sm transition-all"
             style={{
               background: "rgba(194,19,37,0.1)",
               border: "1px solid rgba(194,19,37,0.3)",

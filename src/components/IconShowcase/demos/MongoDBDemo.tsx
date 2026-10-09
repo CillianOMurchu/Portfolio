@@ -63,7 +63,7 @@ export default function MongoDBDemo() {
             ) : (
               <div className="flex gap-1 mt-1 flex-wrap">
                 {doc.stack.map((s) => (
-                  <span key={s} className="text-sm px-1.5 py-0.5 rounded text-gray-500"
+                  <span key={s} className="text-sm px-1.5 py-0.5 rounded-sm text-gray-500"
                     style={{ background: "rgba(255,255,255,0.05)", color: filter === s ? MONGODB_ACCENT : "#9ca3af" }}>
                     {s}
                   </span>

@@ -159,7 +159,7 @@ export default function RxJSDemo() {
       <div className="flex flex-col gap-2">
         {OPERATORS.map(op => (
           <button key={op.id} onClick={() => toggleOp(op.id)}
-            className="rounded px-3 py-2 text-sm font-mono text-left transition-all"
+            className="rounded-sm px-3 py-2 text-sm font-mono text-left transition-all"
             style={{
               background: activeOps.has(op.id) ? "rgba(139,92,246,0.12)" : "rgba(255,255,255,0.03)",
               border: `1px solid ${activeOps.has(op.id) ? "rgba(139,92,246,0.4)" : "rgba(255,255,255,0.08)"}`,

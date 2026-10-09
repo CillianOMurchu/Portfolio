@@ -14,7 +14,7 @@ Do not read individual source files to re-learn the project. Use these docs.
 ## Project Identity
 
 Personal portfolio for Cillian Ó Murchú. Live at `cillianomurchu.vercel.app`.
-React 18 + TypeScript + Vite + Tailwind + Framer Motion. No SSR. No global state library.
+React 18 + TypeScript + Vite + Tailwind v4 + shadcn/ui + Framer Motion. No SSR. No global state library.
 
 ---
 
@@ -28,9 +28,11 @@ src/components/      Reusable UI. Feature folders for co-located logic.
   HeroTitle/         HeroTitle component.
   IconShowcase/      Per-technology demo overlays (see its own CLAUDE.md).
   layout/            Navbar (incl. mobile menu), Footer only.
-  ui/                Stateless presentational atoms.
+  ui/                shadcn components (lowercase, e.g. button.tsx, added via `npx shadcn add`)
+                     plus our own stateless atoms (PascalCase, e.g. InfoBox.tsx).
 src/context/         React context providers only.
 src/data/            Static data files (no API calls).
+src/lib/             utils.ts only (shadcn's `cn` re-export).
 src/hooks/           General-purpose hooks. Sphere-specific hooks live in sphere/.
 src/utils/           Pure functions. Sphere-specific utils live in sphere/.
 src/styles/          theme.css only. No new CSS files here.
@@ -42,7 +44,7 @@ src/styles/          theme.css only. No new CSS files here.
 
 ## Import Path Conventions
 
-Always use relative imports. No path aliases configured.
+Use relative imports for our own code. The `@/` alias (→ `src/`) exists for shadcn: generated files in `components/ui/` import `@/lib/utils` etc. Don't hand-edit those imports.
 
 ```
 From src/pages/           → ../components/..., ../hooks/..., ../utils/..., ../data/...
@@ -59,7 +61,7 @@ Vite glob import in `sphere/iconLoader.ts` uses `"../../assets/programming-icons
 
 **Animation variants:** Always import from `utils/animations.ts`. Do not define local variants for scroll-triggered animations — add to `scrollVariants` there instead.
 
-**CSS styling:** Use `theme.css` utility classes (`.neon`, `.text-accent`, `.border-accent-subtle`, `.surface`, `.timeline-card-*`, etc.) before writing inline styles. CSS custom properties are in `styles/theme.css`. Tailwind is not extended via config — custom classes live in `theme.css`.
+**CSS styling:** Prefer shadcn components and Tailwind utilities using the semantic tokens (`bg-background`, `text-foreground`, `bg-primary`, `text-muted-foreground`, `border-border`, `bg-card`…). Tokens are defined in `src/index.css` (`:root` + `@theme inline`), mapped to the Neon Emerald palette. There is no `tailwind.config.js` (Tailwind v4 is configured in CSS). Legacy classes in `styles/theme.css` (`.neon`, `.timeline-card-*`, …) are being replaced; don't add new ones there. No light/dark theme — the site has one dark palette.
 
 **Info boxes:** Use `components/ui/InfoBox.tsx` (generic). Pass `text` (full string) and optionally `displayedText` (partial, for typing cursor). `className` accepts positional and sizing overrides. Do not recreate info-box styling inline.
 
@@ -85,10 +87,13 @@ After any significant change, run `npm run build` to catch type errors.
 
 - Do not add files to `src/utils/` or `src/hooks/` if they belong to a feature (sphere, name, etc.). Co-locate instead.
 - Do not define animation variants locally in a component — use `utils/animations.ts`.
-- Do not create a new CSS file. Add classes to `theme.css` or use Tailwind utilities.
+- Do not create a new CSS file. Use Tailwind utilities; add tokens to `src/index.css`.
+- Do not hardcode hex/rgba colours in components — use the semantic tokens.
+- Icons: use `lucide-react` (shadcn's icon set). `react-icons` is being phased out.
 - Do not use `any` types. The Twitch player interface pattern in `Streaming.tsx` shows how to type external scripts.
 - Do not add `console.log` to production code.
-- Do not use wildcard versions in `package.json` (was fixed — `clsx` and `tailwind-merge` are now pinned).
+- Do not use wildcard versions in `package.json`.
+- Do not add `clsx` / `tailwind-merge` — `cn` (from the `cn` package, re-exported in `lib/utils.ts`) replaces both.
 - Do not install Three.js — the sphere is canvas-based, not Three.js.
 
 ---

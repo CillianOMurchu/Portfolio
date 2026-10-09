@@ -48,7 +48,7 @@ export default function FirebaseDemo() {
   }, [listening]);
 
   const Field = ({ k, v }: { k: string; v: string | number }) => (
-    <div className="flex justify-between items-center py-1 px-2 rounded transition-all duration-300"
+    <div className="flex justify-between items-center py-1 px-2 rounded-sm transition-all duration-300"
       style={{ background: flash.has(k) ? "rgba(255,202,40,0.12)" : "transparent", border: `1px solid ${flash.has(k) ? "rgba(255,202,40,0.3)" : "transparent"}` }}>
       <span className="text-blue-400 text-sm font-mono">{k}:</span>
       <span className="text-sm font-mono" style={{ color: k === "status" ? STATUS_COLOR[v as Doc["status"]] : "#f3f4f6" }}>

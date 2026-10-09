@@ -17,7 +17,7 @@ const TOGGLES: ClassToggle[] = [
   { cls: "border", label: "border", default: false },
   { cls: "ring-2", label: "ring-2 ring-emerald-400", default: false },
   { cls: "scale-105", label: "scale-105", default: false },
-  { cls: "backdrop-blur-sm", label: "backdrop-blur-sm", default: false },
+  { cls: "backdrop-blur-xs", label: "backdrop-blur-xs", default: false },
   { cls: "opacity-75", label: "opacity-75", default: false },
   { cls: "rotate-1", label: "rotate-1", default: false },
 ];
@@ -51,7 +51,7 @@ export default function TailwindDemo() {
         <div
           className={cardClass}
           style={{
-            background: active.has("backdrop-blur-sm")
+            background: active.has("backdrop-blur-xs")
               ? "rgba(56,189,248,0.08)"
               : "rgba(56,189,248,0.12)",
             borderColor: "rgba(56,189,248,0.3)",
@@ -77,7 +77,7 @@ export default function TailwindDemo() {
             <button
               key={t.cls}
               onClick={() => toggle(t.cls)}
-              className="rounded px-3 py-2 text-left text-sm font-mono transition-all"
+              className="rounded-sm px-3 py-2 text-left text-sm font-mono transition-all"
               style={{
                 background: on ? "rgba(56,189,248,0.1)" : "rgba(255,255,255,0.03)",
                 border: `1px solid ${on ? "rgba(56,189,248,0.4)" : "rgba(255,255,255,0.07)"}`,
