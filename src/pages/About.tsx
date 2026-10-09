@@ -1,5 +1,5 @@
-import { motion } from "framer-motion";
-import profileImage from "../assets/about/profile.png";
+import { m } from "framer-motion";
+import profileImage from "../assets/about/profile.webp";
 import { experienceData } from "../data/experience-data";
 import { TimelineItem } from "../components/TimelineItem";
 import { scrollVariants, scrollViewport, scrollTiming } from "../utils/animations";
@@ -19,7 +19,7 @@ const About = () => {
     <div className="min-h-screen pt-20 pb-16 flex flex-col items-center justify-start space-y-8 px-4">
       {/* Desktop Layout */}
       <div className="hidden md:flex w-full max-w-6xl gap-12 items-start">
-        <motion.div
+        <m.div
           initial="hidden"
           whileInView="visible"
           viewport={scrollViewport}
@@ -30,11 +30,14 @@ const About = () => {
           <img
             src={profileImage}
             alt="Portrait of Cillian O'Murchu"
+            width={800}
+            height={800}
+            decoding="async"
             className="w-80 h-80 rounded-full shadow-lg object-cover border-4 border-primary/30"
           />
-        </motion.div>
+        </m.div>
 
-        <motion.div
+        <m.div
           initial="hidden"
           whileInView="visible"
           viewport={scrollViewport}
@@ -43,11 +46,11 @@ const About = () => {
           className="self-center flex-1 flex flex-col justify-center"
         >
           <ProfileHeader />
-        </motion.div>
+        </m.div>
       </div>
 
       {/* Mobile Layout */}
-      <motion.div
+      <m.div
         initial="hidden"
         whileInView="visible"
         viewport={scrollViewport}
@@ -58,12 +61,15 @@ const About = () => {
         <img
           src={profileImage}
           alt="Portrait of Cillian O'Murchu"
+          width={800}
+          height={800}
+          decoding="async"
           className="w-full max-w-100 aspect-square rounded-full shadow-lg object-cover mb-6 border-4 border-primary/30"
         />
         <div className="w-full">
           <ProfileHeader />
         </div>
-      </motion.div>
+      </m.div>
 
       <TimelineLayout />
     </div>

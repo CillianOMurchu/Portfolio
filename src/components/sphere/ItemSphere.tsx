@@ -1,13 +1,14 @@
 import React, { useRef } from "react";
 import { useOrbOrigin } from "../../context/OrbOriginContext";
 import { generateFibonacciSphere } from "./fibonacciSphere";
-import { loadIconModules } from "./iconLoader";
+import { loadIconModules, preloadImages } from "./iconLoader";
 import type { ItemSphereProps, SphereState } from "./types";
-import { usePreloadImages } from "./usePreloadImages";
 import { useSphereCanvas } from "./useSphereCanvas";
 
 const { svgModules, iconNames } = loadIconModules();
 const positions = generateFibonacciSphere(iconNames.length);
+// Built once at module load so the canvas loop never captures an empty map.
+const images = preloadImages(iconNames, svgModules);
 
 const svgUrlMap: Record<string, string> = {};
 Object.entries(svgModules).forEach(([path, url]) => {
@@ -37,7 +38,6 @@ export const ItemSphere: React.FC<ItemSphereProps> = ({ onIconClick, visible }) 
   const containerRef = useRef<HTMLDivElement>(null);
   const { setHoveredIcon, setClickedIcon, clickedIcon } = useOrbOrigin();
 
-  const imagesRef = usePreloadImages(iconNames, svgModules);
   const mountTime = getPersistentMountTime();
 
   const handleIconClick = (name: string, screenX: number, screenY: number) => {
@@ -50,7 +50,7 @@ export const ItemSphere: React.FC<ItemSphereProps> = ({ onIconClick, visible }) 
     containerRef,
     positions,
     iconNames,
-    images: imagesRef.current,
+    images,
     persistentState,
     mountTime,
     onIconClick: handleIconClick,

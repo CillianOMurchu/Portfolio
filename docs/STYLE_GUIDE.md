@@ -53,7 +53,7 @@ const HeroTitle = () => {
 ```ts
 // 1. Imports
 import React, { useState } from "react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { scrollVariants } from "../../utils/animations";
 
 // 2. Module-level constants (before component)
@@ -132,7 +132,7 @@ style={{ boxShadow: "0 0 5px rgba(16,185,129,0.8), ..." }}
 ```tsx
 import { scrollVariants, scrollViewport, scrollTiming } from "../../utils/animations";
 
-<motion.div
+<m.div
   initial="hidden"
   whileInView="visible"
   viewport={scrollViewport}
@@ -169,7 +169,7 @@ Relative paths only. No aliases. Group order (no linter enforced, but preferred)
 ```ts
 // 1. React / external libraries
 import React, { useState } from "react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 
 // 2. Internal: context, hooks, utils
 import { useOrbOrigin } from "../../context/OrbOriginContext";
@@ -180,7 +180,7 @@ import NameDisplay from "./NameDisplay";
 
 // 4. Assets and CSS
 import "./NameAnimations.css";
-import profileImage from "../assets/about/profile.png";
+import profileImage from "../assets/about/profile.webp";
 ```
 
 ---

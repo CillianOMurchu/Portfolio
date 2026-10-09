@@ -58,6 +58,10 @@ Vite glob import in `sphere/iconLoader.ts` uses `"../../assets/programming-icons
 
 ## Key Patterns
 
+**Framer Motion:** use `m.*` components (the app is wrapped in `LazyMotion strict`; `motion.*` throws).
+
+**Images:** WebP, sized to ~2× display size, with `width`/`height`; `loading="lazy"` below the fold. No multi-MB PNGs.
+
 **Animation variants:** Always import from `utils/animations.ts`. Do not define local variants for scroll-triggered animations — add to `scrollVariants` there instead.
 
 **CSS styling:** Prefer shadcn components and Tailwind utilities using the semantic tokens (`bg-background`, `text-foreground`, `bg-primary`, `text-muted-foreground`, `border-border`, `bg-card`…). Tokens are defined in `src/index.css` (`:root` + `@theme inline`), mapped to the Neon Emerald palette. There is no `tailwind.config.js` (Tailwind v4 is configured in CSS). Neon extras (`--glow-primary`, `--glow-secondary`, `--accent-secondary`) and demo brand colours (`rxjs`, `rxjs-light`) live there too. The only other CSS file is `name/NameAnimations.css` (keyframes). No light/dark theme — the site has one dark palette.

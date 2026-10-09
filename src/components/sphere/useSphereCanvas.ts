@@ -1,6 +1,7 @@
 import { type MutableRefObject, useEffect, useRef } from "react";
 import type { Position3D, ProjectedIcon, SphereState } from "./types";
 import { findIconAt, getDistanceToNearestIcon } from "./hitTest";
+import { createIconRasterizer } from "./iconRaster";
 import { getIconSize } from "./responsive";
 import { rotatePoint } from "./rotation";
 
@@ -9,6 +10,10 @@ const DRAG_ROTATION_MULTIPLIER = 0.005;
 const PERSPECTIVE_NEAR = 1.2;
 const PERSPECTIVE_FAR = 1.6;
 const SPHERE_PROJECTION_SCALE = 0.36;
+// Largest on-screen scale an icon reaches (nearest point, z = 1).
+const MAX_PERSPECTIVE = PERSPECTIVE_NEAR / (PERSPECTIVE_FAR - 1);
+// Below this rotation speed the sphere counts as stopped.
+const REST_VELOCITY = 1e-4;
 
 export function projectToScreen(
   pos: Position3D,
@@ -74,6 +79,8 @@ export function useSphereCanvas({
   const prevHoveredNameRef = useRef<string | null>(null);
   const highlightedIconRef = useRef<string | null>(highlightedIcon);
   const highlightStartTimeRef = useRef<number | null>(null);
+  // Restarts the draw loop after it pauses at rest; set by the main effect.
+  const resumeRef = useRef<() => void>(() => {});
 
   useEffect(() => {
     onIconClickRef.current = onIconClick;
@@ -85,6 +92,7 @@ export function useSphereCanvas({
 
   useEffect(() => {
     isVisibleRef.current = visible;
+    resumeRef.current();
   }, [visible]);
 
   useEffect(() => {
@@ -95,6 +103,7 @@ export function useSphereCanvas({
     } else if (!highlightedIcon) {
       highlightStartTimeRef.current = null;
     }
+    resumeRef.current();
   }, [highlightedIcon]);
 
   useEffect(() => {
@@ -104,6 +113,16 @@ export function useSphereCanvas({
 
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
+
+    let animationId: number;
+    let isPaused = false;
+    const getIconRaster = createIconRasterizer();
+    const resume = () => {
+      if (!isPaused) return;
+      isPaused = false;
+      animationId = requestAnimationFrame(draw);
+    };
+    resumeRef.current = resume;
 
     // ─── Screen size tracking ───
     const updateScreenSize = () => {
@@ -131,6 +150,8 @@ export function useSphereCanvas({
         0,
         0,
       );
+      // Resizing clears the canvas; redraw even if the loop is paused.
+      resume();
     };
     resize();
 
@@ -236,7 +257,6 @@ export function useSphereCanvas({
     canvas.addEventListener("mouseup", handleMouseUp);
 
     // ─── Animation loop ───
-    let animationId: number;
     const state = persistentState;
 
     function draw(now?: number) {
@@ -249,6 +269,7 @@ export function useSphereCanvas({
       const nowVal = typeof now === "number" ? now : performance.now();
       const size = sizeRef.current;
       const iconSize = getIconSize(screenSizeRef.current.width);
+      const rasterSize = Math.ceil(iconSize * MAX_PERSPECTIVE * window.devicePixelRatio);
       if (!ctx) return;
 
       ctx.clearRect(0, 0, size, size);
@@ -331,7 +352,7 @@ export function useSphereCanvas({
           ctx.save();
           ctx.globalAlpha = finalAlpha;
           ctx.drawImage(
-            img,
+            getIconRaster(icon.name, img, rasterSize),
             x2d - scaledIconSize / 2,
             y2d - scaledIconSize / 2,
             scaledIconSize,
@@ -343,6 +364,19 @@ export function useSphereCanvas({
 
       projectedRef.current = hitTestData;
       ctx.restore();
+
+      // Stop redrawing once the sphere has come to rest under an open showcase;
+      // resume() restarts it when the highlight, size or visibility changes.
+      const isAtRest =
+        highlighted !== null &&
+        highlightProgress >= 1 &&
+        !isDraggingRef.current &&
+        Math.abs(state.vx) < REST_VELOCITY &&
+        Math.abs(state.vy) < REST_VELOCITY;
+      if (isAtRest) {
+        isPaused = true;
+        return;
+      }
       animationId = requestAnimationFrame(draw);
     }
     draw();
@@ -351,6 +385,7 @@ export function useSphereCanvas({
 
     // ─── Cleanup ───
     return () => {
+      resumeRef.current = () => {};
       cancelAnimationFrame(animationId);
       clearTimeout(animationId);
       ro.disconnect();
@@ -371,6 +406,5 @@ export function useSphereCanvas({
     mountTime,
     fadeInDuration,
     fadeInStagger,
-    visible,
   ]);
 }

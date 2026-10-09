@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 
 interface TwitchPlayer {
@@ -100,7 +100,7 @@ const Streaming = () => {
             
             {/* 🔴 LIVE INDICATOR - Animated Position */}
             <AnimatePresence mode="wait">
-                <motion.div
+                <m.div
                     key={status}
                     initial={{ opacity: 0, top: "50%", left: "50%", x: "-50%", y: "-50%" }}
                     animate={{
@@ -119,11 +119,11 @@ const Streaming = () => {
                         <span className={`size-2.5 rounded-full animate-pulse shadow-lg ${STATUS_DISPLAY[status].dot}`} />
                         {STATUS_DISPLAY[status].label}
                     </Badge>
-                </motion.div>
+                </m.div>
             </AnimatePresence>
 
             {/* 📺 VIDEO PLAYER CONTAINER - Fades in when live */}
-            <motion.div
+            <m.div
                 className="w-full max-w-7xl aspect-video"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: status === "live" ? 1 : 0 }}
@@ -136,7 +136,7 @@ const Streaming = () => {
                     id="twitch-player-embed" 
                     className="w-full h-full rounded-lg border border-primary/30"
                 />
-            </motion.div>
+            </m.div>
         </div>
     );
 };

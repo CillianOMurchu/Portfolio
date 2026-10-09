@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, m } from "framer-motion";
 import React from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 import About from "./About";
@@ -15,7 +15,7 @@ export const AppRoutes: React.FC = () => {
   const location = useLocation();
   return (
     <AnimatePresence mode="wait">
-      <motion.div
+      <m.div
         key={location.pathname}
         initial={{ opacity: 0, filter: "blur(8px)", y: 20 }}
         animate={{
@@ -36,7 +36,7 @@ export const AppRoutes: React.FC = () => {
             <Route key={key} path={path} element={screen} />
           ))}
         </Routes>
-      </motion.div>
+      </m.div>
     </AnimatePresence>
   );
 };

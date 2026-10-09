@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, m } from "framer-motion";
 import React, { Suspense, useEffect, useState } from "react";
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -55,7 +55,7 @@ const IconShowcase: React.FC = () => {
 
   return (
     <AnimatePresence>
-      <motion.div
+      <m.div
         key="showcase-backdrop"
         className="fixed inset-x-0 bottom-0 z-10000 flex h-[calc(100dvh-8rem)] w-full flex-col items-center overflow-x-hidden overflow-y-auto bg-background/96 px-4 backdrop-blur-lg md:overflow-x-visible md:px-0 md:py-16"
         initial={{ opacity: 0 }}
@@ -76,7 +76,7 @@ const IconShowcase: React.FC = () => {
 
         {/* Header — icon sits above the title as a normal flex item */}
         <div className="mt-3 flex w-full max-w-xl flex-col items-center justify-center gap-1.5 px-6 pt-2 text-center">
-          <motion.img
+          <m.img
             src={clickedIcon.svgUrl}
             alt={displayName}
             style={{
@@ -94,7 +94,7 @@ const IconShowcase: React.FC = () => {
           {/* Title and tagline fade in after icon lands */}
           {contentVisible && (
             <div className="flex min-w-0 flex-col items-center gap-0.5">
-              <motion.h2
+              <m.h2
                 className="text-2xl leading-[1.1] font-extrabold tracking-tight"
                 style={{ color: accentColor }}
                 initial={{ opacity: 0, y: -10 }}
@@ -102,16 +102,16 @@ const IconShowcase: React.FC = () => {
                 transition={{ duration: 0.3 }}
               >
                 {displayName}
-              </motion.h2>
+              </m.h2>
               {meta && (
-                <motion.p
+                <m.p
                   className="max-w-64 text-sm leading-snug text-muted-foreground"
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3, delay: 0.05 }}
                 >
                   {meta.tagline}
-                </motion.p>
+                </m.p>
               )}
             </div>
           )}
@@ -120,7 +120,7 @@ const IconShowcase: React.FC = () => {
         {/* Demo area — scrollable content below header */}
         <AnimatePresence>
           {contentVisible && (
-            <motion.div
+            <m.div
               key="content"
               className="flex min-h-0 w-full max-w-xl flex-1 flex-col overflow-y-auto px-6 py-4 *:flex *:min-h-0 *:flex-1 *:flex-col"
               initial={{ opacity: 0, y: 20 }}
@@ -134,10 +134,10 @@ const IconShowcase: React.FC = () => {
                   meta && <GenericDemo name={displayName} meta={meta} />
                 )}
               </Suspense>
-            </motion.div>
+            </m.div>
           )}
         </AnimatePresence>
-      </motion.div>
+      </m.div>
     </AnimatePresence>
   );
 };

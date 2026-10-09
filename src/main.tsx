@@ -1,6 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
+import { LazyMotion, domAnimation } from "framer-motion";
 import "./index.css";
 import App from "./App";
 import { OrbOriginProvider } from "./context/OrbOriginContext";
@@ -14,7 +15,10 @@ root.render(
   <StrictMode>
     <BrowserRouter>
       <OrbOriginProvider>
-        <App />
+        {/* domAnimation covers everything used here (no layout/drag); `strict` flags any stray motion.* */}
+        <LazyMotion features={domAnimation} strict>
+          <App />
+        </LazyMotion>
       </OrbOriginProvider>
     </BrowserRouter>
   </StrictMode>

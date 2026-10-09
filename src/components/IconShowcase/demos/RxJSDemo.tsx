@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, m } from "framer-motion";
 import DemoShell from "./components/DemoShell";
 import { PASS_COLOR, MUTED_COLOR } from "./constants";
 
@@ -119,7 +119,7 @@ export default function RxJSDemo() {
           {ordered.map((e, index) => {
             const isOverflow = index >= capacity;
             return (
-              <motion.div
+              <m.div
                 key={e.id}
                 className="absolute top-0 left-0 flex size-7 items-center justify-center rounded-full border-2 text-xs font-bold"
                 style={{ borderColor: color, color }}
@@ -133,7 +133,7 @@ export default function RxJSDemo() {
                 transition={{ type: "spring", stiffness: 200, damping: 26 }}
               >
                 {e.value}
-              </motion.div>
+              </m.div>
             );
           })}
         </AnimatePresence>
@@ -207,7 +207,7 @@ export default function RxJSDemo() {
 
       <AnimatePresence>
         {isInfoOpen && (
-          <motion.div
+          <m.div
             className="fixed inset-0 z-10010 flex items-center justify-center bg-black/70 p-6 backdrop-blur-sm"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -215,7 +215,7 @@ export default function RxJSDemo() {
             transition={{ duration: 0.2 }}
             onClick={() => setIsInfoOpen(false)}
           >
-            <motion.div
+            <m.div
               className={MODAL_PANEL_CLASSES}
               initial={{ opacity: 0, scale: 0.92, y: 16 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -253,8 +253,8 @@ export default function RxJSDemo() {
                   </div>
                 ))}
               </div>
-            </motion.div>
-          </motion.div>
+            </m.div>
+          </m.div>
         )}
       </AnimatePresence>
     </DemoShell>

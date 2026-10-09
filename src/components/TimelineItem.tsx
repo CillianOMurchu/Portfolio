@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { Cog, Lightbulb, type LucideIcon } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { scrollVariants } from "../utils/animations";
@@ -41,14 +41,14 @@ const TimelineSection = ({ icon: Icon, title, bullet, items }: TimelineSectionPr
         <Icon className="size-4" />
         {title}
       </h4>
-      <motion.ul className="space-y-3" variants={scrollVariants.listContainer}>
+      <m.ul className="space-y-3" variants={scrollVariants.listContainer}>
         {items.map((item, i) => (
-          <motion.li key={i} variants={scrollVariants.listItem} className="flex gap-2 text-secondary-foreground">
+          <m.li key={i} variants={scrollVariants.listItem} className="flex gap-2 text-secondary-foreground">
             <span className="shrink-0 text-lg font-extrabold leading-6 text-primary">{bullet}</span>
             <p>{withBold(item)}</p>
-          </motion.li>
+          </m.li>
         ))}
-      </motion.ul>
+      </m.ul>
     </section>
   );
 };
@@ -61,7 +61,7 @@ export const TimelineItem = ({ work, index }: TimelineItemProps) => {
   );
 
   return (
-    <motion.div
+    <m.div
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.2 }}
@@ -75,6 +75,10 @@ export const TimelineItem = ({ work, index }: TimelineItemProps) => {
               <img
                 src={work.projectImage}
                 alt={`Screenshot of ${work.name}`}
+                width={800}
+                height={800}
+                loading="lazy"
+                decoding="async"
                 className="mx-auto h-auto w-full rounded-lg object-cover shadow-xl transition hover:opacity-80 hover:shadow-primary/30 sm:mx-0 sm:max-h-60 sm:w-auto"
               />
             </a>
@@ -105,6 +109,6 @@ export const TimelineItem = ({ work, index }: TimelineItemProps) => {
           <TimelineSection icon={Cog} title="Key Features & Contributions" bullet="»" items={work.keyFeatures} />
         </div>
       </Card>
-    </motion.div>
+    </m.div>
   );
 };

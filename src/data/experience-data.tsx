@@ -1,10 +1,10 @@
-import lighthouseImage from "../assets/about/header-lighthouse.png";
-import betsson from "../assets/about/header-betsson.png";
-import pokerstars from "../assets/about/header-pokerstars.png";
-import roadooImage from "../assets/about/header-roadoo.png";
+import lighthouseImage from "../assets/about/header-lighthouse.webp";
+import betsson from "../assets/about/header-betsson.webp";
+import pokerstars from "../assets/about/header-pokerstars.webp";
+import roadooImage from "../assets/about/header-roadoo.webp";
 
 // TODO: Add Maslo logo image import when available
-// import masloImage from "../assets/about/header-maslo.png";
+// import masloImage from "../assets/about/header-maslo.webp";
 
 export const experienceData = [
   {

@@ -32,7 +32,8 @@ The glob option "as" has been deprecated in favour of "query".
 ### Icons not appearing
 - Check that `src/assets/programming-icons/` contains `.svg` files.
 - The glob in `sphere/iconLoader.ts` matches `../../assets/programming-icons/*.svg` — if the file moves, this path must update.
-- Images are preloaded eagerly on mount via `usePreloadImages`. If `img.complete` is false during the first draw frames, icons will be invisible until loaded.
+- Images are created once at module load in `ItemSphere.tsx` (`preloadImages`). If `img.complete` is false during the first draw frames, icons stay invisible until loaded.
+- Never pass the images map through a ref that is filled in an effect: the draw loop captures it when its effect runs, and an empty map means a blank sphere (this was the "blank after navigating back to Home" bug).
 
 ### Sphere not pausing when hidden
 - `visible` prop must be passed from `HomeScreen` → `ItemSphere` → `useSphereCanvas`.

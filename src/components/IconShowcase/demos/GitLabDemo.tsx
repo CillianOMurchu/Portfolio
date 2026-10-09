@@ -1,5 +1,5 @@
 import { Fragment, useRef, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, m } from "framer-motion";
 import gitlabSvg from "../../../assets/programming-icons/gitlab.svg";
 import DemoButton from "./components/DemoButton";
 import { PASS_COLOR, FAIL_COLOR, WARN_COLOR, MUTED_COLOR, DARK_MUTED } from "./constants";
@@ -165,7 +165,7 @@ export default function GitLabDemo() {
       {/* Face overlay — appears when pipeline reaches a terminal state */}
       <AnimatePresence>
         {isDone && (
-          <motion.div
+          <m.div
             key="face"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -185,13 +185,13 @@ export default function GitLabDemo() {
             }}
           >
             {/* Eyes — GitLab logos floating left and right */}
-            <motion.div
+            <m.div
               animate={{ x: [-5, 5] }}
               transition={{ repeat: Infinity, repeatType: "mirror", duration: 2.6, ease: "easeInOut" }}
               style={{ display: "flex", gap: 52, marginBottom: 14 }}
             >
               {[0, 1].map((i) => (
-                <motion.img
+                <m.img
                   key={i}
                   src={gitlabSvg}
                   initial={{ opacity: 0, y: -48, scale: 0.3 }}
@@ -200,10 +200,10 @@ export default function GitLabDemo() {
                   style={{ width: 38, height: 38, display: "block" }}
                 />
               ))}
-            </motion.div>
+            </m.div>
 
             {/* Nose — the tagline, distilled to a dot */}
-            <motion.div
+            <m.div
               initial={{ opacity: 0, scale: 0 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.52, type: "spring", bounce: 0.7 }}
@@ -211,7 +211,7 @@ export default function GitLabDemo() {
             />
 
             {/* Smile/frown — the pipeline curled into a curve */}
-            <motion.svg
+            <m.svg
               width="140"
               height="55"
               viewBox="0 0 140 55"
@@ -220,7 +220,7 @@ export default function GitLabDemo() {
               transition={{ delay: 0.62 }}
               style={{ marginBottom: 18, overflow: "visible" }}
             >
-              <motion.path
+              <m.path
                 d={pipelinePassed ? "M 15,12 Q 70,52 125,12" : "M 15,43 Q 70,3 125,43"}
                 fill="none"
                 stroke={pipelinePassed ? PASS_COLOR : FAIL_COLOR}
@@ -236,7 +236,7 @@ export default function GitLabDemo() {
                 const { x, y } = smilePoint(t, pipelinePassed);
                 const sc = stageColor(jobs, stage);
                 return (
-                  <motion.circle
+                  <m.circle
                     key={stage}
                     cx={x}
                     cy={y}
@@ -248,9 +248,9 @@ export default function GitLabDemo() {
                   />
                 );
               })}
-            </motion.svg>
+            </m.svg>
 
-            <motion.p
+            <m.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 1.55 }}
@@ -261,9 +261,9 @@ export default function GitLabDemo() {
               }}
             >
               {pipelinePassed ? "deployed to production" : "pipeline blocked"}
-            </motion.p>
+            </m.p>
 
-            <motion.button
+            <m.button
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 2.0 }}
@@ -279,8 +279,8 @@ export default function GitLabDemo() {
               }}
             >
               ↺ try again
-            </motion.button>
-          </motion.div>
+            </m.button>
+          </m.div>
         )}
       </AnimatePresence>
     </div>

@@ -35,7 +35,8 @@ The sphere is the most complex feature. All files in `components/sphere/`.
 ```
 loadIconModules()          Vite glob → svgModules + iconNames[]
 generateFibonacciSphere(n) → Position3D[]  (unit sphere, golden angle)
-usePreloadImages()         → imagesRef (name → HTMLImageElement)
+preloadImages()            → images (name → HTMLImageElement), built once at module load in ItemSphere
+createIconRasterizer()     → each SVG rasterised once per size (iconRaster.ts); the loop draws bitmaps
 useSphereCanvas()          → RAF loop, mouse events, canvas draw
 ```
 
@@ -59,6 +60,10 @@ Constants: `PERSPECTIVE_NEAR=1.2`, `PERSPECTIVE_FAR=1.6`, `SPHERE_PROJECTION_SCA
 ### Persistence across Strict Mode
 
 `persistentState` and `globalMountTime` are module-level variables (not React state). React Strict Mode double-mounts components — module-level vars survive this, keeping rotation state and fade-in timing consistent.
+
+### Rest pause
+
+When an icon is clicked (IconShowcase open), the sphere decelerates to a stop. Once it is fully at rest the loop stops requesting frames; `resume()` restarts it when the highlight clears, the canvas resizes, or visibility changes. This avoids re-blurring the overlay's full-screen `backdrop-blur` every frame.
 
 ### Visibility pause
 
@@ -129,6 +134,7 @@ When the user hovers an icon on the sphere, three things happen in sequence:
 Two layers:
 
 **1. Framer Motion (declarative, scroll-triggered)**
+- Loaded via `<LazyMotion features={domAnimation} strict>` in `main.tsx`. Use `m.div` etc., never `motion.div` (strict mode throws). `domAnimation` has no layout/drag; switch to `domMax` if those are ever needed.
 - Shared variants in `utils/animations.ts` — `scrollVariants`, `scrollViewport`, `scrollTiming`
 - Used by `About.tsx` and `TimelineItem.tsx`
 - Page transitions in `AppRoutes.tsx` (per-route motion wrapper)

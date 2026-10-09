@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import { useOrbOrigin } from "../../context/OrbOriginContext";
 import InfoBox from "../ui/InfoBox";
 import { iconDescriptions } from "../../data/icon-descriptions";
@@ -57,7 +57,7 @@ const SphereOrb: React.FC = () => {
       {/* Flying orb */}
       <AnimatePresence>
         {hoveredIcon && (
-          <motion.div
+          <m.div
             key="sphere-orb"
             style={{
               position: "fixed",
@@ -97,7 +97,7 @@ const SphereOrb: React.FC = () => {
       {/* Growing line */}
       <AnimatePresence>
         {settled && hoveredIcon && (
-          <motion.div
+          <m.div
             key={`line-${iconName}`}
             style={{
               position: "fixed",
@@ -120,7 +120,7 @@ const SphereOrb: React.FC = () => {
       {/* Info box */}
       <AnimatePresence>
         {settled && hoveredIcon && (
-          <motion.div
+          <m.div
             key={`info-${iconName}`}
             style={{
               position: "fixed",
@@ -137,7 +137,7 @@ const SphereOrb: React.FC = () => {
             <div style={{ transform: "translateY(-50%)" }}>
               <InfoBox text={desc} displayedText={displayedText} />
             </div>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
     </>
