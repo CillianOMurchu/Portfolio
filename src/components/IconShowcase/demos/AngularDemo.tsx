@@ -1,6 +1,7 @@
 import { useState } from "react";
 import DemoShell from "./components/DemoShell";
 import CodePanel from "./components/CodePanel";
+import { MUTED_COLOR, SECONDARY_ACCENT } from "./constants";
 
 const ANGULAR_ACCENT = "#dd1b16";
 
@@ -9,8 +10,8 @@ const ROUTES = [
     path: "/home", label: "Home", icon: "⌂",
     content: () => (
       <div className="space-y-2">
-        <p className="text-white font-semibold">Welcome, Cillian</p>
-        <p className="text-gray-400 text-sm">This is the HomeComponent. It bootstrapped from AppModule.</p>
+        <p className="text-foreground font-semibold">Welcome, Cillian</p>
+        <p className="text-muted-foreground text-sm">This is the HomeComponent. It bootstrapped from AppModule.</p>
         <div className="flex gap-2 mt-2">
           {["Angular", "TypeScript", "RxJS"].map(t => (
             <span key={t} className="text-sm px-2 py-0.5 rounded-sm" style={{ background: "rgba(221,0,49,0.15)", color: ANGULAR_ACCENT }}>{t}</span>
@@ -23,12 +24,12 @@ const ROUTES = [
     path: "/dashboard", label: "Dashboard", icon: "▦",
     content: () => (
       <div className="space-y-2">
-        <p className="text-white font-semibold">DashboardComponent</p>
+        <p className="text-foreground font-semibold">DashboardComponent</p>
         <div className="grid grid-cols-3 gap-2 mt-2">
           {[["Projects", "14"], ["Tests", "342"], ["Coverage", "87%"]].map(([k, v]) => (
             <div key={k} className="rounded-sm p-2 text-center" style={{ background: "rgba(221,0,49,0.08)" }}>
               <p className="text-lg font-bold" style={{ color: ANGULAR_ACCENT }}>{v}</p>
-              <p className="text-sm text-gray-500">{k}</p>
+              <p className="text-sm text-muted-foreground">{k}</p>
             </div>
           ))}
         </div>
@@ -39,10 +40,10 @@ const ROUTES = [
     path: "/settings", label: "Settings", icon: "⚙",
     content: () => (
       <div className="space-y-2">
-        <p className="text-white font-semibold">SettingsComponent</p>
+        <p className="text-foreground font-semibold">SettingsComponent</p>
         <div className="space-y-2 mt-1">
           {["Dark mode: true", "Notifications: false", "Debug: false"].map(s => (
-            <div key={s} className="flex items-center gap-2 text-sm text-gray-400 font-mono">
+            <div key={s} className="flex items-center gap-2 text-sm text-muted-foreground font-mono">
               <span style={{ color: ANGULAR_ACCENT }}>@Input()</span> {s}
             </div>
           ))}
@@ -63,16 +64,16 @@ export default function AngularDemo() {
           {ROUTES.map((r, i) => (
             <button key={r.path} onClick={() => setActive(i)}
               className="flex-1 py-2 text-sm font-medium transition-all"
-              style={{ color: i === active ? ANGULAR_ACCENT : "#6b7280", borderBottom: i === active ? `2px solid ${ANGULAR_ACCENT}` : "2px solid transparent" }}>
+              style={{ color: i === active ? ANGULAR_ACCENT : MUTED_COLOR, borderBottom: i === active ? `2px solid ${ANGULAR_ACCENT}` : "2px solid transparent" }}>
               {r.icon} {r.label}
             </button>
           ))}
         </div>
 
         <div className="flex items-center gap-2 px-3 py-1.5 text-sm font-mono" style={{ background: "#130005", borderBottom: "1px solid rgba(221,0,49,0.1)" }}>
-          <span className="text-gray-600">router.navigate(</span>
+          <span className="text-muted-foreground/60">router.navigate(</span>
           <span style={{ color: ANGULAR_ACCENT }}>'{route.path}'</span>
-          <span className="text-gray-600">)</span>
+          <span className="text-muted-foreground/60">)</span>
         </div>
 
         <div className="p-4" style={{ background: "#0d0004", minHeight: 120 }}>
@@ -81,14 +82,14 @@ export default function AngularDemo() {
       </div>
 
       <CodePanel accent={ANGULAR_ACCENT} className="p-3 font-mono text-sm leading-5">
-        <div className="text-gray-600">{"// app-routing.module.ts"}</div>
+        <div className="text-muted-foreground/60">{"// app-routing.module.ts"}</div>
         {ROUTES.map((r) => (
           <div key={r.path}>
-            <span className="text-gray-500">{"  { path: '"}</span>
+            <span className="text-muted-foreground">{"  { path: '"}</span>
             <span style={{ color: ANGULAR_ACCENT }}>{r.path.slice(1)}</span>
-            <span className="text-gray-500">{"', component: "}</span>
-            <span style={{ color: "#38bdf8" }}>{r.label}Component</span>
-            <span className="text-gray-500">{" },"}</span>
+            <span className="text-muted-foreground">{"', component: "}</span>
+            <span style={{ color: SECONDARY_ACCENT }}>{r.label}Component</span>
+            <span className="text-muted-foreground">{" },"}</span>
           </div>
         ))}
       </CodePanel>

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { AnimatePresence, m } from "framer-motion";
 import DemoShell from "./components/DemoShell";
-import { PASS_COLOR, MUTED_COLOR } from "./constants";
+import { MUTED_COLOR, PASS_COLOR, SECONDARY_TEXT } from "./constants";
 
 const RXJS_ACCENT = "#b7178c";
 const EVENT_SLOT = 36; // event (28px) + gap (8px) — used to compute how many fit per line
@@ -137,7 +137,7 @@ export default function RxJSDemo() {
             );
           })}
         </AnimatePresence>
-        {events.length === 0 && <span className="absolute top-1/2 left-0 -translate-y-1/2 text-xs text-gray-500 italic">— waiting —</span>}
+        {events.length === 0 && <span className="absolute top-1/2 left-0 -translate-y-1/2 text-xs text-muted-foreground italic">— waiting —</span>}
       </div>
     );
   };
@@ -187,10 +187,10 @@ export default function RxJSDemo() {
       <div className="flex gap-2">
         <button onClick={() => setIsLive(l => !l)}
           className="flex-1 rounded-lg py-2 text-sm transition-all"
-          style={{ background: isLive ? "rgba(183,23,140,0.15)" : "rgba(255,255,255,0.04)", border: `1px solid ${isLive ? "rgba(183,23,140,0.4)" : "rgba(255,255,255,0.1)"}`, color: isLive ? RXJS_ACCENT : "#9ca3af" }}>
+          style={{ background: isLive ? "rgba(183,23,140,0.15)" : "rgba(255,255,255,0.04)", border: `1px solid ${isLive ? "rgba(183,23,140,0.4)" : "rgba(255,255,255,0.1)"}`, color: isLive ? RXJS_ACCENT : SECONDARY_TEXT }}>
           {isLive ? "⏹ unsubscribe()" : "▶ subscribe()"}
         </button>
-        <button onClick={emit} className="rounded-lg px-4 py-2 text-sm" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)", color: "#9ca3af" }}>emit</button>
+        <button onClick={emit} className="rounded-lg px-4 py-2 text-sm" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)", color: SECONDARY_TEXT }}>emit</button>
         <button onClick={resetDemo} className="rounded-lg px-4 py-2 text-sm" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", color: MUTED_COLOR }}>↺</button>
       </div>
 

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import DemoShell from "./components/DemoShell";
 import CodePanel from "./components/CodePanel";
-import { PASS_COLOR, FAIL_COLOR, WARN_COLOR, DARK_MUTED } from "./constants";
+import { DARK_MUTED, FAIL_COLOR, PASS_COLOR, RAISED_BG, WARN_COLOR } from "./constants";
 
 const TS_ACCENT = "#3178c6";
 
@@ -35,7 +35,7 @@ const TypeScriptDemo: React.FC = () => {
 
   return (
     <DemoShell>
-      <p className="text-sm text-gray-400 text-center">
+      <p className="text-sm text-muted-foreground text-center">
         Fill in the correct TypeScript types for Cillian's profile object
       </p>
 
@@ -44,14 +44,14 @@ const TypeScriptDemo: React.FC = () => {
         {FIELDS.map((field) => (
           <div key={field.key} className="flex items-center gap-2 ml-4 mb-2 min-w-0 overflow-hidden">
             <span style={{ color: "#9cdcfe" }}>{field.key}</span>
-            <span className="text-gray-500">:</span>
+            <span className="text-muted-foreground">:</span>
             <select
               disabled={submitted}
               value={answers[field.key] ?? ""}
               onChange={(e) => setAnswers((prev) => ({ ...prev, [field.key]: e.target.value }))}
               className="rounded-sm px-2 py-0.5 text-sm font-mono outline-hidden"
               style={{
-                background: "#161b22",
+                background: RAISED_BG,
                 border: `1px solid ${statusColor(field)}55`,
                 color: statusColor(field),
               }}
@@ -61,8 +61,8 @@ const TypeScriptDemo: React.FC = () => {
                 <option key={o} value={o}>{o}</option>
               ))}
             </select>
-            <span className="text-gray-500">{"// "}</span>
-            <span className="text-gray-600 text-sm truncate min-w-0">{field.value}</span>
+            <span className="text-muted-foreground">{"// "}</span>
+            <span className="text-muted-foreground/60 text-sm truncate min-w-0">{field.value}</span>
             {submitted && (
               <span style={{ color: answers[field.key] === field.correct ? PASS_COLOR : FAIL_COLOR }}>
                 {answers[field.key] === field.correct ? "✓" : `✗ (${field.correct})`}
@@ -95,7 +95,7 @@ const TypeScriptDemo: React.FC = () => {
           >
             {score}/{FIELDS.length} correct
           </p>
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="text-sm text-muted-foreground mt-1">
             {score === FIELDS.length
               ? "Zero type errors. TypeScript approves."
               : score >= 2

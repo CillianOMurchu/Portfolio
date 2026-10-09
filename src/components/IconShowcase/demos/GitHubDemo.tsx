@@ -1,6 +1,6 @@
 import { useState } from "react";
 import DemoShell from "./components/DemoShell";
-import { PASS_COLOR, FAIL_COLOR, WARN_COLOR } from "./constants";
+import { CODE_BG, FAIL_COLOR, PASS_COLOR, WARN_COLOR } from "./constants";
 
 const COMMITS = [
   { hash: "4a9f2c1", msg: "feat: icon click → showcase overlay with demos", branch: "main", ago: "2h ago", additions: 847, deletions: 12 },
@@ -42,8 +42,8 @@ export default function GitHubDemo() {
 
   return (
     <DemoShell>
-      <div className="rounded-lg p-3 overflow-x-auto" style={{ background: "#0d1117", border: "1px solid rgba(255,255,255,0.1)" }}>
-        <p className="text-sm text-gray-500 mb-2">Contribution graph — hover the glowing cells</p>
+      <div className="rounded-lg p-3 overflow-x-auto" style={{ background: CODE_BG, border: "1px solid rgba(255,255,255,0.1)" }}>
+        <p className="text-sm text-muted-foreground mb-2">Contribution graph — hover the glowing cells</p>
         <div className="flex gap-0.5">
           {Array.from({ length: 52 }, (_, col) => (
             <div key={col} className="flex flex-col gap-0.5">
@@ -76,8 +76,8 @@ export default function GitHubDemo() {
             style={{ background: selectedCommit === i ? "rgba(255,255,255,0.06)" : "rgba(255,255,255,0.02)", border: `1px solid ${selectedCommit === i ? "rgba(255,255,255,0.15)" : "rgba(255,255,255,0.06)"}` }}>
             <div className="flex items-center gap-2">
               <span className="font-mono text-sm" style={{ color: PASS_COLOR }}>{c.hash}</span>
-              <span className="text-sm text-gray-300 flex-1 truncate">{c.msg}</span>
-              <span className="text-sm text-gray-600 shrink-0">{c.ago}</span>
+              <span className="text-sm text-secondary-foreground flex-1 truncate">{c.msg}</span>
+              <span className="text-sm text-muted-foreground/60 shrink-0">{c.ago}</span>
             </div>
             {selectedCommit === i && (
               <div className="flex gap-3 mt-1.5 text-sm font-mono">

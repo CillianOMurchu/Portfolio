@@ -18,7 +18,7 @@ const NameDisplay: React.FC<NameDisplayProps> = ({
         style={{
           cursor: "pointer",
           textShadow:
-            "0 0 5px rgba(16,185,129,0.8),0 0 10px rgba(16,185,129,0.6),0 0 15px rgba(16,185,129,0.4),0 0 20px rgba(16,185,129,0.3)",
+            "0 0 5px color-mix(in srgb, var(--primary) 80%, transparent), 0 0 10px color-mix(in srgb, var(--primary) 60%, transparent), 0 0 15px color-mix(in srgb, var(--primary) 40%, transparent), 0 0 20px color-mix(in srgb, var(--primary) 30%, transparent)",
         }}
       >
         {letters.map((char, i) => (

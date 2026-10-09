@@ -6,7 +6,8 @@
       "Bash(/usr/bin/grep -E \"error|built\")",
       "Bash(bash -c '/usr/bin/grep -oE \"slide-in-from-right\\\\[data-side=right\\\\][^}]*\\\\}|data-open\\\\\\\\\\\\\\\\:duration-400[^}]*\\\\}\" dist/assets/index-*.css | head -3')",
       "Bash(sed -i 's|<SheetContent side=\"right\" className=\"w-64\">|<SheetContent side=\"right\">|' src/components/layout/Navbar.tsx)",
-      "Bash(bash -c '/usr/bin/grep -n \"SheetContent side\" src/components/layout/Navbar.tsx')"
+      "Bash(bash -c '/usr/bin/grep -n \"SheetContent side\" src/components/layout/Navbar.tsx')",
+      "Bash(git grep *)"
     ]
   }
 }

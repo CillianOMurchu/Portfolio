@@ -1,7 +1,7 @@
 import { useState } from "react";
 import DemoShell from "./components/DemoShell";
 import CodePanel from "./components/CodePanel";
-import { PASS_COLOR, FAIL_COLOR } from "./constants";
+import { FAIL_COLOR, PASS_COLOR, SECONDARY_TEXT } from "./constants";
 
 const JEST_ACCENT = "#c21325";
 
@@ -52,7 +52,7 @@ const JestDemo: React.FC = () => {
   return (
     <DemoShell>
       <CodePanel accent={JEST_ACCENT} className="p-4 font-mono text-sm leading-6">
-        <p className="text-gray-500 mb-3">{SUITE}</p>
+        <p className="text-muted-foreground mb-3">{SUITE}</p>
 
         {visible.map((t, i) => (
           <div key={i} className="flex items-start gap-2 ml-4 mb-1">
@@ -61,10 +61,10 @@ const JestDemo: React.FC = () => {
             >
               {t.passes ? "✓" : "✗"}
             </span>
-            <span style={{ color: t.passes ? "#9ca3af" : "#f87171" }}>
+            <span style={{ color: t.passes ? SECONDARY_TEXT : FAIL_COLOR }}>
               {t.description}
             </span>
-            <span className="ml-auto text-gray-600 text-sm shrink-0">
+            <span className="ml-auto text-muted-foreground/60 text-sm shrink-0">
               ({t.duration})
             </span>
           </div>
@@ -79,13 +79,13 @@ const JestDemo: React.FC = () => {
                   className="ml-4 mb-1"
                   style={{ color: FAIL_COLOR }}
                 >
-                  <span className="text-gray-600">{"  ● "}</span>
+                  <span className="text-muted-foreground/60">{"  ● "}</span>
                   {t.note}
                 </div>
               ),
           )}
 
-        <p className="text-gray-500 mt-3">{"}"}</p>
+        <p className="text-muted-foreground mt-3">{"}"}</p>
       </CodePanel>
 
       <div className="flex items-center justify-between px-1">

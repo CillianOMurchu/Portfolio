@@ -16,14 +16,14 @@ const InfoBox: React.FC<InfoBoxProps> = ({ text, displayedText, className = "", 
       className={`w-72 border border-primary/30 bg-black/80 backdrop-blur-xs p-4 rounded-sm ${className}`}
       style={{
         boxShadow:
-          "0 0 10px rgba(16,185,129,0.3), 0 0 20px rgba(16,185,129,0.2), inset 0 0 20px rgba(16,185,129,0.05)",
+          "0 0 10px color-mix(in srgb, var(--primary) 30%, transparent), 0 0 20px color-mix(in srgb, var(--primary) 20%, transparent), inset 0 0 20px color-mix(in srgb, var(--primary) 5%, transparent)",
         ...style,
       }}
     >
       <p
         className="text-primary text-sm tracking-wide leading-relaxed"
         style={{
-          textShadow: "0 0 3px rgba(16,185,129,0.5)",
+          textShadow: "0 0 3px color-mix(in srgb, var(--primary) 50%, transparent)",
           whiteSpace: "pre-line",
         }}
       >

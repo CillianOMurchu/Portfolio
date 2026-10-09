@@ -1,6 +1,7 @@
 import { useState } from "react";
 import DemoShell from "./components/DemoShell";
 import CodePanel from "./components/CodePanel";
+import { SECONDARY_TEXT } from "./constants";
 
 const MONGODB_ACCENT = "#47a248";
 
@@ -27,9 +28,9 @@ export default function MongoDBDemo() {
   return (
     <DemoShell>
       <CodePanel accent={MONGODB_ACCENT} className="px-3 py-2 font-mono text-sm" >
-        <span className="text-gray-600" style={{ color: MONGODB_ACCENT }}>
-          <span className="text-gray-600">{">"} </span>{query}
-          <span className="text-gray-600"> // {visible.length} document{visible.length !== 1 ? "s" : ""}</span>
+        <span className="text-muted-foreground/60" style={{ color: MONGODB_ACCENT }}>
+          <span className="text-muted-foreground/60">{">"} </span>{query}
+          <span className="text-muted-foreground/60"> // {visible.length} document{visible.length !== 1 ? "s" : ""}</span>
         </span>
       </CodePanel>
 
@@ -40,7 +41,7 @@ export default function MongoDBDemo() {
             style={{
               background: filter === f ? "rgba(71,162,72,0.2)" : "rgba(255,255,255,0.04)",
               border: `1px solid ${filter === f ? MONGODB_ACCENT : "rgba(255,255,255,0.1)"}`,
-              color: filter === f ? MONGODB_ACCENT : "#9ca3af",
+              color: filter === f ? MONGODB_ACCENT : SECONDARY_TEXT,
             }}>
             {filter === f ? "✓ " : ""}{f}
           </button>
@@ -53,18 +54,18 @@ export default function MongoDBDemo() {
             className="rounded-lg p-3 text-left transition-all w-full"
             style={{ background: "rgba(71,162,72,0.05)", border: `1px solid ${expanded === doc._id ? MONGODB_ACCENT : "rgba(71,162,72,0.15)"}` }}>
             <div className="flex items-center justify-between">
-              <span className="text-sm text-white font-medium">{doc.name}</span>
+              <span className="text-sm text-foreground font-medium">{doc.name}</span>
               <span className="text-sm" style={{ color: MONGODB_ACCENT }}>{doc.year}</span>
             </div>
             {expanded === doc._id ? (
-              <pre className="mt-2 text-sm font-mono text-gray-400 whitespace-pre-wrap text-left">
+              <pre className="mt-2 text-sm font-mono text-muted-foreground whitespace-pre-wrap text-left">
 {JSON.stringify(doc, null, 2)}
               </pre>
             ) : (
               <div className="flex gap-1 mt-1 flex-wrap">
                 {doc.stack.map((s) => (
-                  <span key={s} className="text-sm px-1.5 py-0.5 rounded-sm text-gray-500"
-                    style={{ background: "rgba(255,255,255,0.05)", color: filter === s ? MONGODB_ACCENT : "#9ca3af" }}>
+                  <span key={s} className="text-sm px-1.5 py-0.5 rounded-sm text-muted-foreground"
+                    style={{ background: "rgba(255,255,255,0.05)", color: filter === s ? MONGODB_ACCENT : SECONDARY_TEXT }}>
                     {s}
                   </span>
                 ))}
@@ -72,7 +73,7 @@ export default function MongoDBDemo() {
             )}
           </button>
         ))}
-        {visible.length === 0 && <p className="text-center text-gray-600 text-sm py-4">No documents match</p>}
+        {visible.length === 0 && <p className="text-center text-muted-foreground/60 text-sm py-4">No documents match</p>}
       </div>
     </DemoShell>
   );

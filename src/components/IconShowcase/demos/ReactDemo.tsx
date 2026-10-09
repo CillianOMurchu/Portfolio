@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import DemoShell from "./components/DemoShell";
 import CodePanel from "./components/CodePanel";
+import { SECONDARY_TEXT } from "./constants";
 
 const REACT_ACCENT = "#61dafb";
 
@@ -46,7 +47,7 @@ export default function ReactDemo() {
 
   return (
     <DemoShell className="gap-5">
-      <p className="text-sm text-gray-400 text-center">
+      <p className="text-sm text-muted-foreground text-center">
         Watch which components re-render when state changes
       </p>
 
@@ -61,7 +62,7 @@ export default function ReactDemo() {
               border: flashing.has(node.id) ? "1px solid rgba(97,218,251,0.5)" : "1px solid transparent",
             }}
           >
-            <span style={{ color: node.pure ? "#9ca3af" : REACT_ACCENT }}>
+            <span style={{ color: node.pure ? SECONDARY_TEXT : REACT_ACCENT }}>
               {"<"}{node.label}{">"}{node.children ? "" : " /"}
             </span>
             {flashing.has(node.id) && (
@@ -88,7 +89,7 @@ export default function ReactDemo() {
         </button>
       </div>
 
-      <p className="text-sm text-center text-gray-600">
+      <p className="text-sm text-center text-muted-foreground/60">
         Header is memoized — it never re-renders even when parent state changes
       </p>
     </DemoShell>

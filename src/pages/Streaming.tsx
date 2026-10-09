@@ -42,9 +42,9 @@ type StreamStatus = "checking" | "live" | "offline";
 
 // Traffic-light colours are deliberate: they signal status, not brand.
 const STATUS_DISPLAY: Record<StreamStatus, { label: string; text: string; dot: string }> = {
-    live:     { label: "LIVE",        text: "text-emerald-400", dot: "bg-emerald-400 shadow-emerald-400/60" },
-    checking: { label: "CHECKING...", text: "text-yellow-400",  dot: "bg-yellow-400 shadow-yellow-400/40" },
-    offline:  { label: "OFFLINE",     text: "text-red-400",     dot: "bg-red-400 shadow-red-400/40" },
+    live:     { label: "LIVE",        text: "text-success", dot: "bg-success shadow-success/60" },
+    checking: { label: "CHECKING...", text: "text-warning",  dot: "bg-warning shadow-warning/40" },
+    offline:  { label: "OFFLINE",     text: "text-error",     dot: "bg-error shadow-error/40" },
 };
 
 const Streaming = () => {

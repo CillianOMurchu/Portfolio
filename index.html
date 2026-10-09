@@ -6,6 +6,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cillian Ó Murchú | Creative Engineer</title>
     <meta name="theme-color" content="#0a0e1a" />
+    <!-- Applies the saved colour theme before first paint (see components/ThemeSwitcher). -->
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem("portfolio-theme");
+          var bg = { ultraviolet: "#100b19", amber: "#17110c", magenta: "#160b19" }[t];
+          if (bg) {
+            document.documentElement.dataset.theme = t;
+            document.querySelector('meta[name="theme-color"]').setAttribute("content", bg);
+          }
+        } catch (e) {
+          console.error("Could not apply saved colour theme:", e);
+        }
+      })();
+    </script>
     <meta
       name="description"
       content="Portfolio of Cillian Ó Murchú, creative engineer."

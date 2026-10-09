@@ -1,6 +1,7 @@
 import { useState } from "react";
 import DemoShell from "./components/DemoShell";
 import CodePanel from "./components/CodePanel";
+import { SECONDARY_ACCENT, SECONDARY_TEXT } from "./constants";
 
 const SASS_ACCENT = "#cc6699";
 
@@ -28,11 +29,11 @@ $font-size: ${fontSize}px;
 
   return (
     <DemoShell className="gap-5">
-      <p className="text-sm text-gray-400 text-center">Edit Sass variables and watch the cascade</p>
+      <p className="text-sm text-muted-foreground text-center">Edit Sass variables and watch the cascade</p>
 
       <div className="grid grid-cols-2 gap-4">
         <div className="flex flex-col gap-2">
-          <p className="text-sm text-gray-500 uppercase tracking-wider">$primary preset</p>
+          <p className="text-sm text-muted-foreground uppercase tracking-wider">$primary preset</p>
           <div className="flex gap-2 flex-wrap">
             {PRESETS.map((p, i) => (
               <button key={p.name} onClick={() => setPreset(i)} title={p.name}
@@ -44,10 +45,10 @@ $font-size: ${fontSize}px;
         </div>
 
         <div className="flex flex-col gap-2">
-          <label className="text-sm text-gray-500 uppercase tracking-wider">$radius: {radius}px</label>
+          <label className="text-sm text-muted-foreground uppercase tracking-wider">$radius: {radius}px</label>
           <input type="range" min={0} max={24} value={radius} onChange={(e) => setRadius(Number(e.target.value))}
             className="w-full" style={{ accentColor: primary }} />
-          <label className="text-sm text-gray-500 uppercase tracking-wider">$font-size: {fontSize}px</label>
+          <label className="text-sm text-muted-foreground uppercase tracking-wider">$font-size: {fontSize}px</label>
           <input type="range" min={11} max={20} value={fontSize} onChange={(e) => setFontSize(Number(e.target.value))}
             className="w-full" style={{ accentColor: primary }} />
         </div>
@@ -56,22 +57,22 @@ $font-size: ${fontSize}px;
       <div className="rounded-xl p-5 flex flex-col gap-3 transition-all duration-300"
         style={{ background: "rgba(255,255,255,0.03)", border: `1px solid rgba(${hexToRgb(primary)},0.3)`, borderRadius: radius }}>
         <div className="flex items-center justify-between">
-          <p className="font-semibold text-white" style={{ fontSize }}>Cillian Ó Murchú</p>
+          <p className="font-semibold text-foreground" style={{ fontSize }}>Cillian Ó Murchú</p>
           <span className="px-2 py-0.5 rounded-full text-sm font-medium transition-all duration-300"
             style={{ background: `${primary}33`, color: primary, borderRadius: radius / 2 }}>
             Available
           </span>
         </div>
-        <p className="text-gray-400" style={{ fontSize: fontSize - 2 }}>Senior Frontend Developer</p>
-        <button className="py-2 px-4 text-sm font-semibold text-white transition-all duration-300"
+        <p className="text-muted-foreground" style={{ fontSize: fontSize - 2 }}>Senior Frontend Developer</p>
+        <button className="py-2 px-4 text-sm font-semibold text-foreground transition-all duration-300"
           style={{ background: `linear-gradient(135deg, ${primary}, ${secondary})`, borderRadius: radius, fontSize }}>
           View Portfolio
         </button>
       </div>
 
-      <CodePanel accent={SASS_ACCENT} className="p-3 font-mono text-sm leading-5 text-gray-400 whitespace-pre overflow-x-auto">
+      <CodePanel accent={SASS_ACCENT} className="p-3 font-mono text-sm leading-5 text-muted-foreground whitespace-pre overflow-x-auto">
         {scss.split("\n").map((line, i) => (
-          <div key={i} style={{ color: line.includes("$") ? SASS_ACCENT : line.startsWith(".") ? "#38bdf8" : "#9ca3af" }}>
+          <div key={i} style={{ color: line.includes("$") ? SASS_ACCENT : line.startsWith(".") ? SECONDARY_ACCENT : SECONDARY_TEXT }}>
             {line}
           </div>
         ))}

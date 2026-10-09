@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import DemoShell from "./components/DemoShell";
-import { PASS_COLOR, FAIL_COLOR, DARK_MUTED } from "./constants";
+import { BODY_TEXT, CODE_BG, DARK_MUTED, FAIL_COLOR, PASS_COLOR, SECONDARY_TEXT, tint } from "./constants";
 
 interface Middleware {
   id: string;
@@ -13,7 +13,7 @@ interface Middleware {
 }
 
 const INITIAL: Middleware[] = [
-  { id: "logger", name: "logger", code: 'console.log(req.method, req.url)', enabled: true, color: "#9ca3af", action: "logged" },
+  { id: "logger", name: "logger", code: 'console.log(req.method, req.url)', enabled: true, color: SECONDARY_TEXT, action: "logged" },
   { id: "cors", name: "cors()", code: 'res.set("Access-Control-Allow-Origin", "*")', enabled: true, color: "#38bdf8", action: "CORS headers added" },
   { id: "auth", name: "auth", code: 'if (!req.headers.authorization) return 401', enabled: true, color: "#f59e0b", action: "authenticated", blocksOn: "disabled" },
   { id: "rateLimit", name: "rateLimit", code: "if (hits > 100) return 429", enabled: true, color: "#8b5cf6", action: "rate checked" },
@@ -51,7 +51,7 @@ export default function ExpressDemo() {
 
   return (
     <DemoShell>
-      <p className="text-sm text-center text-gray-400">Toggle middleware on/off then send a request</p>
+      <p className="text-sm text-center text-muted-foreground">Toggle middleware on/off then send a request</p>
 
       <div className="flex flex-col gap-1">
         {middleware.map((m) => {
@@ -64,7 +64,7 @@ export default function ExpressDemo() {
                 {m.enabled && <span style={{ color: m.color }}>✓</span>}
               </button>
               <span className="font-mono text-sm flex-1" style={{ color: m.enabled ? m.color : DARK_MUTED }}>
-                app.use(<span style={{ color: "#e5e7eb" }}>{m.name}</span>)
+                app.use(<span style={{ color: BODY_TEXT }}>{m.name}</span>)
               </span>
               {isActive && <span className="text-sm" style={{ color: m.color }}>{m.action} ✓</span>}
             </div>
@@ -73,13 +73,13 @@ export default function ExpressDemo() {
       </div>
 
       <button onClick={sendRequest} className="rounded-lg py-2.5 text-sm font-semibold transition-all"
-        style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.15)", color: "#e5e7eb" }}>
+        style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.15)", color: BODY_TEXT }}>
         ↗ GET /api/profile
       </button>
 
       {response && (
         <div className="rounded-lg px-3 py-2 font-mono text-sm whitespace-pre"
-          style={{ background: "#0d1117", border: `1px solid ${response.startsWith("200") ? "rgba(16,185,129,0.3)" : "rgba(239,68,68,0.3)"}`, color: response.startsWith("200") ? PASS_COLOR : FAIL_COLOR }}>
+          style={{ background: CODE_BG, border: `1px solid ${response.startsWith("200") ? tint(PASS_COLOR, 30) : tint(FAIL_COLOR, 30)}`, color: response.startsWith("200") ? PASS_COLOR : FAIL_COLOR }}>
           {response}
         </div>
       )}

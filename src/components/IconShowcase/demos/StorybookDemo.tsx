@@ -1,6 +1,6 @@
 import { useState } from "react";
 import DemoShell from "./components/DemoShell";
-import { PASS_COLOR, WARN_COLOR, MUTED_COLOR } from "./constants";
+import { CODE_BG, MUTED_COLOR, PASS_COLOR, SECONDARY_TEXT, WARN_COLOR } from "./constants";
 
 const STORYBOOK_ACCENT = "#ff4785";
 
@@ -43,7 +43,7 @@ function BadgePreview({ args }: { args: Record<string, unknown> }) {
   return <span className="px-3 py-1.5 rounded-full text-sm font-medium" style={{ background: `${args.color as string}22`, border: `1px solid ${args.color as string}55`, color: args.color as string }}>{String(args.label)}</span>;
 }
 function CardPreview({ args }: { args: Record<string, unknown> }) {
-  return <div className="rounded-xl p-4 w-48" style={{ background: "rgba(255,255,255,0.04)", border: `1px solid ${args.accent as string}33` }}><p className="font-semibold text-white text-sm">{String(args.title)}</p><p className="text-sm mt-1" style={{ color: args.accent as string }}>{String(args.subtitle)}</p></div>;
+  return <div className="rounded-xl p-4 w-48" style={{ background: "rgba(255,255,255,0.04)", border: `1px solid ${args.accent as string}33` }}><p className="font-semibold text-foreground text-sm">{String(args.title)}</p><p className="text-sm mt-1" style={{ color: args.accent as string }}>{String(args.subtitle)}</p></div>;
 }
 
 export default function StorybookDemo() {
@@ -58,12 +58,12 @@ export default function StorybookDemo() {
     <DemoShell>
       <div className="rounded-lg overflow-hidden" style={{ border: `1px solid ${STORYBOOK_ACCENT}33` }}>
         <div className="grid grid-cols-[140px_1fr]" style={{ minHeight: 240 }}>
-          <div className="flex flex-col" style={{ borderRight: "1px solid rgba(255,255,255,0.07)", background: "#0d1117" }}>
-            <div className="px-3 py-2 text-sm text-gray-500 uppercase tracking-wider" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>Stories</div>
+          <div className="flex flex-col" style={{ borderRight: "1px solid rgba(255,255,255,0.07)", background: CODE_BG }}>
+            <div className="px-3 py-2 text-sm text-muted-foreground uppercase tracking-wider" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>Stories</div>
             {COMPONENTS.map((c, i) => (
               <div key={c.name}>
                 <button onClick={() => { setCompIdx(i); setStoryId(c.stories[0].id); }} className="w-full text-left px-3 py-1.5 text-sm transition-all"
-                  style={{ color: i === compIdx ? STORYBOOK_ACCENT : "#9ca3af", background: i === compIdx ? `${STORYBOOK_ACCENT}14` : "transparent" }}>
+                  style={{ color: i === compIdx ? STORYBOOK_ACCENT : SECONDARY_TEXT, background: i === compIdx ? `${STORYBOOK_ACCENT}14` : "transparent" }}>
                   {i === compIdx ? "▾" : "▸"} {c.name}
                 </button>
                 {i === compIdx && c.stories.map(s => (
@@ -80,12 +80,12 @@ export default function StorybookDemo() {
             <div className="flex items-center justify-center flex-1 p-6" style={{ background: "rgba(255,255,255,0.02)", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
               <Preview args={story.args} />
             </div>
-            <div className="p-3 font-mono text-sm" style={{ background: "#0d1117" }}>
-              <p className="text-gray-600 mb-1">Args</p>
+            <div className="p-3 font-mono text-sm" style={{ background: CODE_BG }}>
+              <p className="text-muted-foreground/60 mb-1">Args</p>
               {Object.entries(story.args).map(([k, v]) => (
                 <div key={k} className="flex gap-2">
                   <span className="text-purple-400">{k}</span>
-                  <span className="text-gray-600">:</span>
+                  <span className="text-muted-foreground/60">:</span>
                   <span style={{ color: typeof v === "boolean" ? PASS_COLOR : typeof v === "string" ? WARN_COLOR : "#61dafb" }}>{JSON.stringify(v)}</span>
                 </div>
               ))}

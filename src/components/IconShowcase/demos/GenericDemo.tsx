@@ -33,7 +33,7 @@ const GenericDemo: React.FC<GenericDemoProps> = ({ name, meta }) => {
           <span className="text-3xl font-bold" style={{ color: meta.accentColor }}>
             {meta.yearsUsed}
           </span>
-          <span className="text-sm text-gray-400 text-center">years using {name}</span>
+          <span className="text-sm text-muted-foreground text-center">years using {name}</span>
         </div>
 
         <div
@@ -43,7 +43,7 @@ const GenericDemo: React.FC<GenericDemoProps> = ({ name, meta }) => {
           <span className="text-3xl font-bold" style={{ color: meta.accentColor }}>
             {meta.yearsUsed >= 5 ? "★★★★★" : meta.yearsUsed >= 3 ? "★★★★☆" : "★★★☆☆"}
           </span>
-          <span className="text-sm text-gray-400 text-center">proficiency</span>
+          <span className="text-sm text-muted-foreground text-center">proficiency</span>
         </div>
       </div>
 
@@ -51,8 +51,8 @@ const GenericDemo: React.FC<GenericDemoProps> = ({ name, meta }) => {
         className="rounded-lg p-4 border"
         style={{ background: "rgba(255,255,255,0.03)", borderColor: "rgba(255,255,255,0.08)" }}
       >
-        <p className="text-sm text-gray-500 uppercase tracking-wider mb-2">used in</p>
-        <p className="text-gray-300 text-sm">{meta.tagline}</p>
+        <p className="text-sm text-muted-foreground uppercase tracking-wider mb-2">used in</p>
+        <p className="text-secondary-foreground text-sm">{meta.tagline}</p>
       </div>
     </DemoShell>
   );

@@ -7,7 +7,7 @@ const HeroTitle: React.FC = () => (
     {HERO_ITEMS.map((item) => (
       <div
         key={item}
-        className="cursor-pointer text-[length:clamp(4rem,12vw,10rem)] leading-[1.1] font-extrabold whitespace-nowrap text-slate-400/15 transition-[color,text-shadow] duration-200 select-none even:font-normal hover:text-primary hover:text-shadow-(--glow-primary)"
+        className="cursor-pointer text-[length:clamp(4rem,12vw,10rem)] leading-[1.1] font-extrabold whitespace-nowrap text-muted-foreground/15 transition-[color,text-shadow] duration-200 select-none even:font-normal hover:text-primary hover:text-shadow-(--glow-primary)"
       >
         {item}
       </div>

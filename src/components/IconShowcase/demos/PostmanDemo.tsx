@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import DemoShell from "./components/DemoShell";
-import { PASS_COLOR, FAIL_COLOR, MUTED_COLOR } from "./constants";
+import { BODY_TEXT, CODE_BG, FAIL_COLOR, MUTED_COLOR, PASS_COLOR, WARN_COLOR, tint } from "./constants";
 
 const METHODS = ["GET", "POST", "PUT", "DELETE"] as const;
 type Method = (typeof METHODS)[number];
@@ -11,7 +11,7 @@ const ENDPOINTS: Record<string, string> = {
   "/v1/skills": JSON.stringify({ frontend: ["React", "Angular", "TypeScript", "Tailwind"], backend: ["Node.js", "Express", "MongoDB"], tools: ["Jest", "Cypress", "Figma", "GitHub"] }, null, 2),
 };
 
-const METHOD_COLOR: Record<Method, string> = { GET: PASS_COLOR, POST: "#f59e0b", PUT: "#3178c6", DELETE: FAIL_COLOR };
+const METHOD_COLOR: Record<Method, string> = { GET: PASS_COLOR, POST: WARN_COLOR, PUT: "#3178c6", DELETE: FAIL_COLOR };
 
 export default function PostmanDemo() {
   const [method, setMethod] = useState<Method>("GET");
@@ -44,8 +44,8 @@ export default function PostmanDemo() {
         </select>
 
         <div className="flex-1 flex items-center rounded-sm px-2" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)" }}>
-          <span className="text-sm text-gray-600 font-mono">api.cillian.dev</span>
-          <select value={path} onChange={(e) => setPath(e.target.value)} className="flex-1 bg-transparent outline-hidden text-sm font-mono ml-0.5" style={{ color: "#e5e7eb" }}>
+          <span className="text-sm text-muted-foreground/60 font-mono">api.cillian.dev</span>
+          <select value={path} onChange={(e) => setPath(e.target.value)} className="flex-1 bg-transparent outline-hidden text-sm font-mono ml-0.5" style={{ color: BODY_TEXT }}>
             {Object.keys(ENDPOINTS).map(p => <option key={p} value={p}>{p}</option>)}
           </select>
         </div>
@@ -59,22 +59,22 @@ export default function PostmanDemo() {
 
       <div className="rounded-lg overflow-hidden" style={{ border: "1px solid rgba(255,255,255,0.08)" }}>
         <div className="px-3 py-1.5 text-sm flex items-center gap-3" style={{ background: "rgba(255,255,255,0.03)", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-          <span className="text-gray-500">Authorization:</span>
-          <span className="font-mono text-gray-400">Bearer ey•••••Cillian</span>
+          <span className="text-muted-foreground">Authorization:</span>
+          <span className="font-mono text-muted-foreground">Bearer ey•••••Cillian</span>
         </div>
         <div className="px-3 py-1.5 text-sm flex items-center gap-3" style={{ background: "rgba(255,255,255,0.02)" }}>
-          <span className="text-gray-500">Accept:</span>
-          <span className="font-mono text-gray-400">application/json</span>
+          <span className="text-muted-foreground">Accept:</span>
+          <span className="font-mono text-muted-foreground">application/json</span>
         </div>
       </div>
 
       {response && (
-        <div className="rounded-lg overflow-hidden" style={{ border: `1px solid ${response.status === 200 || response.status === 201 ? "rgba(16,185,129,0.25)" : "rgba(239,68,68,0.25)"}` }}>
+        <div className="rounded-lg overflow-hidden" style={{ border: `1px solid ${response.status === 200 || response.status === 201 ? tint(PASS_COLOR, 25) : tint(FAIL_COLOR, 25)}` }}>
           <div className="px-3 py-1.5 flex items-center gap-2 text-sm" style={{ background: "rgba(255,255,255,0.03)", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
             <span className="font-semibold" style={{ color: response.status < 300 ? PASS_COLOR : FAIL_COLOR }}>{response.status} {response.status === 200 ? "OK" : response.status === 201 ? "Created" : response.status === 405 ? "Method Not Allowed" : "Not Found"}</span>
-            <span className="text-gray-600 ml-auto">{response.ms}ms</span>
+            <span className="text-muted-foreground/60 ml-auto">{response.ms}ms</span>
           </div>
-          <pre className="px-3 py-2 text-sm font-mono text-gray-300 overflow-x-auto max-h-40" style={{ background: "#0d1117" }}>
+          <pre className="px-3 py-2 text-sm font-mono text-secondary-foreground overflow-x-auto max-h-40" style={{ background: CODE_BG }}>
             {response.body}
           </pre>
         </div>

@@ -32,6 +32,119 @@
   --accent-secondary: #38bdf8;
   --glow-primary: 0 0 4px rgb(16 185 129 / 0.4), 0 0 8px rgb(16 185 129 / 0.2);
   --glow-secondary: 0 0 3px rgb(56 189 248 / 0.4), 0 0 6px rgb(56 189 248 / 0.2);
+  --code-bg: #0d1117;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --error: #ef4444;
+}
+
+/* ---------------------------------------------------------------------------
+ * Alternative themes, chosen in the navbar (ThemeSwitcher) and applied as
+ * <html data-theme="...">. No data-theme = Neon Emerald above. Theme ids must
+ * match THEMES in components/ThemeSwitcher/theme.ts and the index.html script.
+ * --ring is solid primary in every theme so focus rings stay visible.
+ * ------------------------------------------------------------------------ */
+
+/* A. Ultraviolet Noir */
+html[data-theme="ultraviolet"] {
+  --background: #100b19;
+  --foreground: #f4f3f6;
+  --card: #191127;
+  --card-foreground: #f4f3f6;
+  --popover: #241839;
+  --popover-foreground: #f4f3f6;
+  --primary: #a06ef7;
+  --primary-foreground: #100b19;
+  --secondary: #241839;
+  --secondary-foreground: #e7e5eb;
+  --muted: #201532;
+  --muted-foreground: #aba4b7;
+  --accent: #a06ef726;
+  --accent-foreground: #cfb2ff;
+  --destructive: #f55c5c;
+  --border: #a06ef733;
+  --input: #a06ef733;
+  --ring: #a06ef7;
+  --accent-secondary: #59a8f8;
+  --glow-primary: 0 0 4px #a06ef766, 0 0 8px #a06ef733;
+  --glow-secondary: 0 0 4px #59a8f866, 0 0 8px #59a8f833;
+  --code-bg: #0e0916;
+  --success: #4ade80;
+  --warning: #facc15;
+  --error: #f87171;
+}
+
+/* B. Molten Amber */
+html[data-theme="amber"] {
+  --background: #17110c;
+  --foreground: #f6f5f4;
+  --card: #241b14;
+  --card-foreground: #f6f5f4;
+  --popover: #35281d;
+  --popover-foreground: #f6f5f4;
+  --primary: #faa005;
+  --primary-foreground: #17110c;
+  --secondary: #35281d;
+  --secondary-foreground: #ebe8e5;
+  --muted: #2e2319;
+  --muted-foreground: #b6ada5;
+  --accent: #faa00526;
+  --accent-foreground: #ffce5c;
+  --destructive: #f46767;
+  --border: #faa00533;
+  --input: #faa00533;
+  --ring: #faa005;
+  --accent-secondary: #9989fa;
+  --glow-primary: 0 0 4px #faa00566, 0 0 8px #faa00533;
+  --glow-secondary: 0 0 4px #9989fa66, 0 0 8px #9989fa33;
+  --code-bg: #140f0a;
+  --success: #4ade80;
+  --warning: #fde047;
+  --error: #f87171;
+}
+
+/* C. Hot Magenta */
+html[data-theme="magenta"] {
+  --background: #160b19;
+  --foreground: #f6f3f6;
+  --card: #221127;
+  --card-foreground: #f6f3f6;
+  --popover: #321938;
+  --popover-foreground: #f6f3f6;
+  --primary: #f250a6;
+  --primary-foreground: #160b19;
+  --secondary: #321938;
+  --secondary-foreground: #eae5eb;
+  --muted: #2c1631;
+  --muted-foreground: #b3a4b7;
+  --accent: #f250a626;
+  --accent-foreground: #ff8fc7;
+  --destructive: #f46767;
+  --border: #f250a633;
+  --input: #f250a633;
+  --ring: #f250a6;
+  --accent-secondary: #35e3e9;
+  --glow-primary: 0 0 4px #f250a666, 0 0 8px #f250a633;
+  --glow-secondary: 0 0 4px #35e3e966, 0 0 8px #35e3e933;
+  --code-bg: #130915;
+  --success: #34d399;
+  --warning: #facc15;
+  --error: #f87171;
+}
+
+/* Brief cross-fade while switching; the class is added by setTheme(). */
+@media (prefers-reduced-motion: no-preference) {
+  html.theme-transition,
+  html.theme-transition *,
+  html.theme-transition *::before,
+  html.theme-transition *::after {
+    transition:
+      background-color 0.25s,
+      color 0.25s,
+      border-color 0.25s,
+      box-shadow 0.25s,
+      text-shadow 0.25s !important;
+  }
 }
 
 @theme inline {
@@ -56,6 +169,10 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
   --color-accent-secondary: var(--accent-secondary);
+  --color-code-bg: var(--code-bg);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-error: var(--error);
 
   /* Brand colours used by IconShowcase demos. */
   --color-rxjs: #b7178c;
@@ -65,6 +182,13 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) * 1.4);
   --radius-2xl: calc(var(--radius) * 1.8);
+}
+
+@utility glow-primary {
+  box-shadow: var(--glow-primary);
+}
+@utility glow-secondary {
+  box-shadow: var(--glow-secondary);
 }
 
 @layer base {
