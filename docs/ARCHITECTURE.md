@@ -10,12 +10,10 @@ main.tsx
         └── OrbOriginProvider          (context: Ó position + hovered icon state)
               └── App.tsx
                     ├── Navbar          (fixed top, Name widget + mobile menu)
-                    ├── PageRouter      (thin wrapper)
-                    │     └── AppRoutes (React Router <Routes>)
-                    │           ├── /           HomeScreen
-                    │           ├── /about      About
-                    │           ├── /streaming  Streaming
-                    │           └── /…          (stubs)
+                    ├── AppRoutes       (React Router <Routes>)
+                    │     ├── /           HomeScreen
+                    │     ├── /about      About
+                    │     └── /streaming  Streaming
                     ├── Footer          (fixed bottom, social links)
                     └── SphereOrb       (position: fixed overlay — orb + line + info box)
 ```
@@ -24,7 +22,7 @@ main.tsx
 
 ## Routing
 
-`pages/AppRoutes.tsx` defines a `routeConfigs` array. Each entry gets a Framer Motion wrapper (opacity 0→1, y 20→-20 on exit). `PageRouter` is a pass-through — it exists as an abstraction point but adds no logic.
+`pages/AppRoutes.tsx` defines a `routes` array. Each entry gets a Framer Motion wrapper (opacity 0→1, y 20→-12 on exit).
 
 ---
 
@@ -137,8 +135,6 @@ Two layers:
 
 **2. CSS animations (imperative, canvas, keyframes)**
 - `NameAnimations.css` — `fadein-letter`, `orb`, `orb-trace`, `info-box`
-- `HeroTitle.anim.css` — supporting classes
-- `flyInUp` keyframe — defined inline in `HeroTitle.tsx` via `<style>` tag
 - Canvas RAF loop in `useSphereCanvas.ts`
 
 ---
@@ -168,6 +164,6 @@ No global state library. Three sources of truth:
 
 Vite 7. Manual chunks: `react-vendor`, `framer-motion`. TypeScript strict via `tsconfig`.
 
-Main bundle at last build: **228KB gzip 76KB**. Framer Motion: **116KB gzip 38KB**. React vendor: **141KB gzip 45KB**.
+Main bundle at last build: **118KB gzip 44KB**. Framer Motion: **116KB gzip 38KB**. React vendor: **141KB gzip 45KB**.
 
 Images (not code): profile photo ~1MB, company headers 1–5.5MB — these are the real page weight.

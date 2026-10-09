@@ -17,7 +17,7 @@
 
 ## Stack
 
-React 18 · TypeScript · Vite · React Router · Framer Motion · Tailwind CSS · Supabase
+React 18 · TypeScript · Vite · React Router · Framer Motion · Tailwind CSS
 
 ---
 
@@ -25,18 +25,18 @@ React 18 · TypeScript · Vite · React Router · Framer Motion · Tailwind CSS 
 
 ```
 src/
-├── pages/              Route screens (Home, About, Streaming, Contact, stubs)
+├── pages/              Route screens (Home, About, Streaming)
 ├── components/
-│   ├── sphere/         Canvas sphere — all 10 related files co-located
+│   ├── sphere/         Canvas sphere — all related files co-located
 │   ├── name/           Name widget — component, sub-components, CSS
-│   ├── HeroTitle/      Hero title + CSS
-│   ├── layout/         Navbar, Footer
-│   ├── navigation/     Mobile menu
-│   ├── ui/             Atoms (BurgerMenuIcon, SocialLink)
+│   ├── IconShowcase/   Per-technology demo overlays
+│   ├── HeroTitle/      Hero title
+│   ├── layout/         Navbar (incl. mobile menu), Footer
+│   ├── ui/             Atoms (InfoBox, SocialLink)
 │   └── TimelineItem.tsx
 ├── context/            OrbOriginContext
-├── data/               experience-data.tsx (static work history)
-├── hooks/              General hooks (scroll, flicker, navigation, auth)
+├── data/               experience-data, icon descriptions/demos (static)
+├── hooks/              General hooks (useNeonFlicker)
 ├── styles/             theme.css (all CSS variables + utility classes)
-└── utils/              animations.ts, supabaseClient.ts
+└── utils/              animations.ts
 ```

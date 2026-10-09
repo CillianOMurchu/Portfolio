@@ -1,7 +1,11 @@
 import { motion } from "framer-motion";
-import ReactMarkdown from "react-markdown";
-import "../styles/theme.css";
 import { scrollVariants } from "../utils/animations";
+
+// Renders **bold** segments; the only markdown used in experience-data.
+const withBold = (text: string) =>
+  text.split(/\*\*(.+?)\*\*/g).map((part, i) =>
+    i % 2 === 1 ? <strong key={i}>{part}</strong> : part
+  );
 
 // --- INTERFACES (Updated) ---
 
@@ -96,7 +100,7 @@ export const TimelineItem = ({ work, index }: TimelineItemProps) => {
                   variants={scrollVariants.listItem}
                 >
                   <span className="timeline-card-list-bullet">•</span>
-                  <ReactMarkdown>{responsibility}</ReactMarkdown>
+                  <p>{withBold(responsibility)}</p>
                 </motion.li>
               ))}
             </motion.ul>
@@ -119,7 +123,7 @@ export const TimelineItem = ({ work, index }: TimelineItemProps) => {
                   variants={scrollVariants.listItem}
                 >
                   <span className="timeline-card-list-bullet">»</span>
-                  <ReactMarkdown>{feature}</ReactMarkdown>
+                  <p>{withBold(feature)}</p>
                 </motion.li>
               ))}
             </motion.ul>

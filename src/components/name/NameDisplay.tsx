@@ -3,7 +3,7 @@ import React from "react";
 interface NameDisplayProps {
   letters: string[];
   oIndex: number;
-  oCharRef: React.RefObject<HTMLSpanElement | null>;
+  oCharRef: React.Ref<HTMLSpanElement>;
 }
 
 const NameDisplay: React.FC<NameDisplayProps> = ({

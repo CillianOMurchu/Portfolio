@@ -74,7 +74,7 @@ const About = () => {
 
 export default About;
 
-export const TimelineLayout = () => {
+const TimelineLayout = () => {
   return (
     <div className="flex flex-col space-y-12 px-4 py-8 w-full max-w-6xl mx-auto">
       {experienceData.map((work, index) => (

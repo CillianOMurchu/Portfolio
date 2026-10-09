@@ -2,50 +2,10 @@
 
 ## Active Bugs
 
-### 1. HeroTitle buttons are not clickable
+### 1. HeroTitle items are decorative only
 **File:** `components/HeroTitle/HeroTitle.tsx`
-**Symptom:** The SASS / Hospitality / iGaming text items on the home screen respond to hover (neon glow) but clicking does nothing.
-**Root cause:** The `<button>` elements have `onMouseEnter` / `onMouseLeave` handlers but no `onClick`. `HomeScreen.tsx` manages `selectedItem` state but never calls `setSelectedItem` — the description panel, scroll indicator, and "Key Technologies" grid below the hero are unreachable.
-**Fix needed:** Add `onClick` to HeroTitle buttons. HomeScreen needs to pass a handler like `onItemClick={(item) => setSelectedItem(item as ItemType)}`.
-
----
-
-### 2. Navbar border doesn't render
-**Files:** `components/layout/Navbar.tsx` line 17, `components/navigation/MobileMenuPanel.tsx` line 29
-**Symptom:** The expected neon green bottom border on the navbar and left border on the mobile menu panel don't appear.
-**Root cause:** Code uses class names `border-bottom-neon` and `border-left-neon` but `theme.css` defines `border-neon-bottom` and `border-neon-left` (word order is reversed).
-**Fix:** Either rename the classes in Navbar/MobileMenuPanel, or add aliases in `theme.css`.
-
----
-
-### 3. Contact form does nothing
-**File:** `pages/Contact.tsx`
-**Symptom:** The chat-style UI renders but typing a message and clicking Send has no effect.
-**Root cause:** Input has no state, button has no handler. Placeholder UI only.
-
----
-
-## Dead Code
-
-### `hooks/useAuth.ts`
-Full Supabase Google OAuth hook (session state, sign-in/out, loading states). Not imported or used anywhere in the application. Also creates its own Supabase client, duplicating `utils/supabaseClient.ts`. Safe to delete if auth is not being built out. Do not build on top of this hook without first verifying it still works.
-
-### `hooks/useElementCenter.ts`
-Returns `[ref, getCenter()]` for a DOM element. Was apparently an early approach to the OrbOriginContext position-sharing problem. Not imported anywhere. Safe to delete.
-
----
-
-## Incomplete Pages
-
-The following routes render stub pages with a single heading:
-
-| Route | File | Content |
-|---|---|---|
-| `/fintech` | `pages/Fintech.tsx` | "Welcome to the Fintech page!" |
-| `/hospitality` | `pages/Hospitality.tsx` | "Welcome to the Hospitality page!" |
-| `/igaming` | `pages/iGaming.tsx` | "Welcome to the iGaming page!" |
-
-These are not linked from the navigation menu.
+**Symptom:** The SASS / Hospitality / iGaming items glow on hover but clicking does nothing.
+**Root cause:** By design for now. The sector pages they once pointed at were removed (Oct 2026). Don't add an `onClick` without a destination.
 
 ---
 
@@ -64,12 +24,6 @@ The glob option "as" has been deprecated in favour of "query".
 → In sphere/iconLoader.ts, change `as: "url"` to `query: "?url", import: "default"`
 → This is a minor Vite API change — low priority
 ```
-
----
-
-## Supabase Client Duplication
-
-`utils/supabaseClient.ts` and `hooks/useAuth.ts` both call `createClient(url, key)` with the same env vars. If Supabase is ever actively used, consolidate to just `utils/supabaseClient.ts` and import from there.
 
 ---
 

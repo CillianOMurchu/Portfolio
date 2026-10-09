@@ -97,7 +97,6 @@ export default MyComponent;
 
 /* Semantic names for utilities */
 .text-accent { }
-.border-neon-bottom { }   /* NOT border-bottom-neon — this is the correct pattern */
 .neon-glow { }
 ```
 
@@ -148,7 +147,7 @@ import { scrollVariants, scrollViewport, scrollTiming } from "../../utils/animat
 | Hooks | camelCase, `use` prefix | `useNeonFlicker.ts` |
 | Utils / pure functions | camelCase | `fibonacciSphere.ts` |
 | Types file in feature folder | `types.ts` | `components/sphere/types.ts` |
-| CSS colocated with component | Same name | `HeroTitle.anim.css` |
+| CSS colocated with component | Same name | `NameAnimations.css` |
 | Page components | PascalCase | `HomeScreen.tsx` |
 
 ---

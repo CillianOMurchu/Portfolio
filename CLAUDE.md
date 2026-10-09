@@ -25,9 +25,9 @@ src/pages/           Route-level screens only. One file per route.
 src/components/      Reusable UI. Feature folders for co-located logic.
   sphere/            All canvas sphere logic lives here. Do not split out.
   name/              Name widget and its sub-components. Do not split out.
-  HeroTitle/         HeroTitle component + its CSS file.
-  layout/            Navbar, Footer only.
-  navigation/        Mobile menu components only.
+  HeroTitle/         HeroTitle component.
+  IconShowcase/      Per-technology demo overlays (see its own CLAUDE.md).
+  layout/            Navbar (incl. mobile menu), Footer only.
   ui/                Stateless presentational atoms.
 src/context/         React context providers only.
 src/data/            Static data files (no API calls).
@@ -97,9 +97,7 @@ After any significant change, run `npm run build` to catch type errors.
 
 See **docs/TROUBLESHOOTING.md** for the full list. Critical ones:
 
-1. **HeroTitle buttons have no `onClick`** — `selectedItem` in HomeScreen is never set by user interaction. The description panel below the hero is currently unreachable. Do not assume it works.
-2. **CSS class name mismatch** — `Navbar.tsx` uses `border-bottom-neon`, `MobileMenuPanel.tsx` uses `border-left-neon`, but `theme.css` defines `border-neon-bottom` / `border-neon-left`. The borders don't render.
-3. **`useElementCenter` is dead code** — superseded by OrbOriginContext, do not build on top of it.
+1. **HeroTitle items are decorative only** — hover glow, no click target. The sector pages were removed.
 
 ---
 

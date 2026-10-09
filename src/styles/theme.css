@@ -1,4 +1,4 @@
-/* Website Theme: Dark Mode / Neon Emerald */
+/* Website Theme: Neon Emerald */
 :root {
   /* --- BASE VARIABLES --- */
   --border-thickness: 2px;
@@ -34,69 +34,12 @@
   --font-weight-extrabold: 800;
 }
 
-/* --- CONSOLIDATED UTILITY CLASSES --- */
-
-/* Centralized neon border utilities (Remove redundant menu-border classes) */
-.border-neon-bottom {
-  border-bottom: var(--neon-border);
-}
-.border-neon-top {
-  border-top: var(--neon-border);
-}
-.border-neon-left {
-  border-left: var(--neon-border);
-  box-shadow: var(
-    --neon-glow-primary
-  ); /* Add glow by default on accented borders */
-}
-
 /* Base Neon class with stronger glow */
 .neon {
   color: var(--color-accent-primary);
 }
 .neon-glow {
   box-shadow: var(--neon-glow-primary);
-}
-
-/* --- BUTTON IMPROVEMENTS --- */
-
-.btn-primary {
-  /* ... existing styles ... */
-  background-color: var(--color-accent-primary);
-  color: var(--color-bg-primary);
-  font-weight: var(--font-weight-bold);
-  padding: 0.75rem 1.5rem;
-  border-radius: 4px;
-  transition:
-    background-color 0.2s,
-    box-shadow 0.2s,
-    transform 0.1s;
-  border: none;
-}
-.btn-primary:hover {
-  background-color: var(
-    --color-accent-light
-  ); /* Use lighter shade for 'power up' feel */
-  box-shadow: var(--neon-glow-hover);
-  transform: translateY(-1px); /* Subtle lift */
-}
-
-/* New: Secondary outline button for hierarchy */
-.btn-secondary {
-  padding: 0.75rem 1.5rem;
-  border-radius: 4px;
-  font-weight: var(--font-weight-bold);
-  color: var(--color-accent-primary);
-  border: 1px solid var(--color-accent-primary);
-  background-color: transparent;
-  transition:
-    background-color 0.2s,
-    box-shadow 0.2s;
-}
-
-.btn-secondary:hover {
-  background-color: rgba(16, 185, 129, 0.1); /* Subtle fill */
-  box-shadow: 0 0 5px var(--color-accent-primary);
 }
 
 /* --- TIMELINE CARD STYLES --- */
@@ -183,25 +126,10 @@
   font-size: 1.25rem;
 }
 
-/* --- NAVIGATION MENU ITEMS --- */
-
-.nav-menu-item-selected {
-  background-color: rgba(16, 185, 129, 0.15);
-  border-radius: 4px;
-}
-
 /* --- TEXT COLOR UTILITIES --- */
 
 .text-accent {
   color: var(--color-accent-primary);
-}
-
-.text-accent-light {
-  color: var(--color-accent-light);
-}
-
-.text-muted {
-  color: var(--color-text-muted);
 }
 
 /* --- BORDER UTILITIES --- */
@@ -214,35 +142,6 @@
   border-color: rgba(16, 185, 129, 0.3);
 }
 
-/* --- BACKGROUND UTILITIES --- */
-
-.bg-accent-subtle {
-  background-color: rgba(16, 185, 129, 0.15);
-}
-
-.bg-accent-hover {
-  background-color: rgba(16, 185, 129, 0.1);
-}
-
-/* --- SHADOW/GLOW UTILITIES --- */
-
-.shadow-accent {
-  box-shadow:
-    0 0 10px rgba(16, 185, 129, 0.3),
-    0 0 20px rgba(16, 185, 129, 0.2);
-}
-
-.shadow-accent-strong {
-  box-shadow: 0 0 15px rgba(16, 185, 129, 0.5);
-}
-
-/* --- HAMBURGER MENU --- */
-
-.burger-line {
-  background-color: var(--color-accent-primary);
-  box-shadow: var(--neon-glow-primary);
-}
-
 /* --- SURFACE/CARD IMPROVEMENTS --- */
 
 .surface {
@@ -250,13 +149,6 @@
   border: 1px solid rgba(255, 255, 255, 0.08); /* Slightly brighter white border for definition */
   border-radius: 8px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); /* Deeper shadow for depth */
-}
-
-/* New: Interactive Surface (e.g., Cards, List Items) */
-.surface-interactive:hover {
-  background-color: var(--color-bg-hover);
-  border-color: var(--color-accent-primary); /* Highlight on hover */
-  box-shadow: 0 0 10px rgba(16, 185, 129, 0.2);
 }
 
 /* --- ICON SHOWCASE OVERLAY --- */
@@ -455,11 +347,6 @@
 .hero-title--hovered {
   color: var(--color-accent-primary);
   text-shadow: var(--neon-glow-primary);
-}
-
-.hero-title--deemphasised {
-  opacity: 0.3;
-  transform: scale(0.95);
 }
 
 /* --- GITLAB DEMO STYLING --- */
@@ -970,9 +857,4 @@
 .hero-title--hovered {
   color: var(--color-accent-primary);
   text-shadow: var(--neon-glow-primary);
-}
-
-.hero-title--deemphasised {
-  opacity: 0.3;
-  transform: scale(0.95);
 }

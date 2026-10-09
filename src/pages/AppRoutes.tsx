@@ -2,22 +2,12 @@ import { AnimatePresence, motion } from "framer-motion";
 import React from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 import About from "./About";
-import Contact from "./Contact";
-import Fintech from "./Fintech";
 import HomeScreen from "./HomeScreen";
-import Hospitality from "./Hospitality";
-import IGaming from "./iGaming";
-import Sass from "./Sass";
 import Streaming from "./Streaming";
 
 const routes = [
   { path: "/", key: "home", screen: <HomeScreen /> },
   { path: "/about", key: "about", screen: <About /> },
-  { path: "/fintech", key: "fintech", screen: <Fintech /> },
-  { path: "/sass", key: "sass", screen: <Sass /> },
-  { path: "/hospitality", key: "hospitality", screen: <Hospitality /> },
-  { path: "/igaming", key: "igaming", screen: <IGaming /> },
-  { path: "/contact", key: "contact", screen: <Contact /> },
   { path: "/streaming", key: "streaming", screen: <Streaming /> },
 ];
 
