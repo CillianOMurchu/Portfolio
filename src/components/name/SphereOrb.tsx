@@ -66,8 +66,8 @@ const SphereOrb: React.FC = () => {
               width: ORB_SIZE,
               height: ORB_SIZE,
               borderRadius: "50%",
-              backgroundColor: "#10b981",
-              boxShadow: "0 0 10px #10b981, 0 0 20px #10b981, 0 0 30px #10b981",
+              backgroundColor: "var(--primary)",
+              boxShadow: "0 0 10px var(--primary), 0 0 20px var(--primary), 0 0 30px var(--primary)",
               pointerEvents: "none",
               zIndex: 9999,
             }}
@@ -104,8 +104,8 @@ const SphereOrb: React.FC = () => {
               left: lineLeft,
               top: lineTop,
               height: 2,
-              backgroundColor: "#10b981",
-              boxShadow: "0 0 6px #10b981",
+              backgroundColor: "var(--primary)",
+              boxShadow: "0 0 6px var(--primary)",
               pointerEvents: "none",
               zIndex: 9998,
             }}

@@ -38,7 +38,6 @@ src/
 ├── data/               experience-data, icon descriptions/demos (static)
 ├── hooks/              General hooks (useNeonFlicker)
 ├── lib/                utils.ts (shadcn `cn`)
-├── styles/             theme.css (legacy CSS variables + classes)
 ├── utils/              animations.ts
 └── index.css           Tailwind v4 + shadcn tokens
 ```

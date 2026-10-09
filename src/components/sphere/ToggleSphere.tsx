@@ -16,18 +16,17 @@ const ToggleSphere: React.FC = () => {
   const pillHeight = isSm ? PILL_HEIGHT_SM : PILL_HEIGHT;
 
   return (
-    <div className="sphere-toggle-container" style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+    <div className="flex flex-col items-center">
       <button
-        className="sphere-toggle-button"
         onClick={() => setShowSphere(!showSphere)}
         aria-label={showSphere ? "Hide Tech Sphere" : "Show Tech Sphere"}
         style={{
           width: pillWidth,
           height: pillHeight,
           borderRadius: pillHeight / 2,
-          border: `2px solid var(--color-accent-primary)`,
-          background: showSphere ? "var(--color-bg-primary)" : "var(--color-bg-surface)",
-          boxShadow: showSphere ? `0 0 8px 2px var(--color-accent-primary)` : `var(--neon-glow-primary)`,
+          border: "2px solid var(--primary)",
+          background: showSphere ? "var(--background)" : "var(--secondary)",
+          boxShadow: showSphere ? "0 0 8px 2px var(--primary)" : "var(--glow-primary)",
           display: "flex",
           alignItems: "center",
           position: "relative",
@@ -39,7 +38,6 @@ const ToggleSphere: React.FC = () => {
         }}
       >
         <span
-          className="sphere-toggle-knob"
           style={{
             position: "absolute",
             left: showSphere ? `calc(${pillWidth - pillHeight * 0.6 - 8}px)` : "4px",
@@ -48,15 +46,16 @@ const ToggleSphere: React.FC = () => {
             width: pillHeight * 0.6,
             height: pillHeight * 0.6,
             borderRadius: "50%",
-            background: showSphere ? "var(--color-accent-primary)" : "var(--color-accent-secondary)",
-            boxShadow: showSphere ? `var(--neon-glow-primary)` : "var(--neon-glow-secondary)",
-            border: `2px solid var(--color-accent-primary)`,
+            background: showSphere ? "var(--primary)" : "var(--accent-secondary)",
+            boxShadow: showSphere ? "var(--glow-primary)" : "var(--glow-secondary)",
+            border: "2px solid var(--primary)",
+            pointerEvents: "none",
             transition: "left 0.3s cubic-bezier(.4,0,.2,1), background 0.3s cubic-bezier(.4,0,.2,1), box-shadow 0.3s cubic-bezier(.4,0,.2,1)",
           }}
         />
       </button>
       <span
-        className="sphere-toggle-label mt-1 text-xs font-bold tracking-wide text-primary"
+        className="mt-1 text-xs font-bold tracking-wide text-primary"
         style={{
           opacity: showTitle ? 1 : 0,
           transition: "opacity 0.18s cubic-bezier(.4,0,.2,1)",

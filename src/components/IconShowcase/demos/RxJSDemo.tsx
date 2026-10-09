@@ -14,6 +14,20 @@ const OPERATORS = [
   { id: "scan",   label: "scan((acc, x) => acc + x, 0)" },
 ] as const;
 
+const MODAL_EXAMPLES = [
+  { op: "map",    description: "reshapes each value" },
+  { op: "filter", description: "lets only some through" },
+  { op: "scan",   description: "accumulates a running result" },
+] as const;
+
+const STREAM_ROW_CLASSES = "flex w-full items-start gap-4";
+const STREAM_LABEL_CLASSES = "w-14 shrink-0 pt-1 text-right text-xs font-semibold text-secondary-foreground";
+const MODAL_BODY_CLASSES = "mb-3.5 text-base leading-relaxed text-secondary-foreground [&_strong]:font-bold [&_strong]:text-rxjs-light";
+const MODAL_PANEL_CLASSES =
+  "relative w-full max-w-120 rounded-[18px] border border-rxjs/35 px-7 pt-8 pb-7 text-center " +
+  "bg-[radial-gradient(120%_120%_at_0%_0%,rgb(183_23_140/0.18)_0%,transparent_55%),linear-gradient(160deg,#16101c_0%,#0d0f1a_100%)] " +
+  "shadow-[0_24px_60px_rgb(0_0_0/0.55),inset_0_0_0_1px_rgb(255_255_255/0.03)]";
+
 export default function RxJSDemo() {
   const [source, setSource] = useState<Event[]>([]);
   const [result, setResult] = useState<Event[]>([]);
@@ -100,14 +114,14 @@ export default function RxJSDemo() {
     // newest first → index 0 is leftmost; older events slide right by one slot each
     const ordered = [...events].reverse();
     return (
-      <div className="rxjs-stream-display" ref={withRef ? displayRef : undefined}>
+      <div className="relative h-7 min-w-0 flex-1 overflow-hidden" ref={withRef ? displayRef : undefined}>
         <AnimatePresence initial={false}>
           {ordered.map((e, index) => {
             const isOverflow = index >= capacity;
             return (
               <motion.div
                 key={e.id}
-                className="rxjs-event"
+                className="absolute top-0 left-0 flex size-7 items-center justify-center rounded-full border-2 text-xs font-bold"
                 style={{ borderColor: color, color }}
                 initial={{ x: -EVENT_SLOT, opacity: 0, scale: 0.6 }}
                 animate={{
@@ -123,34 +137,34 @@ export default function RxJSDemo() {
             );
           })}
         </AnimatePresence>
-        {events.length === 0 && <span className="rxjs-empty">— waiting —</span>}
+        {events.length === 0 && <span className="absolute top-1/2 left-0 -translate-y-1/2 text-xs text-gray-500 italic">— waiting —</span>}
       </div>
     );
   };
 
   return (
     <DemoShell>
-      <div className="rxjs-demo">
+      <div className="flex w-full flex-col gap-4">
         {/* Stream visualization area */}
-        <div className="rxjs-streams">
-          <div className="rxjs-stream-row">
-            <span className="rxjs-stream-label">source$</span>
+        <div className="flex w-full flex-col gap-6">
+          <div className={STREAM_ROW_CLASSES}>
+            <span className={STREAM_LABEL_CLASSES}>source$</span>
             {renderStream(source, RXJS_ACCENT, true)}
           </div>
 
           {activeOpList.length > 0 && (
-            <div className="rxjs-operators-list">
+            <div className="flex flex-col gap-2 pl-18">
               {activeOpList.map(op => (
-                <div key={op.id} className="rxjs-operator-item">
-                  <span className="rxjs-operator-dot" />
-                  <span className="rxjs-operator-text">.pipe({op.label})</span>
+                <div key={op.id} className="flex items-center gap-2 text-xs font-medium text-violet-400">
+                  <span className="size-[3px] shrink-0 rounded-full bg-violet-400" />
+                  <span className="font-mono">.pipe({op.label})</span>
                 </div>
               ))}
             </div>
           )}
 
-          <div className="rxjs-stream-row">
-            <span className="rxjs-stream-label">result$</span>
+          <div className={STREAM_ROW_CLASSES}>
+            <span className={STREAM_LABEL_CLASSES}>result$</span>
             {renderStream(result, PASS_COLOR)}
           </div>
         </div>
@@ -183,10 +197,10 @@ export default function RxJSDemo() {
       <div className="flex justify-center">
         <button
           onClick={() => setIsInfoOpen(true)}
-          className="rxjs-info-trigger"
+          className="inline-flex items-center gap-2 rounded-full border border-rxjs/30 bg-rxjs/8 px-4 py-2 text-sm font-medium text-secondary-foreground transition hover:-translate-y-px hover:border-rxjs/55 hover:bg-rxjs/16"
           aria-label="What is an RxJS stream?"
         >
-          <span className="rxjs-info-trigger-icon">ℹ</span>
+          <span className="inline-flex size-[1.15rem] items-center justify-center rounded-full border border-rxjs-light/50 text-xs text-rxjs-light italic">ℹ</span>
           What is a stream?
         </button>
       </div>
@@ -194,7 +208,7 @@ export default function RxJSDemo() {
       <AnimatePresence>
         {isInfoOpen && (
           <motion.div
-            className="rxjs-modal-backdrop"
+            className="fixed inset-0 z-10010 flex items-center justify-center bg-black/70 p-6 backdrop-blur-sm"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -202,7 +216,7 @@ export default function RxJSDemo() {
             onClick={() => setIsInfoOpen(false)}
           >
             <motion.div
-              className="rxjs-modal"
+              className={MODAL_PANEL_CLASSES}
               initial={{ opacity: 0, scale: 0.92, y: 16 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.92, y: 16 }}
@@ -210,38 +224,34 @@ export default function RxJSDemo() {
               onClick={(e) => e.stopPropagation()}
             >
               <button
-                className="rxjs-modal-close"
+                className="absolute top-3.5 right-3.5 flex size-[1.9rem] items-center justify-center rounded-full border border-white/12 bg-white/5 text-sm text-muted-foreground transition-colors hover:bg-white/12 hover:text-foreground"
                 onClick={() => setIsInfoOpen(false)}
                 aria-label="Close"
               >
                 ✕
               </button>
 
-              <div className="rxjs-modal-badge">~</div>
-              <h3 className="rxjs-modal-title">What is a stream?</h3>
+              <div className="mx-auto mb-3.5 flex size-12 items-center justify-center rounded-full border border-rxjs/40 bg-rxjs/14 text-2xl font-bold text-rxjs-light">~</div>
+              <h3 className="mb-3.5 text-2xl font-extrabold tracking-tight text-foreground">What is a stream?</h3>
 
-              <p className="rxjs-modal-body">
+              <p className={MODAL_BODY_CLASSES}>
                 A <strong>stream</strong> is a river of events flowing over time —
                 clicks, keystrokes, API responses, anything that happens more than once.
               </p>
-              <p className="rxjs-modal-body">
+              <p className={MODAL_BODY_CLASSES}>
                 RxJS lets you attach <strong>operators</strong> to that river to
                 transform, filter, or combine values before they reach your code.
               </p>
 
-              <div className="rxjs-modal-examples">
-                <div className="rxjs-modal-example">
-                  <span className="rxjs-modal-op">map</span>
-                  <span>reshapes each value</span>
-                </div>
-                <div className="rxjs-modal-example">
-                  <span className="rxjs-modal-op">filter</span>
-                  <span>lets only some through</span>
-                </div>
-                <div className="rxjs-modal-example">
-                  <span className="rxjs-modal-op">scan</span>
-                  <span>accumulates a running result</span>
-                </div>
+              <div className="mt-5 flex flex-col gap-2 border-t border-white/8 pt-5 text-left">
+                {MODAL_EXAMPLES.map(({ op, description }) => (
+                  <div key={op} className="flex items-center gap-3 text-base text-secondary-foreground">
+                    <span className="min-w-16 shrink-0 rounded-md border border-violet-500/30 bg-violet-500/14 px-2.5 py-0.5 text-center font-mono text-sm font-bold text-violet-300">
+                      {op}
+                    </span>
+                    <span>{description}</span>
+                  </div>
+                ))}
               </div>
             </motion.div>
           </motion.div>

@@ -6,7 +6,7 @@
 /* The site has a single dark palette, so shadcn's `dark:` tweaks always apply. */
 @custom-variant dark (&:where(*));
 
-/* shadcn tokens, mapped to the Neon Emerald palette (see styles/theme.css). */
+/* shadcn tokens, mapped to the Neon Emerald palette. */
 :root {
   --background: #0a0e1a;
   --foreground: #f3f4f6;
@@ -27,6 +27,11 @@
   --input: rgb(255 255 255 / 0.12);
   --ring: #10b981;
   --radius: 0.5rem;
+
+  /* Neon extras (not part of shadcn's token set). */
+  --accent-secondary: #38bdf8;
+  --glow-primary: 0 0 4px rgb(16 185 129 / 0.4), 0 0 8px rgb(16 185 129 / 0.2);
+  --glow-secondary: 0 0 3px rgb(56 189 248 / 0.4), 0 0 6px rgb(56 189 248 / 0.2);
 }
 
 @theme inline {
@@ -50,6 +55,11 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-accent-secondary: var(--accent-secondary);
+
+  /* Brand colours used by IconShowcase demos. */
+  --color-rxjs: #b7178c;
+  --color-rxjs-light: #e879c4;
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);

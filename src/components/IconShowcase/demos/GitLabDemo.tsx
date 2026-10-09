@@ -116,15 +116,15 @@ export default function GitLabDemo() {
   const pipelinePassed = overall === "passed";
 
   return (
-    <div className="gitlab-pipeline-container">
-      <div className="gitlab-details-row">
-        <div className="gitlab-pipeline-info">
-          <span className="gitlab-pipeline-status" style={{ color: STATUS_COLOR[overall] }}>
+    <div className="relative flex min-h-40 w-full flex-col gap-4">
+      <div className="flex min-w-0 flex-col items-stretch gap-3 rounded-lg border border-white/8 bg-white/3 p-2.5 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-4 sm:px-4 sm:py-3">
+        <div className="flex min-w-0 flex-wrap items-center gap-2 sm:gap-3">
+          <span className="text-xs font-semibold whitespace-nowrap" style={{ color: STATUS_COLOR[overall] }}>
             ● Pipeline #{pipelineId}
           </span>
-          <span className="gitlab-pipeline-branch text-gray-500">main → production</span>
+          <span className="text-xs whitespace-nowrap text-white/50">main → production</span>
         </div>
-        <div className="gitlab-actions">
+        <div className="flex w-full shrink-0 justify-between gap-1.5 sm:w-auto sm:justify-start sm:gap-2">
           <DemoButton color={PASS_COLOR} disabled={running} onClick={() => runPipeline(false)} className="px-3 py-1 text-sm">
             {running ? "Running…" : "✓ Success"}
           </DemoButton>
@@ -135,27 +135,27 @@ export default function GitLabDemo() {
         </div>
       </div>
 
-      <div className="gitlab-stages-row">
+      <div className="flex max-w-full flex-wrap items-start justify-center gap-3 pb-1 md:gap-2">
         {STAGES.map((stage, i) => {
           const stageJobs = jobs.filter((j) => j.stage === stage);
           const sc = stageColor(jobs, stage);
           return (
             <Fragment key={stage}>
-              <div className="gitlab-stage-box">
+              <div className="flex max-w-[90px] min-w-[90px] shrink-0 grow-0 basis-[calc(50%-0.375rem)] flex-col items-center gap-2 md:max-w-[100px] md:min-w-[80px] md:basis-auto">
                 <div
-                  className="gitlab-stage-header"
+                  className="w-full min-w-[90px] rounded-md p-1.5 text-center md:min-w-[80px] md:p-2"
                   style={{ background: `${sc}18`, border: `1px solid ${sc}44` }}
                 >
                   <p className="text-sm font-semibold" style={{ color: sc }}>{stage}</p>
                   {stageJobs.map((j) => (
-                    <p key={j.id} className="gitlab-job-name" style={{ color: STATUS_COLOR[j.status] }}>
+                    <p key={j.id} className="mt-0.5 max-w-full text-xs wrap-break-word" style={{ color: STATUS_COLOR[j.status] }}>
                       {STATUS_ICON[j.status]} {j.name}
                     </p>
                   ))}
                 </div>
               </div>
               {i < STAGES.length - 1 && (
-                <div className="gitlab-stage-separator">→</div>
+                <div className="hidden h-full items-center px-1 md:flex">→</div>
               )}
             </Fragment>
           );

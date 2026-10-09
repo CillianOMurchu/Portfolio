@@ -80,7 +80,7 @@ export function Name() {
       >
         <div className="absolute inset-0" />
         <div
-          className="absolute inset-3 border border-accent-subtle"
+          className="absolute inset-3 border border-primary/30"
           style={{ clipPath: HEXAGON_CLIP }}
         />
         <NameDisplay

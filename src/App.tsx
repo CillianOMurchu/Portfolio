@@ -3,7 +3,6 @@ import Footer from "./components/layout/Footer";
 import Navbar from "./components/layout/Navbar";
 import SphereOrb from "./components/name/SphereOrb";
 import AppRoutes from "./pages/AppRoutes";
-import "./styles/theme.css";
 
 const NAVBAR_H = "4rem"; // h-16
 const FOOTER_H = "4rem"; // h-16

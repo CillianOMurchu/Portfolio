@@ -14,7 +14,7 @@ const NameDisplay: React.FC<NameDisplayProps> = ({
   <div className="absolute inset-0 flex items-center justify-center">
     <a href="/about">
       <span
-        className="text-accent text-xs tracking-wider"
+        className="text-primary text-xs tracking-wider"
         style={{
           cursor: "pointer",
           textShadow:

@@ -9,12 +9,12 @@ const HomeScreen: React.FC = () => {
   const { showSphere } = useOrbOrigin();
 
   return (
-    <div className="home-screen">
-      <div className="home-screen-toggle">
+    <div className="relative h-full w-full bg-linear-135 from-background to-card">
+      <div className="absolute top-4 right-4 z-20 md:top-6 md:right-6">
         <ToggleSphere />
       </div>
 
-      <div className={`home-screen-sphere ${showSphere ? "home-screen-sphere--visible" : "home-screen-sphere--hidden"}`}>
+      <div className={`fixed inset-0 z-1 transition-opacity duration-400 ${showSphere ? "opacity-100" : "pointer-events-none opacity-0"}`}>
         <ItemSphere visible={showSphere} />
       </div>
 

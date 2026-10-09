@@ -35,7 +35,6 @@ src/data/            Static data files (no API calls).
 src/lib/             utils.ts only (shadcn's `cn` re-export).
 src/hooks/           General-purpose hooks. Sphere-specific hooks live in sphere/.
 src/utils/           Pure functions. Sphere-specific utils live in sphere/.
-src/styles/          theme.css only. No new CSS files here.
 ```
 
 **When adding a new feature:** If it has more than 2 related files, give it a `components/<feature>/` folder. Keep hook, util, type, and component files co-located inside that folder.
@@ -61,7 +60,7 @@ Vite glob import in `sphere/iconLoader.ts` uses `"../../assets/programming-icons
 
 **Animation variants:** Always import from `utils/animations.ts`. Do not define local variants for scroll-triggered animations — add to `scrollVariants` there instead.
 
-**CSS styling:** Prefer shadcn components and Tailwind utilities using the semantic tokens (`bg-background`, `text-foreground`, `bg-primary`, `text-muted-foreground`, `border-border`, `bg-card`…). Tokens are defined in `src/index.css` (`:root` + `@theme inline`), mapped to the Neon Emerald palette. There is no `tailwind.config.js` (Tailwind v4 is configured in CSS). Legacy classes in `styles/theme.css` (`.neon`, `.timeline-card-*`, …) are being replaced; don't add new ones there. No light/dark theme — the site has one dark palette.
+**CSS styling:** Prefer shadcn components and Tailwind utilities using the semantic tokens (`bg-background`, `text-foreground`, `bg-primary`, `text-muted-foreground`, `border-border`, `bg-card`…). Tokens are defined in `src/index.css` (`:root` + `@theme inline`), mapped to the Neon Emerald palette. There is no `tailwind.config.js` (Tailwind v4 is configured in CSS). Neon extras (`--glow-primary`, `--glow-secondary`, `--accent-secondary`) and demo brand colours (`rxjs`, `rxjs-light`) live there too. The only other CSS file is `name/NameAnimations.css` (keyframes). No light/dark theme — the site has one dark palette.
 
 **Info boxes:** Use `components/ui/InfoBox.tsx` (generic). Pass `text` (full string) and optionally `displayedText` (partial, for typing cursor). `className` accepts positional and sizing overrides. Do not recreate info-box styling inline.
 

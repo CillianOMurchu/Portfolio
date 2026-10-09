@@ -99,7 +99,7 @@ export default function CypressDemo() {
           <span className="text-gray-500">Tests: portfolio.cy.ts</span>
           <span style={{ color: PASS_COLOR }}>{passed}/{STEPS.length}</span>
         </div>
-        <div className="cypress-steps-list">
+        <div className="max-h-44 overflow-y-auto">
         {steps.map((s, i) => (
           <div key={i} ref={el => { stepRefs.current[i] = el; }} className="px-3 py-1 flex items-center gap-2 min-w-0"
             style={{ background: s.status === "running" ? "rgba(245,158,11,0.06)" : "transparent" }}>

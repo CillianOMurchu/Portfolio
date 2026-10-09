@@ -80,8 +80,7 @@ export default MyComponent;
 
 1. **shadcn components** (`components/ui/*.tsx`) — Button, Card, Badge, Sheet, …
 2. **Tailwind utilities with semantic tokens** — `bg-card`, `text-muted-foreground`, `border-border`, `text-primary`; plus layout/spacing/responsive utilities
-3. **Legacy `theme.css` classes** — only where not yet migrated; don't add new ones
-4. **Inline `style` prop** — only for dynamic values that can't be expressed in CSS (animation state, calculated positions)
+3. **Inline `style` prop** — only for dynamic values that can't be expressed in CSS (animation state, calculated positions)
 
 ### Type scale
 
@@ -95,9 +94,9 @@ Font is Geist (variable, bundled via `@fontsource-variable/geist`). Use only the
 | `text-lg` | 18px | subtitles |
 | `text-2xl` | 24px | card / section titles |
 | `text-4xl` | 36px | page headings |
-| `clamp(4rem, 12vw, 10rem)` | 64–160px | hero display (`.hero-title`) only |
+| `text-[length:clamp(4rem,12vw,10rem)]` | 64–160px | hero display (`HeroTitle`) only |
 
-Legacy `theme.css` rules use the same values in rem. Exception: IconShowcase demos may use other sizes when the size itself is what's being demonstrated (Figma, Sass, Stencil).
+Exception: IconShowcase demos may use other sizes when the size itself is what's being demonstrated (Figma, Sass, Stencil).
 
 ### Never
 
@@ -106,26 +105,19 @@ Legacy `theme.css` rules use the same values in rem. Exception: IconShowcase dem
 - Use magic colour values — use semantic token utilities (`bg-primary`, `text-foreground`, …)
 - Add a `tailwind.config.js` — Tailwind v4 is configured in CSS (`@theme inline` in `src/index.css`)
 
-### CSS class naming
+### Watch out: `accent` means shadcn's accent
 
-```css
-/* Feature prefix for component-specific classes */
-.timeline-card { }
-.timeline-card-title { }
-
-/* Semantic names for utilities */
-.text-accent { }
-.neon-glow { }
-```
+`text-accent` / `bg-accent` / `border-accent` are shadcn's hover tint (emerald at 15% opacity), not the brand colour. For emerald text, borders or fills use `text-primary`, `border-primary/30`, `bg-primary`.
 
 ### Neon glow pattern
 
-Use the CSS variable, not hardcoded values:
+Use the glow tokens, not hardcoded values:
 
-```ts
+```tsx
 // Good
-style={{ boxShadow: "var(--neon-glow-primary)" }}
-style={{ textShadow: "var(--neon-glow-secondary)" }}
+<div className="shadow-(--glow-primary)" />
+<span className="hover:text-shadow-(--glow-primary)" />
+style={{ boxShadow: showSphere ? "var(--glow-primary)" : "var(--glow-secondary)" }}  // dynamic
 
 // Avoid
 style={{ boxShadow: "0 0 5px rgba(16,185,129,0.8), ..." }}

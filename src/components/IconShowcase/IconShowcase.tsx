@@ -43,7 +43,7 @@ const IconShowcase: React.FC = () => {
 
   if (!clickedIcon) return null;
 
-  const accentColor = meta?.accentColor ?? "var(--color-accent-primary)";
+  const accentColor = meta?.accentColor ?? "var(--primary)";
 
   // Final resting position of the icon in viewport coords
   const iconTargetX = window.innerWidth / 2 - ICON_SIZE / 2;
@@ -57,7 +57,7 @@ const IconShowcase: React.FC = () => {
     <AnimatePresence>
       <motion.div
         key="showcase-backdrop"
-        className="showcase-backdrop"
+        className="fixed inset-x-0 bottom-0 z-10000 flex h-[calc(100dvh-8rem)] w-full flex-col items-center overflow-x-hidden overflow-y-auto bg-background/96 px-4 backdrop-blur-lg md:overflow-x-visible md:px-0 md:py-16"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
@@ -75,7 +75,7 @@ const IconShowcase: React.FC = () => {
         </Button>
 
         {/* Header — icon sits above the title as a normal flex item */}
-        <div className="showcase-header">
+        <div className="mt-3 flex w-full max-w-xl flex-col items-center justify-center gap-1.5 px-6 pt-2 text-center">
           <motion.img
             src={clickedIcon.svgUrl}
             alt={displayName}
@@ -93,9 +93,9 @@ const IconShowcase: React.FC = () => {
 
           {/* Title and tagline fade in after icon lands */}
           {contentVisible && (
-            <div className="showcase-header-text">
+            <div className="flex min-w-0 flex-col items-center gap-0.5">
               <motion.h2
-                className="showcase-title"
+                className="text-2xl leading-[1.1] font-extrabold tracking-tight"
                 style={{ color: accentColor }}
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -105,7 +105,7 @@ const IconShowcase: React.FC = () => {
               </motion.h2>
               {meta && (
                 <motion.p
-                  className="showcase-tagline"
+                  className="max-w-64 text-sm leading-snug text-muted-foreground"
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3, delay: 0.05 }}
@@ -122,7 +122,7 @@ const IconShowcase: React.FC = () => {
           {contentVisible && (
             <motion.div
               key="content"
-              className="showcase-content"
+              className="flex min-h-0 w-full max-w-xl flex-1 flex-col overflow-y-auto px-6 py-4 *:flex *:min-h-0 *:flex-1 *:flex-col"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 0.1 }}

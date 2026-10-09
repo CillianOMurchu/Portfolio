@@ -147,9 +147,11 @@ Tailwind v4 + shadcn/ui, configured in CSS (no `tailwind.config.js`, no PostCSS 
 - Single dark palette — no light/dark switching. `@custom-variant dark` always matches so shadcn's `dark:` refinements apply.
 - `components.json` — shadcn CLI config (style `radix-nova`, Radix primitives via `radix-ui`, `lucide` icons). Components land in `src/components/ui/`.
 - `src/lib/utils.ts` — re-exports `cn` (the `cn` package replaces clsx + tailwind-merge).
-- `src/styles/theme.css` — legacy custom properties and classes (`.neon`, `.timeline-card-*`, …), being migrated to tokens.
+- Neon extras on `:root`: `--glow-primary`, `--glow-secondary` (box/text-shadow values) and `--accent-secondary` (sky blue, used by the sphere toggle). Use as `shadow-(--glow-primary)` or `var(--glow-primary)` in dynamic inline styles.
+- Demo brand colours in `@theme` (`--color-rxjs`, `--color-rxjs-light`) for `bg-rxjs/10` style utilities.
+- `components/name/NameAnimations.css` — the only other CSS file (Name widget keyframes).
 
-The colour that drives almost everything: `--primary` / `--color-accent-primary` = `#10b981` (emerald).
+The colour that drives almost everything: `--primary` = `#10b981` (emerald).
 
 ---
 
