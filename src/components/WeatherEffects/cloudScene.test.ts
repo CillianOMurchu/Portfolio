@@ -1,116 +1,132 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import {
-  cloudCountFor,
-  createCloud,
-  createClouds,
-  createCloudScene,
-  MAX_CLOUDS,
-  updateClouds,
-  type Cloud,
+  cloudLayerAlpha,
+  createCloudLayers,
+  drawCloudLayers,
+  layerAlpha,
+  layerBrightness,
+  layerSpeed,
+  LAYERS,
+  MAX_CLOUD_SIZE,
+  MIN_CLOUD_SIZE,
+  paintCloudTexture,
+  updateCloudLayers,
+  type CloudLayer,
+  type CreateTextureCanvas,
 } from "./cloudScene";
-import { asContext, createStubContext, seededRng } from "./testUtils";
+import { asContext, createStubContext, recordAssignments, seededRng } from "./testUtils";
 
-const W = 1920;
-const H = 1080;
+const W = 1600;
+const H = 900;
 
-const cloud = (overrides: Partial<Cloud> = {}): Cloud => ({
-  x: 500,
-  y: 100,
-  speed: 20,
-  halfWidth: 200,
-  alpha: 0.2,
-  puffs: [{ dx: 0, dy: 0, r: 100 }],
-  ...overrides,
-});
-
-describe("cloudCountFor", () => {
-  it("scales with width and coverage, and is capped", () => {
-    expect(cloudCountFor(1920, 1)).toBe(8);
-    expect(cloudCountFor(1920, 0.5)).toBe(4);
-    expect(cloudCountFor(1920, 0)).toBe(0);
-    expect(cloudCountFor(1920, 10)).toBe(MAX_CLOUDS);
-  });
-});
-
-describe("createCloud", () => {
-  it("builds 5–7 puffs whose extent fits within halfWidth", () => {
-    const rng = seededRng(1);
-    for (let i = 0; i < 50; i++) {
-      const c = createCloud(W, H, 15, rng);
-      expect(c.puffs.length).toBeGreaterThanOrEqual(5);
-      expect(c.puffs.length).toBeLessThanOrEqual(7);
-      for (const p of c.puffs) expect(Math.abs(p.dx) + p.r).toBeLessThanOrEqual(c.halfWidth + 1e-9);
-      expect(c.y).toBeGreaterThanOrEqual(H * 0.05);
-      expect(c.y).toBeLessThanOrEqual(H * 0.5);
-      expect(c.alpha).toBeGreaterThanOrEqual(0.18);
-      expect(c.alpha).toBeLessThanOrEqual(0.32);
-    }
-  });
-
-  it("drifts with the wind's direction at 0.6–1.4× its speed", () => {
-    const rng = seededRng(2);
-    const right = createCloud(W, H, 20, rng);
-    const left = createCloud(W, H, -20, rng);
-    expect(right.speed).toBeGreaterThanOrEqual(12);
-    expect(right.speed).toBeLessThanOrEqual(28);
-    expect(left.speed).toBeLessThan(0);
-  });
-});
-
-describe("createClouds", () => {
-  it("returns the requested count, deterministically with a seeded rng", () => {
-    expect(createClouds(6, W, H, 15, seededRng(3))).toHaveLength(6);
-    expect(createClouds(6, W, H, 15, seededRng(3))).toEqual(createClouds(6, W, H, 15, seededRng(3)));
-  });
-});
-
-describe("updateClouds", () => {
-  it("moves clouds by speed * dt", () => {
-    const clouds = [cloud({ x: 500, speed: 20 }), cloud({ x: 500, speed: -10 })];
-    updateClouds(clouds, 0.5, W, H, () => 0.5);
-    expect(clouds[0].x).toBe(510);
-    expect(clouds[1].x).toBe(495);
-  });
-
-  it("wraps a cloud leaving the right edge back to the left, in place", () => {
-    const c = cloud({ x: W + 199, speed: 20, halfWidth: 200 });
-    const clouds = [c];
-    updateClouds(clouds, 0.1, W, H, () => 0.5);
-    expect(clouds[0]).toBe(c);
-    expect(c.x).toBe(-200);
-    expect(c.y).toBeCloseTo(H * 0.275); // 0.05 + 0.5 * 0.45
-  });
-
-  it("wraps a cloud leaving the left edge back to the right", () => {
-    const c = cloud({ x: -199, speed: -20, halfWidth: 200 });
-    updateClouds([c], 0.1, W, H, () => 0.5);
-    expect(c.x).toBe(W + 200);
-  });
-
-  it("leaves still clouds alone", () => {
-    const c = cloud({ x: W + 1000, speed: 0 });
-    updateClouds([c], 1, W, H, () => 0.5);
-    expect(c.x).toBe(W + 1000);
-  });
-});
-
-describe("createCloudScene", () => {
-  it("draws one glow per puff and restores state", () => {
+function stubTextureFactory() {
+  const contexts: ReturnType<typeof createStubContext>[] = [];
+  const create = vi.fn((size: number) => {
     const ctx = createStubContext();
-    const scene = createCloudScene({ coverage: 1, wind: 15, color: [210, 218, 230] }, seededRng(4));
-    scene.resize(W, H, asContext(ctx));
-    scene.update(0.016);
-    scene.draw(asContext(ctx));
+    contexts.push(ctx);
+    return { width: size, height: size, getContext: () => ctx } as unknown as OffscreenCanvas;
+  }) satisfies CreateTextureCanvas;
+  return { create, contexts };
+}
 
-    expect(ctx.createRadialGradient).toHaveBeenCalledTimes(1);
-    expect(ctx.fillRect.mock.calls.length).toBeGreaterThanOrEqual(8 * 5);
-    expect(ctx.fillRect.mock.calls.length).toBeLessThanOrEqual(8 * 7);
-    expect(ctx.save.mock.calls.length).toBe(ctx.restore.mock.calls.length);
+describe("layer parameters", () => {
+  it("follow depth: farther layers are slower, darker and fainter", () => {
+    expect(layerSpeed(0.3)).toBeCloseTo(0.225);
+    expect(layerSpeed(1)).toBeCloseTo(0.4);
+    expect(layerBrightness(0.6)).toBeCloseTo(34);
+    expect(layerAlpha(0.3)).toBeCloseTo(0.79);
+    expect(layerAlpha(1)).toBeCloseTo(1);
+  });
+});
+
+describe("paintCloudTexture", () => {
+  it("paints 3 radial gradients with blue-tinted grey stops", () => {
+    const ctx = createStubContext();
+    paintCloudTexture(asContext(ctx), 400, 30, () => 0.5);
+    expect(ctx.createRadialGradient).toHaveBeenCalledTimes(3);
+    expect(ctx.fillRect).toHaveBeenCalledTimes(3);
+    const gradient = ctx.createRadialGradient.mock.results[0].value as { addColorStop: ReturnType<typeof vi.fn> };
+    expect(gradient.addColorStop.mock.calls).toEqual([
+      [0, "rgba(55,55,60,0.2)"],
+      [0.5, "rgba(30,30,45,0.12)"],
+      [1, "rgba(20,20,30,0)"],
+    ]);
+  });
+});
+
+describe("createCloudLayers", () => {
+  it("builds 3 layers of 5–6 evenly spaced, pre-rendered clouds", () => {
+    const { create, contexts } = stubTextureFactory();
+    const layers = createCloudLayers(W, H, seededRng(1), create);
+
+    expect(layers.map((l) => l.depth)).toEqual(LAYERS.map((l) => l.depth));
+    const total = layers.reduce((n, l) => n + l.clouds.length, 0);
+    expect(create).toHaveBeenCalledTimes(total);
+    expect(contexts.every((c) => c.createRadialGradient.mock.calls.length === 3)).toBe(true);
+
+    layers.forEach((layer, i) => {
+      expect(layer.clouds.length).toBeGreaterThanOrEqual(5);
+      expect(layer.clouds.length).toBeLessThanOrEqual(6);
+      const spacing = W / layer.clouds.length;
+      layer.clouds.forEach((cloud, j) => {
+        expect(cloud.x).toBeCloseTo((j + 0.5) * spacing);
+        expect(Math.abs(cloud.y - H * LAYERS[i].y)).toBeLessThanOrEqual(40);
+        expect(cloud.size).toBeGreaterThanOrEqual(MIN_CLOUD_SIZE);
+        expect(cloud.size).toBeLessThanOrEqual(MAX_CLOUD_SIZE);
+      });
+    });
+  });
+});
+
+describe("updateCloudLayers", () => {
+  it("scrolls by speed per frame and wraps at the width", () => {
+    const layer: CloudLayer = { depth: 1, speed: 0.4, alpha: 1, offset: W - 0.2, clouds: [] };
+    updateCloudLayers([layer], 1, W);
+    expect(layer.offset).toBeCloseTo(0.2);
+  });
+});
+
+describe("drawCloudLayers", () => {
+  const texture = {} as OffscreenCanvas;
+  const layer = (offset: number): CloudLayer => ({
+    depth: 1,
+    speed: 0.4,
+    alpha: 0.8,
+    offset,
+    clouds: [{ x: 100, y: 200, size: 200, texture }],
   });
 
-  it("draws nothing before it has been sized", () => {
+  it("draws visible copies of the set only, and wraps seamlessly", () => {
     const ctx = createStubContext();
-    createCloudScene({ coverage: 1, wind: 15, color: [1, 2, 3] }).draw(asContext(ctx));
-    expect(ctx.fillRect).not.toHaveBeenCalled();
+    drawCloudLayers(asContext(ctx), [layer(0)], W, 1, 0);
+    expect(ctx.drawImage).toHaveBeenCalledTimes(1);
+    expect(ctx.drawImage).toHaveBeenCalledWith(texture, 0, 100);
+
+    ctx.drawImage.mockClear();
+    drawCloudLayers(asContext(ctx), [layer(W - 50)], W, 1, 0); // straddles the right edge
+    expect(ctx.drawImage).toHaveBeenCalledTimes(2);
+    expect(ctx.drawImage).toHaveBeenCalledWith(texture, W - 50, 100);
+    expect(ctx.drawImage).toHaveBeenCalledWith(texture, -50, 100);
+  });
+
+  it("scales opacity by the cloud amount and skips at zero", () => {
+    const ctx = createStubContext();
+    const alphas = recordAssignments(ctx, "globalAlpha");
+    drawCloudLayers(asContext(ctx), [layer(0)], W, 0.5, 0);
+    expect(alphas[0]).toBeCloseTo(0.4);
+    expect(ctx.globalCompositeOperation).toBe("source-over");
+
+    ctx.drawImage.mockClear();
+    drawCloudLayers(asContext(ctx), [layer(0)], W, 0, 0);
+    expect(ctx.drawImage).not.toHaveBeenCalled();
+  });
+
+  it("lights clouds additively during lightning", () => {
+    const ctx = createStubContext();
+    const ops = recordAssignments(ctx, "globalCompositeOperation");
+    drawCloudLayers(asContext(ctx), [layer(0)], W, 1, 1);
+    expect(ops).toEqual(["lighter", "source-over"]);
+    expect(cloudLayerAlpha(layer(0), 1, 1)).toBe(1);
+    expect(cloudLayerAlpha(layer(0), 0.5, 0.5)).toBeCloseTo(0.6);
   });
 });

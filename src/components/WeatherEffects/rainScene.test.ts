@@ -1,68 +1,69 @@
 import { describe, expect, it } from "vitest";
-import { createRainScene, dropCountFor, MAX_DROPS } from "./rainScene";
-import { asContext, createStubContext, seededRng } from "./testUtils";
+import { bucketAlpha, bucketOf, DEPTH_BUCKETS, drawRain, drawSplashes, LIGHTNING_RAIN_ALPHA, streakLength } from "./rainScene";
+import { createDrops, createParticlePool, type Drop } from "./rainSimulation";
+import { asContext, createStubContext, recordAssignments, seededRng } from "./testUtils";
 
-const OPTIONS = { intensity: 1, wind: 0, color: "rgba(174,194,224,0.5)" };
-
-describe("dropCountFor", () => {
-  it("scales with area and intensity", () => {
-    expect(dropCountFor(800, 600, 1)).toBe(48);
-    expect(dropCountFor(800, 600, 2)).toBe(96);
-    expect(dropCountFor(800, 600, 0)).toBe(0);
-    expect(dropCountFor(800, 600, -1)).toBe(0);
+describe("depth buckets", () => {
+  it("cover z in [0, 1) and give opacity ≈ z * 0.5", () => {
+    expect(bucketOf(0)).toBe(0);
+    expect(bucketOf(0.999)).toBe(DEPTH_BUCKETS - 1);
+    expect(bucketOf(1)).toBe(DEPTH_BUCKETS - 1);
+    expect(bucketAlpha(0)).toBeCloseTo(0.5 / DEPTH_BUCKETS / 2);
+    expect(bucketAlpha(DEPTH_BUCKETS - 1)).toBeLessThan(0.5);
   });
 
-  it("caps the total number of drops", () => {
-    expect(dropCountFor(3840, 2160, 10)).toBe(MAX_DROPS);
+  it("makes nearer drops longer", () => {
+    const near: Drop = { x: 0, y: 0, vx: 0, vy: 10, speed: 10, z: 0.9 };
+    expect(streakLength(near)).toBeCloseTo(21);
+    expect(streakLength({ ...near, z: 0.1 })).toBeCloseTo(13);
   });
 });
 
-describe("createRainScene", () => {
-  it("draws every drop in one path with a single stroke per frame", () => {
+describe("drawRain", () => {
+  it("draws every active drop as a 4-corner streak with one fill per depth bucket", () => {
     const ctx = createStubContext();
-    const scene = createRainScene(OPTIONS, seededRng(1));
-    scene.resize(800, 600, asContext(ctx));
-    scene.update(0.016);
-    scene.draw(asContext(ctx));
+    const drops = createDrops(300, 800, 600, seededRng(1));
+    drawRain(asContext(ctx), drops, 200, false);
 
-    expect(ctx.beginPath).toHaveBeenCalledTimes(1);
-    expect(ctx.moveTo).toHaveBeenCalledTimes(48);
-    expect(ctx.lineTo).toHaveBeenCalledTimes(48);
-    expect(ctx.stroke).toHaveBeenCalledTimes(1);
-    expect(ctx.strokeStyle).toBe(OPTIONS.color);
+    expect(ctx.fill).toHaveBeenCalledTimes(DEPTH_BUCKETS);
+    expect(ctx.moveTo).toHaveBeenCalledTimes(200);
+    expect(ctx.lineTo).toHaveBeenCalledTimes(200 * 3);
+    expect(ctx.globalAlpha).toBe(1); // restored
   });
 
-  it("moves drops between frames", () => {
+  it("draws a streak forward along the velocity, 1.2px wide", () => {
     const ctx = createStubContext();
-    const scene = createRainScene(OPTIONS, seededRng(2));
-    scene.resize(800, 600, asContext(ctx));
-    scene.draw(asContext(ctx));
-    const before = ctx.moveTo.mock.calls.map(([, y]) => y as number);
-
-    ctx.moveTo.mockClear();
-    scene.update(0.01);
-    scene.draw(asContext(ctx));
-    const after = ctx.moveTo.mock.calls.map(([, y]) => y as number);
-
-    const moved = after.filter((y, i) => y > before[i]);
-    expect(moved.length).toBeGreaterThan(0);
+    const d: Drop = { x: 100, y: 50, vx: 0, vy: 10, speed: 10, z: 0.5 };
+    drawRain(asContext(ctx), [d], 1, false);
+    expect(ctx.moveTo).toHaveBeenCalledWith(100.6, 50);
+    expect(ctx.lineTo).toHaveBeenNthCalledWith(1, 100.6, 67);
+    expect(ctx.lineTo).toHaveBeenNthCalledWith(2, 99.4, 67);
+    expect(ctx.lineTo).toHaveBeenNthCalledWith(3, 99.4, 50);
   });
 
-  it("slants streaks with the wind", () => {
+  it("jumps to 0.8 opacity during lightning", () => {
     const ctx = createStubContext();
-    const scene = createRainScene({ ...OPTIONS, wind: 200 }, seededRng(3));
-    scene.resize(800, 600, asContext(ctx));
-    scene.draw(asContext(ctx));
-    const [x0] = ctx.moveTo.mock.calls[0] as number[];
-    const [x1] = ctx.lineTo.mock.calls[0] as number[];
-    expect(x1).toBeGreaterThan(x0);
+    const alphas = recordAssignments(ctx, "globalAlpha");
+    drawRain(asContext(ctx), createDrops(50, 800, 600, seededRng(2)), 50, true);
+    expect(alphas.slice(0, DEPTH_BUCKETS).every((a) => a === LIGHTNING_RAIN_ALPHA)).toBe(true);
   });
 
-  it("draws nothing when there are no drops", () => {
+  it("draws nothing with no active drops", () => {
     const ctx = createStubContext();
-    const scene = createRainScene({ ...OPTIONS, intensity: 0 });
-    scene.resize(800, 600, asContext(ctx));
-    scene.draw(asContext(ctx));
-    expect(ctx.stroke).not.toHaveBeenCalled();
+    drawRain(asContext(ctx), createDrops(10, 800, 600), 0, false);
+    expect(ctx.fill).not.toHaveBeenCalled();
+  });
+});
+
+describe("drawSplashes", () => {
+  it("draws live particles only, faded by life", () => {
+    const ctx = createStubContext();
+    const pool = createParticlePool(5);
+    Object.assign(pool[1], { x: 10, y: 20, size: 2, life: 0.5 });
+    const alphas = recordAssignments(ctx, "globalAlpha");
+    drawSplashes(asContext(ctx), pool);
+    expect(ctx.fillRect).toHaveBeenCalledTimes(1);
+    expect(ctx.fillRect).toHaveBeenCalledWith(10, 20, 2, 2);
+    expect(alphas[0]).toBe(0.5);
   });
 });

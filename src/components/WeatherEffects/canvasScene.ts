@@ -4,11 +4,13 @@
 // Scene; the driver owns the canvas and the clock.
 
 export interface Scene {
-  /** Called on start and whenever the canvas's CSS size changes. Context state has just been reset. */
+  /** false = the driver doesn't clear between frames (the scene paints over its previous frame). Default true. */
+  readonly clearEachFrame?: boolean;
+  /** Called on start and whenever the canvas's CSS size changes. Context state and pixels have just been reset. */
   resize(width: number, height: number, ctx: CanvasRenderingContext2D): void;
   /** Advance by `dt` seconds (0 on the first frame and after a pause, capped at MAX_FRAME_DT). */
   update(dt: number): void;
-  /** Draw onto the already-cleared canvas, in CSS pixels. Must leave the transform as it found it. */
+  /** Draw in CSS pixels (onto a cleared canvas unless clearEachFrame is false). Must leave the transform as it found it. */
   draw(ctx: CanvasRenderingContext2D): void;
 }
 
@@ -59,7 +61,7 @@ export function startCanvasScene(canvas: HTMLCanvasElement, scene: Scene): () =>
     const dt = lastTime === null ? 0 : Math.min((now - lastTime) / 1000, MAX_FRAME_DT);
     lastTime = now;
     scene.update(dt);
-    ctx.clearRect(0, 0, width, height);
+    if (scene.clearEachFrame !== false) ctx.clearRect(0, 0, width, height);
     scene.draw(ctx);
     frameId = requestAnimationFrame(frame);
   };

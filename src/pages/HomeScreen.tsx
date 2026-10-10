@@ -29,7 +29,7 @@ const HomeScreen: React.FC = () => {
   }, []);
 
   return (
-    <div className="relative h-full w-full bg-linear-135 from-background to-card">
+    <div className="relative isolate h-full w-full bg-linear-135 from-background to-card">
       <div className="absolute top-4 right-4 z-20 flex items-start gap-3 md:top-6 md:right-6">
         <WeatherPicker value={weather} onChange={setWeather} />
         <ToggleSphere />

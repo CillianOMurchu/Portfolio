@@ -1,27 +1,18 @@
-// Renders the effect for a weather id ("off" renders nothing).
+// Renders the sky for a weather id ("off" renders nothing), using the picker
+// preset unless `sky` (e.g. from skyForWeatherCode) is given.
 import React from "react";
-import CloudEffect from "./CloudEffect";
-import FogEffect from "./FogEffect";
-import RainEffect from "./RainEffect";
-import StormEffect from "./StormEffect";
-import SunEffect from "./SunEffect";
-import type { WeatherId } from "./weatherOptions";
+import type { SkyOptions } from "./skyScene";
+import SkyEffect from "./SkyEffect";
+import { SKY_PRESETS, type WeatherId } from "./weatherOptions";
 
-const WeatherEffect: React.FC<{ weather: WeatherId }> = ({ weather }) => {
-  switch (weather) {
-    case "sunny":
-      return <SunEffect />;
-    case "cloudy":
-      return <CloudEffect />;
-    case "foggy":
-      return <FogEffect />;
-    case "rainy":
-      return <RainEffect />;
-    case "stormy":
-      return <StormEffect />;
-    case "off":
-      return null;
-  }
+interface WeatherEffectProps {
+  weather: WeatherId;
+  sky?: SkyOptions;
+}
+
+const WeatherEffect: React.FC<WeatherEffectProps> = ({ weather, sky }) => {
+  if (weather === "off") return null;
+  return <SkyEffect {...(sky ?? SKY_PRESETS[weather])} />;
 };
 
 export default WeatherEffect;

@@ -1,21 +1,8 @@
 // The Vitest environment is `node` (no DOM), so components are rendered to
-// static markup; their canvas loops are covered by canvasScene.test.ts.
+// static markup; their canvas loops are covered by the scene and driver tests.
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
-import type React from "react";
-import CloudEffect from "./CloudEffect";
-import FogEffect from "./FogEffect";
-import RainEffect from "./RainEffect";
-import StormEffect from "./StormEffect";
-import SunEffect from "./SunEffect";
-
-const EFFECTS: Array<[string, React.FC<{ className?: string }>]> = [
-  ["RainEffect", RainEffect],
-  ["SunEffect", SunEffect],
-  ["CloudEffect", CloudEffect],
-  ["FogEffect", FogEffect],
-  ["StormEffect", StormEffect],
-];
+import SkyEffect from "./SkyEffect";
 
 function stubReducedMotion(reduce: boolean) {
   vi.stubGlobal("window", {
@@ -27,26 +14,21 @@ afterEach(() => {
   vi.unstubAllGlobals();
 });
 
-describe.each(EFFECTS)("<%s />", (_name, Effect) => {
-  it("renders a decorative, click-through, full-viewport canvas", () => {
+describe("<SkyEffect />", () => {
+  it("renders a decorative, click-through canvas behind its parent's content", () => {
     stubReducedMotion(false);
-    const html = renderToStaticMarkup(<Effect />);
+    const html = renderToStaticMarkup(<SkyEffect weather={0} />);
     expect(html).toMatch(/^<canvas /);
     expect(html).toContain('aria-hidden="true"');
     expect(html).toContain("pointer-events-none");
-    expect(html).toContain("fixed");
-    expect(html).toContain("inset-0");
-  });
-
-  it("lets className override the default stacking", () => {
-    stubReducedMotion(false);
-    const html = renderToStaticMarkup(<Effect className="z-0" />);
-    expect(html).toContain("z-0");
-    expect(html).not.toContain("z-10");
+    expect(html).toContain("absolute");
+    expect(html).toContain("-z-10");
+    expect(html).not.toContain("fixed");
+    expect(html).not.toMatch(/(^|\s)z-10/);
   });
 
   it("renders nothing when prefers-reduced-motion is reduce", () => {
     stubReducedMotion(true);
-    expect(renderToStaticMarkup(<Effect />)).toBe("");
+    expect(renderToStaticMarkup(<SkyEffect weather={0} />)).toBe("");
   });
 });

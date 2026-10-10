@@ -1,108 +1,118 @@
-// Cloudy: soft clouds (clusters of overlapping glow "puffs") drifting across
-// the upper half of the screen and wrapping around.
+// Clouds: three parallax layers of soft textures, each pre-rendered once to an
+// offscreen canvas (3 overlapping radial gradients) and then just drawImage'd.
+// Layers scroll right and wrap; lightning brightens them additively.
 
-import type { Scene } from "./canvasScene";
-import { createUnitGlow, fillGlow, type RGB } from "./paint";
+export type Ctx2D = CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D;
+export type TextureCanvas = HTMLCanvasElement | OffscreenCanvas;
+export type CreateTextureCanvas = (size: number) => TextureCanvas;
 
-export interface CloudOptions {
-  coverage: number; // cloud-count multiplier
-  wind: number; // px/s, positive = rightwards
-  color: RGB;
-}
+export type CloudSprite = { x: number; y: number; size: number; texture: TextureCanvas };
+export type CloudLayer = { depth: number; speed: number; alpha: number; offset: number; clouds: CloudSprite[] };
 
-export type Puff = { dx: number; dy: number; r: number };
-export type Cloud = { x: number; y: number; speed: number; halfWidth: number; alpha: number; puffs: Puff[] };
+export const LAYERS = [
+  { depth: 0.3, y: 0.1 },
+  { depth: 0.6, y: 0.2 },
+  { depth: 1.0, y: 0.3 },
+] as const;
+export const MIN_CLOUD_SIZE = 200;
+export const MAX_CLOUD_SIZE = 600;
+const Y_JITTER = 40;
+const LIGHTNING_GLOW = 0.4;
 
-export const MAX_CLOUDS = 16;
-const PX_PER_CLOUD = 240; // of canvas width, at coverage 1 (≈ 8 clouds at 1920px)
+export const layerSpeed = (depth: number) => 0.15 + depth * 0.25; // px/frame
+export const layerBrightness = (depth: number) => 25 + depth * 15;
+export const layerAlpha = (depth: number) => 0.7 + depth * 0.3;
 
-export function cloudCountFor(width: number, coverage: number): number {
-  return Math.min(Math.round((width / PX_PER_CLOUD) * Math.max(coverage, 0)), MAX_CLOUDS);
-}
+export const createTextureCanvas: CreateTextureCanvas = (size) => {
+  if (typeof OffscreenCanvas !== "undefined") return new OffscreenCanvas(size, size);
+  const canvas = document.createElement("canvas");
+  canvas.width = size;
+  canvas.height = size;
+  return canvas;
+};
 
-const randomCloudY = (height: number, rng: () => number) => height * (0.05 + rng() * 0.45);
+const rgba = (r: number, g: number, b: number, a: number) =>
+  `rgba(${Math.round(r)},${Math.round(g)},${Math.round(b)},${a})`;
 
-/** One cloud: a row of puffs, biggest and highest in the middle. `x` is 0 until placed. */
-export function createCloud(width: number, height: number, wind: number, rng: () => number): Cloud {
-  const base = Math.max(width, height) * (0.04 + rng() * 0.04);
-  const puffCount = 5 + Math.floor(rng() * 3);
-  const puffs: Puff[] = [];
-  let halfWidth = 0;
-
-  for (let i = 0; i < puffCount; i++) {
-    const t = (i / (puffCount - 1)) * 2 - 1; // -1 … 1 across the cloud
-    const middle = 1 - Math.abs(t);
-    const puff = {
-      dx: t * base * 1.5 + (rng() - 0.5) * base * 0.3,
-      dy: -middle * base * 0.5 + (rng() - 0.5) * base * 0.2,
-      r: base * (0.6 + middle * 0.5 + rng() * 0.2),
-    };
-    puffs.push(puff);
-    halfWidth = Math.max(halfWidth, Math.abs(puff.dx) + puff.r);
+/** Paints one soft cloud: 3 radial gradients jittered ±15% from the centre, slightly blue-tinted grey. */
+export function paintCloudTexture(ctx: Ctx2D, size: number, brightness: number, rng: () => number): void {
+  const b = brightness;
+  for (let i = 0; i < 3; i++) {
+    const cx = size / 2 + (rng() * 2 - 1) * 0.15 * size;
+    const cy = size / 2 + (rng() * 2 - 1) * 0.15 * size;
+    const radius = size * (0.4 + rng() * 0.2);
+    const alpha = 0.15 + rng() * 0.1;
+    const gradient = ctx.createRadialGradient(cx, cy, 0, cx, cy, radius);
+    gradient.addColorStop(0, rgba(b + 25, b + 25, b + 30, alpha));
+    gradient.addColorStop(0.5, rgba(b, b, b + 15, alpha * 0.6));
+    gradient.addColorStop(1, rgba(b - 10, b - 10, b, 0));
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, size, size);
   }
-
-  return {
-    x: 0,
-    y: randomCloudY(height, rng),
-    speed: wind * (0.6 + rng() * 0.8),
-    halfWidth,
-    alpha: 0.18 + rng() * 0.14,
-    puffs,
-  };
 }
 
-export function createClouds(count: number, width: number, height: number, wind: number, rng: () => number): Cloud[] {
-  const clouds: Cloud[] = [];
-  for (let i = 0; i < count; i++) {
-    const cloud = createCloud(width, height, wind, rng);
-    cloud.x = rng() * (width + 2 * cloud.halfWidth) - cloud.halfWidth; // anywhere, incl. partly off-screen
-    clouds.push(cloud);
+export function createCloudLayers(
+  width: number,
+  height: number,
+  rng: () => number = Math.random,
+  createCanvas: CreateTextureCanvas = createTextureCanvas,
+): CloudLayer[] {
+  return LAYERS.map(({ depth, y }) => {
+    const count = 5 + Math.floor(rng() * 2);
+    const spacing = width / count;
+    const clouds: CloudSprite[] = [];
+
+    for (let i = 0; i < count; i++) {
+      const size = Math.round(MIN_CLOUD_SIZE + rng() * (MAX_CLOUD_SIZE - MIN_CLOUD_SIZE));
+      const texture = createCanvas(size);
+      const ctx = texture.getContext("2d") as Ctx2D | null;
+      if (ctx) paintCloudTexture(ctx, size, layerBrightness(depth), rng);
+      clouds.push({ x: (i + 0.5) * spacing, y: height * y + (rng() * 2 - 1) * Y_JITTER, size, texture });
+    }
+
+    return { depth, speed: layerSpeed(depth), alpha: layerAlpha(depth), offset: 0, clouds };
+  });
+}
+
+/** Scrolls every layer in place, wrapping its offset at the screen width. */
+export function updateCloudLayers(layers: CloudLayer[], frames: number, width: number): void {
+  if (width <= 0) return;
+  for (let i = 0; i < layers.length; i++) {
+    const layer = layers[i];
+    layer.offset = (layer.offset + layer.speed * frames) % width;
   }
-  return clouds;
 }
 
-/** Drifts clouds in place; one that fully leaves re-enters on the opposite edge at a new height. */
-export function updateClouds(clouds: Cloud[], dt: number, width: number, height: number, rng: () => number): void {
-  for (let i = 0; i < clouds.length; i++) {
-    const cloud = clouds[i];
-    cloud.x += cloud.speed * dt;
-    if (cloud.speed > 0 && cloud.x - cloud.halfWidth > width) {
-      cloud.x = -cloud.halfWidth;
-      cloud.y = randomCloudY(height, rng);
-    } else if (cloud.speed < 0 && cloud.x + cloud.halfWidth < 0) {
-      cloud.x = width + cloud.halfWidth;
-      cloud.y = randomCloudY(height, rng);
+/** Opacity of a layer for the current cloud amount, boosted while lightning is lit. */
+export function cloudLayerAlpha(layer: CloudLayer, amount: number, lightningIntensity: number): number {
+  return Math.min(1, layer.alpha * amount + lightningIntensity * LIGHTNING_GLOW);
+}
+
+/** Draws back to front; each set is drawn at -width, 0 and +width so the wrap is seamless. Off-screen clouds are skipped. */
+export function drawCloudLayers(
+  ctx: CanvasRenderingContext2D,
+  layers: CloudLayer[],
+  width: number,
+  amount: number,
+  lightningIntensity: number,
+): void {
+  if (amount <= 0) return;
+  const lit = lightningIntensity > 0;
+  if (lit) ctx.globalCompositeOperation = "lighter";
+
+  for (let i = 0; i < layers.length; i++) {
+    const layer = layers[i];
+    ctx.globalAlpha = cloudLayerAlpha(layer, amount, lit ? lightningIntensity : 0);
+    for (let loop = -1; loop <= 1; loop++) {
+      for (let j = 0; j < layer.clouds.length; j++) {
+        const cloud = layer.clouds[j];
+        const left = cloud.x + layer.offset + loop * width - cloud.size / 2;
+        if (left >= width || left + cloud.size <= 0) continue;
+        ctx.drawImage(cloud.texture, left, cloud.y - cloud.size / 2);
+      }
     }
   }
-}
 
-export function createCloudScene({ coverage, wind, color }: CloudOptions, rng: () => number = Math.random): Scene {
-  let width = 0;
-  let height = 0;
-  let clouds: Cloud[] = [];
-  let glow: CanvasGradient | null = null;
-
-  return {
-    resize(w, h, ctx) {
-      width = w;
-      height = h;
-      clouds = createClouds(cloudCountFor(w, coverage), w, h, wind, rng);
-      glow = createUnitGlow(ctx, color, [[0, 1], [0.5, 0.85], [1, 0]]);
-    },
-
-    update(dt) {
-      updateClouds(clouds, dt, width, height, rng);
-    },
-
-    draw(ctx) {
-      if (!glow) return;
-      for (let i = 0; i < clouds.length; i++) {
-        const cloud = clouds[i];
-        for (let j = 0; j < cloud.puffs.length; j++) {
-          const puff = cloud.puffs[j];
-          fillGlow(ctx, glow, cloud.x + puff.dx, cloud.y + puff.dy, puff.r, puff.r * 0.85, cloud.alpha);
-        }
-      }
-    },
-  };
+  ctx.globalAlpha = 1;
+  if (lit) ctx.globalCompositeOperation = "source-over";
 }

@@ -75,6 +75,16 @@ describe("startCanvasScene", () => {
     expect(rafQueue.size).toBe(1); // keeps scheduling itself
   });
 
+  it("doesn't clear between frames when the scene opts out", () => {
+    const ctx = createStubContext();
+    const scene = { ...stubScene(), clearEachFrame: false };
+    startCanvasScene(asCanvas(stubCanvas(ctx)), scene);
+    runFrame(0);
+    runFrame(16);
+    expect(ctx.clearRect).not.toHaveBeenCalled();
+    expect(scene.draw).toHaveBeenCalledTimes(2);
+  });
+
   it("caps dt after a slow frame", () => {
     const scene = stubScene();
     startCanvasScene(asCanvas(stubCanvas(createStubContext())), scene);
