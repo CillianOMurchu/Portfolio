@@ -1,18 +1,18 @@
-import { CloudOff, CloudRain } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import HeroTitle from "../components/HeroTitle/HeroTitle";
 import IconShowcase from "../components/IconShowcase/IconShowcase";
-import RainEffect from "../components/RainEffect/RainEffect";
+import WeatherEffect from "../components/WeatherEffects/WeatherEffect";
+import WeatherPicker from "../components/WeatherEffects/WeatherPicker";
+import type { WeatherId } from "../components/WeatherEffects/weatherOptions";
 import ItemSphere from "../components/sphere/ItemSphere";
 import ToggleSphere from "../components/sphere/ToggleSphere";
-import { Button } from "../components/ui/button";
 import { useOrbOrigin } from "../context/OrbOriginContext";
 import { getVisitorLocation } from "../services/location";
 import { getCurrentWeather } from "../services/weather";
 
 const HomeScreen: React.FC = () => {
   const { showSphere } = useOrbOrigin();
-  const [raining, setRaining] = useState(false);
+  const [weather, setWeather] = useState<WeatherId>("off");
 
   useEffect(() => {
     const controller = new AbortController();
@@ -31,20 +31,11 @@ const HomeScreen: React.FC = () => {
   return (
     <div className="relative h-full w-full bg-linear-135 from-background to-card">
       <div className="absolute top-4 right-4 z-20 flex items-start gap-3 md:top-6 md:right-6">
-        <Button
-          variant={raining ? "default" : "outline"}
-          size="icon"
-          onClick={() => setRaining((on) => !on)}
-          aria-pressed={raining}
-          aria-label={raining ? "Stop rain" : "Start rain"}
-          title={raining ? "Stop rain" : "Start rain"}
-        >
-          {raining ? <CloudOff /> : <CloudRain />}
-        </Button>
+        <WeatherPicker value={weather} onChange={setWeather} />
         <ToggleSphere />
       </div>
 
-      {raining && <RainEffect />}
+      <WeatherEffect weather={weather} />
 
       <div className={`fixed inset-0 z-1 transition-opacity duration-400 ${showSphere ? "opacity-100" : "pointer-events-none opacity-0"}`}>
         <ItemSphere visible={showSphere} />

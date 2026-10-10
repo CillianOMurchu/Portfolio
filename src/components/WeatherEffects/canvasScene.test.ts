@@ -1,39 +1,19 @@
-// The project's Vitest environment is `node` (no jsdom / Testing Library), so:
-// - markup and reduced-motion behaviour are checked with react-dom/server;
-// - the effect's canvas loop (startRain) is driven directly with stub
-//   canvas/context/window/document objects and a manual rAF queue.
+// Drives startCanvasScene with stub canvas/window/document objects and a manual
+// rAF queue (the Vitest environment is `node`, with no DOM).
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { renderToStaticMarkup } from "react-dom/server";
-import RainEffect from "./RainEffect";
-import { dropCountFor, MAX_DROPS, startRain } from "./rainLoop";
+import { composeScenes, MAX_FRAME_DT, startCanvasScene, type Scene } from "./canvasScene";
+import { createStubContext, type StubContext } from "./testUtils";
 
 // ─── Stubs ────────────────────────────────────────────────────────────────────
 
-function stubContext() {
-  return {
-    clearRect: vi.fn(),
-    beginPath: vi.fn(),
-    moveTo: vi.fn(),
-    lineTo: vi.fn(),
-    stroke: vi.fn(),
-    setTransform: vi.fn(),
-    scale: vi.fn(),
-    strokeStyle: "",
-    lineWidth: 0,
-  };
-}
-type StubContext = ReturnType<typeof stubContext>;
-
 function stubCanvas(ctx: StubContext | null, width = 800, height = 600) {
-  return {
-    clientWidth: width,
-    clientHeight: height,
-    width: 0,
-    height: 0,
-    getContext: vi.fn(() => ctx),
-  };
+  return { clientWidth: width, clientHeight: height, width: 0, height: 0, getContext: vi.fn(() => ctx) };
 }
 const asCanvas = (c: ReturnType<typeof stubCanvas>) => c as unknown as HTMLCanvasElement;
+
+function stubScene() {
+  return { resize: vi.fn(), update: vi.fn(), draw: vi.fn() } satisfies Scene;
+}
 
 let rafQueue: Map<number, FrameRequestCallback>;
 let nextFrameId: number;
@@ -54,22 +34,15 @@ function runFrame(time: number) {
 }
 
 let doc: EventTarget & { hidden: boolean };
-let win: EventTarget & { devicePixelRatio: number; matchMedia: (query: string) => { matches: boolean } };
-
-function setReducedMotion(reduce: boolean) {
-  win.matchMedia = vi.fn((query: string) => ({ matches: reduce && query === "(prefers-reduced-motion: reduce)" }));
-}
+let win: EventTarget & { devicePixelRatio: number };
 
 beforeEach(() => {
   rafQueue = new Map();
   nextFrameId = 1;
   requestAnimationFrameMock.mockClear();
   cancelAnimationFrameMock.mockClear();
-
   doc = Object.assign(new EventTarget(), { hidden: false });
-  win = Object.assign(new EventTarget(), { devicePixelRatio: 1, matchMedia: () => ({ matches: false }) });
-  setReducedMotion(false);
-
+  win = Object.assign(new EventTarget(), { devicePixelRatio: 1 });
   vi.stubGlobal("document", doc);
   vi.stubGlobal("window", win);
   vi.stubGlobal("requestAnimationFrame", requestAnimationFrameMock);
@@ -80,69 +53,48 @@ afterEach(() => {
   vi.unstubAllGlobals();
 });
 
-// ─── <RainEffect /> markup ────────────────────────────────────────────────────
+// ─── startCanvasScene ─────────────────────────────────────────────────────────
 
-describe("<RainEffect />", () => {
-  it("renders a decorative, click-through, full-viewport canvas", () => {
-    const html = renderToStaticMarkup(<RainEffect />);
-    expect(html).toMatch(/^<canvas /);
-    expect(html).toContain('aria-hidden="true"');
-    expect(html).toContain("pointer-events-none");
-    expect(html).toContain("fixed");
-    expect(html).toContain("inset-0");
-  });
+describe("startCanvasScene", () => {
+  it("sizes the scene, then per frame updates with real dt, clears and draws", () => {
+    const ctx = createStubContext();
+    const scene = stubScene();
+    startCanvasScene(asCanvas(stubCanvas(ctx)), scene);
 
-  it("merges a custom className", () => {
-    expect(renderToStaticMarkup(<RainEffect className="opacity-50" />)).toContain("opacity-50");
-  });
-
-  it("renders nothing when prefers-reduced-motion is reduce", () => {
-    setReducedMotion(true);
-    expect(renderToStaticMarkup(<RainEffect />)).toBe("");
-    expect(requestAnimationFrameMock).not.toHaveBeenCalled();
-  });
-});
-
-// ─── startRain (the component's effect) ──────────────────────────────────────
-
-const OPTIONS = { intensity: 1, wind: 0, color: "rgba(174,194,224,0.5)" };
-
-describe("startRain", () => {
-  it("starts the loop and strokes once per frame, not once per drop", () => {
-    const ctx = stubContext();
-    startRain(asCanvas(stubCanvas(ctx)), OPTIONS);
+    expect(scene.resize).toHaveBeenCalledWith(800, 600, ctx);
     expect(requestAnimationFrameMock).toHaveBeenCalledTimes(1);
 
-    runFrame(0);
-    const drops = dropCountFor(800, 600, 1);
-    expect(drops).toBeGreaterThan(1);
-    expect(ctx.clearRect).toHaveBeenCalledTimes(1);
-    expect(ctx.beginPath).toHaveBeenCalledTimes(1);
-    expect(ctx.moveTo).toHaveBeenCalledTimes(drops);
-    expect(ctx.lineTo).toHaveBeenCalledTimes(drops);
-    expect(ctx.stroke).toHaveBeenCalledTimes(1);
-    expect(ctx.strokeStyle).toBe(OPTIONS.color);
+    runFrame(1000);
+    expect(scene.update).toHaveBeenLastCalledWith(0); // first frame: no dt
+    expect(ctx.clearRect).toHaveBeenCalledWith(0, 0, 800, 600);
+    expect(scene.draw).toHaveBeenCalledWith(ctx);
 
-    runFrame(16);
-    expect(ctx.stroke).toHaveBeenCalledTimes(2);
+    runFrame(1016);
+    expect(scene.update.mock.lastCall?.[0]).toBeCloseTo(0.016);
+    expect(scene.draw).toHaveBeenCalledTimes(2);
     expect(rafQueue.size).toBe(1); // keeps scheduling itself
   });
 
-  it("caps the total number of drops", () => {
-    expect(dropCountFor(3840, 2160, 10)).toBe(MAX_DROPS);
-    expect(dropCountFor(800, 600, 0)).toBe(0);
+  it("caps dt after a slow frame", () => {
+    const scene = stubScene();
+    startCanvasScene(asCanvas(stubCanvas(createStubContext())), scene);
+    runFrame(0);
+    runFrame(2000);
+    expect(scene.update).toHaveBeenLastCalledWith(MAX_FRAME_DT);
   });
 
   it("does not crash or start a loop when getContext returns null", () => {
-    const cleanup = startRain(asCanvas(stubCanvas(null)), OPTIONS);
+    const scene = stubScene();
+    const cleanup = startCanvasScene(asCanvas(stubCanvas(null)), scene);
     expect(requestAnimationFrameMock).not.toHaveBeenCalled();
+    expect(scene.resize).not.toHaveBeenCalled();
     expect(() => cleanup()).not.toThrow();
   });
 
   it("cancels the frame and removes listeners on cleanup", () => {
     const docRemove = vi.spyOn(doc, "removeEventListener");
     const winRemove = vi.spyOn(win, "removeEventListener");
-    const cleanup = startRain(asCanvas(stubCanvas(stubContext())), OPTIONS);
+    const cleanup = startCanvasScene(asCanvas(stubCanvas(createStubContext())), stubScene());
     const [frameId] = rafQueue.keys();
 
     cleanup();
@@ -159,20 +111,19 @@ describe("startRain", () => {
   });
 
   it("is safe to start, clean up and start again (StrictMode double effect)", () => {
-    const canvas = asCanvas(stubCanvas(stubContext()));
-    startRain(canvas, OPTIONS)();
-    const cleanup = startRain(canvas, OPTIONS);
+    const canvas = asCanvas(stubCanvas(createStubContext()));
+    startCanvasScene(canvas, stubScene())();
+    const cleanup = startCanvasScene(canvas, stubScene());
     expect(rafQueue.size).toBe(1);
     cleanup();
     expect(rafQueue.size).toBe(0);
   });
 
   it("pauses when hidden and resumes without a dt jump when visible", () => {
-    const ctx = stubContext();
-    startRain(asCanvas(stubCanvas(ctx)), OPTIONS);
+    const scene = stubScene();
+    startCanvasScene(asCanvas(stubCanvas(createStubContext())), scene);
     runFrame(0);
     runFrame(16);
-    const lastPositions = ctx.moveTo.mock.calls.slice(-dropCountFor(800, 600, 1));
 
     doc.hidden = true;
     doc.dispatchEvent(new Event("visibilitychange"));
@@ -183,31 +134,32 @@ describe("startRain", () => {
     doc.dispatchEvent(new Event("visibilitychange"));
     expect(rafQueue.size).toBe(1);
 
-    ctx.moveTo.mockClear();
-    runFrame(60_000); // a minute later: first frame after resume uses dt = 0
-    expect(ctx.moveTo.mock.calls).toEqual(lastPositions);
+    runFrame(60_000); // a minute later
+    expect(scene.update).toHaveBeenLastCalledWith(0);
   });
 
   it("doesn't start the loop while the page is hidden", () => {
     doc.hidden = true;
-    startRain(asCanvas(stubCanvas(stubContext())), OPTIONS);
+    startCanvasScene(asCanvas(stubCanvas(createStubContext())), stubScene());
     expect(requestAnimationFrameMock).not.toHaveBeenCalled();
   });
 
   it("caps the backing-store scale at 2 when devicePixelRatio is 3", () => {
     win.devicePixelRatio = 3;
-    const ctx = stubContext();
+    const ctx = createStubContext();
     const canvas = stubCanvas(ctx, 800, 600);
-    startRain(asCanvas(canvas), OPTIONS);
+    const scene = stubScene();
+    startCanvasScene(asCanvas(canvas), scene);
     expect(canvas.width).toBe(1600);
     expect(canvas.height).toBe(1200);
     expect(ctx.setTransform).toHaveBeenCalledWith(2, 0, 0, 2, 0, 0);
+    expect(scene.resize).toHaveBeenCalledWith(800, 600, ctx); // scenes work in CSS px
   });
 
-  it("throttles window resizes to one per frame and resizes the canvas", () => {
-    const ctx = stubContext();
-    const canvas = stubCanvas(ctx, 800, 600);
-    startRain(asCanvas(canvas), OPTIONS);
+  it("throttles window resizes to one per frame and skips unchanged sizes", () => {
+    const canvas = stubCanvas(createStubContext(), 800, 600);
+    const scene = stubScene();
+    startCanvasScene(asCanvas(canvas), scene);
     requestAnimationFrameMock.mockClear();
 
     canvas.clientWidth = 1000;
@@ -217,13 +169,15 @@ describe("startRain", () => {
     win.dispatchEvent(new Event("resize"));
     expect(requestAnimationFrameMock).toHaveBeenCalledTimes(1);
 
-    runFrame(0); // runs the queued resize
+    runFrame(0);
     expect(canvas.width).toBe(1000);
     expect(canvas.height).toBe(500);
+    expect(scene.resize).toHaveBeenCalledTimes(2);
+    expect(scene.resize).toHaveBeenLastCalledWith(1000, 500, expect.anything());
 
-    ctx.moveTo.mockClear();
-    runFrame(16); // next draw uses drops recreated for the new size
-    expect(ctx.moveTo).toHaveBeenCalledTimes(dropCountFor(1000, 500, 1));
+    win.dispatchEvent(new Event("resize")); // same size
+    runFrame(16);
+    expect(scene.resize).toHaveBeenCalledTimes(2);
   });
 
   it("uses ResizeObserver when available and disconnects it on cleanup", () => {
@@ -241,9 +195,9 @@ describe("startRain", () => {
       },
     );
     const winAdd = vi.spyOn(win, "addEventListener");
-    const canvas = stubCanvas(stubContext(), 800, 600);
+    const canvas = stubCanvas(createStubContext(), 800, 600);
 
-    const cleanup = startRain(asCanvas(canvas), OPTIONS);
+    const cleanup = startCanvasScene(asCanvas(canvas), stubScene());
     expect(observe).toHaveBeenCalledWith(canvas);
     expect(winAdd).not.toHaveBeenCalledWith("resize", expect.any(Function));
 
@@ -254,5 +208,33 @@ describe("startRain", () => {
 
     cleanup();
     expect(disconnect).toHaveBeenCalledTimes(1);
+  });
+});
+
+// ─── composeScenes ────────────────────────────────────────────────────────────
+
+describe("composeScenes", () => {
+  it("forwards resize, update and draw to each scene in order", () => {
+    const order: string[] = [];
+    const tracked = (name: string): Scene => ({
+      resize: (w, h) => order.push(`${name}.resize(${w},${h})`),
+      update: (dt) => order.push(`${name}.update(${dt})`),
+      draw: () => order.push(`${name}.draw`),
+    });
+    const scene = composeScenes(tracked("back"), tracked("front"));
+    const ctx = createStubContext() as unknown as CanvasRenderingContext2D;
+
+    scene.resize(10, 20, ctx);
+    scene.update(0.5);
+    scene.draw(ctx);
+
+    expect(order).toEqual([
+      "back.resize(10,20)",
+      "front.resize(10,20)",
+      "back.update(0.5)",
+      "front.update(0.5)",
+      "back.draw",
+      "front.draw",
+    ]);
   });
 });

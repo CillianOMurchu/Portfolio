@@ -1,31 +1,42 @@
-// Imperative canvas driver for <RainEffect />. Kept out of the component so the
-// loop, resize and visibility handling can be tested without a DOM.
+// Generic canvas driver shared by the weather effects: DPR-aware sizing, a
+// requestAnimationFrame loop with real delta time, rAF-throttled resizing,
+// pausing while the tab is hidden, and full cleanup. Each effect supplies a
+// Scene; the driver owns the canvas and the clock.
 
-import { createDrops, updateDrops, type Drop } from "./rainSimulation";
-
-export interface RainOptions {
-  intensity: number; // drops per 10,000 px² of canvas
-  wind: number; // px/s, positive = rightwards
-  color: string;
+export interface Scene {
+  /** Called on start and whenever the canvas's CSS size changes. Context state has just been reset. */
+  resize(width: number, height: number, ctx: CanvasRenderingContext2D): void;
+  /** Advance by `dt` seconds (0 on the first frame and after a pause, capped at MAX_FRAME_DT). */
+  update(dt: number): void;
+  /** Draw onto the already-cleared canvas, in CSS pixels. Must leave the transform as it found it. */
+  draw(ctx: CanvasRenderingContext2D): void;
 }
 
-export const MAX_DROPS = 500;
 export const MAX_PIXEL_RATIO = 2;
-const AREA_UNIT = 10_000; // px²
+export const MAX_FRAME_DT = 0.05; // s
 
-export function dropCountFor(width: number, height: number, intensity: number): number {
-  const count = Math.round(((width * height) / AREA_UNIT) * Math.max(intensity, 0));
-  return Math.min(count, MAX_DROPS);
+/** Runs several scenes on one canvas, in order (later scenes draw on top). */
+export function composeScenes(...scenes: Scene[]): Scene {
+  return {
+    resize(width, height, ctx) {
+      for (let i = 0; i < scenes.length; i++) scenes[i].resize(width, height, ctx);
+    },
+    update(dt) {
+      for (let i = 0; i < scenes.length; i++) scenes[i].update(dt);
+    },
+    draw(ctx) {
+      for (let i = 0; i < scenes.length; i++) scenes[i].draw(ctx);
+    },
+  };
 }
 
-/** Starts the rain on `canvas`; returns a cleanup function. No-op if there's no 2D context. */
-export function startRain(canvas: HTMLCanvasElement, { intensity, wind, color }: RainOptions): () => void {
+/** Starts `scene` on `canvas`; returns a cleanup function. No-op if there's no 2D context. */
+export function startCanvasScene(canvas: HTMLCanvasElement, scene: Scene): () => void {
   const ctx = canvas.getContext("2d");
   if (!ctx) return () => {};
 
   let width = 0;
   let height = 0;
-  let drops: Drop[] = [];
   let frameId: number | null = null;
   let resizeFrameId: number | null = null;
   let lastTime: number | null = null;
@@ -41,28 +52,15 @@ export function startRain(canvas: HTMLCanvasElement, { intensity, wind, color }:
     canvas.width = Math.round(w * scale);
     canvas.height = Math.round(h * scale); // also resets context state
     ctx.setTransform(scale, 0, 0, scale, 0, 0);
-    ctx.lineWidth = 1;
-    drops = createDrops(dropCountFor(w, h, intensity), w, h);
-  };
-
-  const draw = () => {
-    ctx.clearRect(0, 0, width, height);
-    ctx.strokeStyle = color;
-    ctx.beginPath();
-    for (let i = 0; i < drops.length; i++) {
-      const drop = drops[i];
-      // Slant the streak along its direction of travel.
-      ctx.moveTo(drop.x, drop.y);
-      ctx.lineTo(drop.x + (wind / drop.speed) * drop.length, drop.y + drop.length);
-    }
-    ctx.stroke();
+    scene.resize(w, h, ctx);
   };
 
   const frame = (now: number) => {
-    const dt = lastTime === null ? 0 : (now - lastTime) / 1000;
+    const dt = lastTime === null ? 0 : Math.min((now - lastTime) / 1000, MAX_FRAME_DT);
     lastTime = now;
-    updateDrops(drops, dt, width, height, wind);
-    draw();
+    scene.update(dt);
+    ctx.clearRect(0, 0, width, height);
+    scene.draw(ctx);
     frameId = requestAnimationFrame(frame);
   };
 
