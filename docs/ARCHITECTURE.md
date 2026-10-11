@@ -136,7 +136,7 @@ Two layers:
 **1. Framer Motion (declarative, scroll-triggered)**
 - Loaded via `<LazyMotion features={domAnimation} strict>` in `main.tsx`. Use `m.div` etc., never `motion.div` (strict mode throws). `domAnimation` has no layout/drag; switch to `domMax` if those are ever needed.
 - Shared variants in `utils/animations.ts` — `scrollVariants`, `scrollViewport`, `scrollTiming`
-- Used by `About.tsx` and `TimelineItem.tsx`
+- Used via `components/ui/Reveal.tsx` (About's `ProfileIntro`, `TimelineItem`)
 - Page transitions in `AppRoutes.tsx` (per-route motion wrapper)
 
 **2. CSS animations (imperative, canvas, keyframes)**

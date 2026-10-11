@@ -1,89 +1,18 @@
-import { m } from "framer-motion";
-import profileImage from "../assets/about/profile.webp";
-import { experienceData } from "../data/experience-data";
-import { TimelineItem } from "../components/TimelineItem";
-import { scrollVariants, scrollViewport, scrollTiming } from "../utils/animations";
+import Character from "../components/Character/Character";
+import DetectiveSection from "../components/Detective/DetectiveSection";
+import { JobHistory } from "../components/About/JobHistory";
+import { ProfileIntro } from "../components/About/ProfileIntro";
 
-const ProfileHeader = () => (
-  <>
-    <h1 className="text-4xl font-extrabold tracking-tight text-primary mb-6">
-      Cillian
-      <span className="block">Ó Murchú</span>
-    </h1>
-    <p className="mt-8 text-lg text-muted-foreground">Creative Engineer</p>
-  </>
+// Hidden until the detective puzzle unlocks it.
+const SHOW_JOB_HISTORY = false;
+
+const About = () => (
+  <div className="relative flex min-h-screen flex-col items-center justify-start space-y-8 px-4 pt-20 pb-16">
+    <ProfileIntro />
+    <DetectiveSection />
+    {SHOW_JOB_HISTORY && <JobHistory />}
+    <Character />
+  </div>
 );
 
-const About = () => {
-  return (
-    <div className="min-h-screen pt-20 pb-16 flex flex-col items-center justify-start space-y-8 px-4">
-      {/* Desktop Layout */}
-      <div className="hidden md:flex w-full max-w-6xl gap-12 items-start">
-        <m.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={scrollViewport}
-          variants={scrollVariants.slideInRight}
-          transition={scrollTiming}
-          className="shrink-0"
-        >
-          <img
-            src={profileImage}
-            alt="Portrait of Cillian O'Murchu"
-            width={800}
-            height={800}
-            decoding="async"
-            className="w-80 h-80 rounded-full shadow-lg object-cover border-4 border-primary/30"
-          />
-        </m.div>
-
-        <m.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={scrollViewport}
-          variants={scrollVariants.slideInLeft}
-          transition={scrollTiming}
-          className="self-center flex-1 flex flex-col justify-center"
-        >
-          <ProfileHeader />
-        </m.div>
-      </div>
-
-      {/* Mobile Layout */}
-      <m.div
-        initial="hidden"
-        whileInView="visible"
-        viewport={scrollViewport}
-        variants={scrollVariants.section}
-        transition={{ duration: 0.7 }}
-        className="md:hidden flex flex-col items-center text-center"
-      >
-        <img
-          src={profileImage}
-          alt="Portrait of Cillian O'Murchu"
-          width={800}
-          height={800}
-          decoding="async"
-          className="w-full max-w-100 aspect-square rounded-full shadow-lg object-cover mb-6 border-4 border-primary/30"
-        />
-        <div className="w-full">
-          <ProfileHeader />
-        </div>
-      </m.div>
-
-      <TimelineLayout />
-    </div>
-  );
-};
-
 export default About;
-
-const TimelineLayout = () => {
-  return (
-    <div className="flex flex-col space-y-12 px-4 py-8 w-full max-w-6xl mx-auto">
-      {experienceData.map((work, index) => (
-        <TimelineItem key={work.id} work={work} index={index} />
-      ))}
-    </div>
-  );
-};

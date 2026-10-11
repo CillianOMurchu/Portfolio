@@ -1,7 +1,8 @@
 import { m } from "framer-motion";
 import { Cog, Lightbulb, type LucideIcon } from "lucide-react";
-import { Card } from "@/components/ui/card";
-import { scrollVariants } from "../utils/animations";
+import { Card } from "../ui/card";
+import { Reveal } from "../ui/Reveal";
+import { scrollVariants } from "../../utils/animations";
 
 interface TimelineWork {
   id: string | number;
@@ -61,13 +62,7 @@ export const TimelineItem = ({ work, index }: TimelineItemProps) => {
   );
 
   return (
-    <m.div
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: 0.2 }}
-      variants={scrollVariants.card}
-      transition={{ delay: index * 0.1, duration: 0.3 }}
-    >
+    <Reveal variants={scrollVariants.card} viewport={{ once: true, amount: 0.2 }} transition={{ delay: index * 0.1, duration: 0.3 }}>
       <Card className="grid grid-cols-1 gap-6 bg-card/40 p-6 text-base ring-primary/30 backdrop-blur-md sm:grid-cols-3">
         <div className="sm:col-span-1">
           {work.projectImage && (
@@ -109,6 +104,6 @@ export const TimelineItem = ({ work, index }: TimelineItemProps) => {
           <TimelineSection icon={Cog} title="Key Features & Contributions" bullet="»" items={work.keyFeatures} />
         </div>
       </Card>
-    </m.div>
+    </Reveal>
   );
 };
