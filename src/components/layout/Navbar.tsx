@@ -1,7 +1,5 @@
-import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
-import { House, Radio } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { MenuToggleIcon } from "@/components/ui/MenuToggleIcon";
 import {
   Sheet,
   SheetClose,
@@ -10,9 +8,10 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { MenuToggleIcon } from "@/components/ui/MenuToggleIcon";
+import { House, Radio } from "lucide-react";
+import React, { useState } from "react";
+import { NavLink } from "react-router-dom";
 import { Name } from "../name/Name";
-import ThemeSwitcher from "../ThemeSwitcher/ThemeSwitcher";
 
 const NAV_LINKS = [
   { href: "/", icon: House, label: "Home" },
@@ -42,7 +41,7 @@ const Navbar: React.FC = () => {
           ))}
         </nav>
 
-        <ThemeSwitcher />
+        {/* <ThemeSwitcher /> */}
 
         <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
           <SheetTrigger asChild>
