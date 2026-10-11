@@ -12,7 +12,7 @@ const NameDisplay: React.FC<NameDisplayProps> = ({
   oCharRef,
 }) => (
   <div className="absolute inset-0 flex items-center justify-center">
-    <a href="/about">
+    <a href="/">
       <span
         className="text-primary text-xs tracking-wider"
         style={{

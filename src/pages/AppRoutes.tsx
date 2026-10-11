@@ -1,13 +1,13 @@
 import { AnimatePresence, m } from "framer-motion";
 import React from "react";
-import { Route, Routes, useLocation } from "react-router-dom";
-import About from "./About";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import HomeScreen from "./HomeScreen";
 import Streaming from "./Streaming";
 
 const routes = [
   { path: "/", key: "home", screen: <HomeScreen /> },
-  { path: "/about", key: "about", screen: <About /> },
+  // About is hidden for now (detective puzzle in progress); send visitors home.
+  { path: "/about", key: "about", screen: <Navigate to="/" replace /> },
   { path: "/streaming", key: "streaming", screen: <Streaming /> },
 ];
 

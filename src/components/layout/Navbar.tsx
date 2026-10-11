@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
-import { House, Radio, User } from "lucide-react";
+import { House, Radio } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -16,7 +16,6 @@ import ThemeSwitcher from "../ThemeSwitcher/ThemeSwitcher";
 
 const NAV_LINKS = [
   { href: "/", icon: House, label: "Home" },
-  { href: "/about", icon: User, label: "About" },
   { href: "/streaming", icon: Radio, label: "Streaming" },
 ];
 
