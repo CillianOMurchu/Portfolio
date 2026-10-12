@@ -11,11 +11,12 @@ import {
 import { House, Radio } from "lucide-react";
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
+import { useStreamAuth } from "../../context/StreamAuthContext";
 import { Name } from "../name/Name";
 
 const NAV_LINKS = [
   { href: "/", icon: House, label: "Home" },
-  { href: "/streaming", icon: Radio, label: "Streaming" },
+  { href: "/streaming", icon: Radio, label: "Streaming", private: true }, // logged-in visitors only
 ];
 
 // NavLink sets aria-current="page" on the active route.
@@ -24,6 +25,8 @@ const LINK_CLASSES =
 
 const Navbar: React.FC = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { status } = useStreamAuth();
+  const links = NAV_LINKS.filter((link) => !("private" in link) || status === "authed");
 
   return (
     <header className="fixed inset-x-0 top-0 z-60 flex h-16 items-center justify-between border-b bg-black/90 px-6 backdrop-blur-sm">
@@ -31,7 +34,7 @@ const Navbar: React.FC = () => {
 
       <div className="flex items-center gap-2">
         <nav className="hidden items-center gap-2 md:flex">
-          {NAV_LINKS.map(({ href, icon: Icon, label }) => (
+          {links.map(({ href, icon: Icon, label }) => (
             <Button key={href} asChild variant="ghost" className={LINK_CLASSES}>
               <NavLink to={href} end>
                 <Icon />
@@ -65,7 +68,7 @@ const Navbar: React.FC = () => {
               <SheetTitle>Menu</SheetTitle>
             </SheetHeader>
             <nav className="flex flex-col gap-1 px-2">
-              {NAV_LINKS.map(({ href, icon: Icon, label }) => (
+              {links.map(({ href, icon: Icon, label }) => (
                 <SheetClose key={href} asChild>
                   <Button
                     asChild

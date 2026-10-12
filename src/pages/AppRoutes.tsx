@@ -1,6 +1,7 @@
 import { AnimatePresence, m } from "framer-motion";
 import React from "react";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
+import StreamGate from "../components/StreamAuth/StreamGate";
 import HomeScreen from "./HomeScreen";
 import Streaming from "./Streaming";
 
@@ -8,7 +9,15 @@ const routes = [
   { path: "/", key: "home", screen: <HomeScreen /> },
   // About is hidden for now (detective puzzle in progress); send visitors home.
   { path: "/about", key: "about", screen: <Navigate to="/" replace /> },
-  { path: "/streaming", key: "streaming", screen: <Streaming /> },
+  {
+    path: "/streaming",
+    key: "streaming",
+    screen: (
+      <StreamGate>
+        <Streaming />
+      </StreamGate>
+    ),
+  },
 ];
 
 export const AppRoutes: React.FC = () => {
