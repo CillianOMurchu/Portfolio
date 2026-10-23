@@ -1,5 +1,6 @@
+import { House } from "lucide-react";
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import { useStreamAuth } from "../../context/StreamAuthContext";
 import { Name } from "../name/Name";
 import ThemeSwitcher from "../ThemeSwitcher/ThemeSwitcher";
@@ -16,14 +17,27 @@ const NAV_LINKS = [
 const LINK_CLASSES =
   "label py-2 no-underline decoration-1 underline-offset-[0.5em] transition-colors duration-(--dur-fast) ease-out hover:text-strong focus-visible:shadow-focus focus-visible:outline-none aria-[current=page]:pointer-events-none aria-[current=page]:text-strong aria-[current=page]:underline";
 
+// The name links to About, so on About the corner becomes the way home.
+const HomeIconLink: React.FC = () => (
+  <Link
+    to="/"
+    aria-label="Home"
+    title="Home"
+    className="inline-grid size-10 place-items-center rounded-xs text-strong no-underline transition-colors duration-(--dur-base) ease-out hover:bg-sunken hover:text-strong focus-visible:shadow-focus focus-visible:outline-none"
+  >
+    <House strokeWidth={1.5} strokeLinecap="square" className="size-[1.125rem]" />
+  </Link>
+);
+
 const Navbar: React.FC = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { status } = useStreamAuth();
+  const { pathname } = useLocation();
   const links = NAV_LINKS.filter((link) => !("private" in link) || status === "authed");
 
   return (
     <header className="fixed inset-x-0 top-0 z-60 flex h-16 items-center justify-between border-b bg-page/88 px-(--gutter) backdrop-blur-[10px]">
-      <Name />
+      {pathname === "/about" ? <HomeIconLink /> : <Name />}
 
       <div className="flex items-center gap-(--space-5)">
         <nav className="hidden items-center gap-(--space-5) md:flex">

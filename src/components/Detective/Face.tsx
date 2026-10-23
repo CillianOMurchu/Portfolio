@@ -1,9 +1,11 @@
 // Interactive face: watches the pointer, follows it with its eyes and updates
 // the expression (curious when it comes close, happy when it's on the face,
 // neutral otherwise). Leaving the face after a blush makes it frown for
-// SULK_MS, unless the pointer comes back first.
+// SULK_MS, unless the pointer comes back first. While happy it bobs, shakes
+// and takes the odd deep breath.
 import React, { useEffect, useRef, useState } from "react";
 import FaceView from "./FaceView";
+import { usePleasureMotion, type FaceMotionRefs } from "./usePleasureMotion";
 import { FACE_RADIUS_RATIO, getExpression, getGaze, nextExpression, SULK_MS, type Expression, type Gaze } from "./faceExpression";
 
 const VIEWBOX_SIZE = 200;
@@ -15,8 +17,15 @@ interface FaceProps {
 
 const Face: React.FC<FaceProps> = ({ className }) => {
   const ref = useRef<SVGSVGElement>(null);
+  const bob = useRef<SVGGElement>(null);
+  const body = useRef<SVGGElement>(null);
+  const features = useRef<SVGGElement>(null);
+  // One stable object, so the motion effect only re-runs when `active` changes.
+  const [motionRefs] = useState<FaceMotionRefs>(() => ({ bob, body, features }));
   const [expression, setExpression] = useState<Expression>("neutral");
   const [gaze, setGaze] = useState<Gaze>(REST);
+  // Bobs, shakes and sighs with pleasure for as long as it blushes.
+  usePleasureMotion(motionRefs, expression === "happy");
   // Latest proximity-only expression, for when the sulk ends.
   const proximity = useRef<Exclude<Expression, "sad">>("neutral");
 
@@ -57,7 +66,7 @@ const Face: React.FC<FaceProps> = ({ className }) => {
     };
   }, []);
 
-  return <FaceView ref={ref} expression={expression} gaze={gaze} className={className} />;
+  return <FaceView ref={ref} motionRefs={motionRefs} expression={expression} gaze={gaze} className={className} />;
 };
 
 export default Face;

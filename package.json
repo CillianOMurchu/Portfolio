@@ -11,7 +11,8 @@
     "test": "vitest",
     "test:run": "vitest run",
     "optimize:character": "node scripts/optimize-character.mjs",
-    "audit:tokens": "node scripts/audit-design-tokens.mjs"
+    "audit:tokens": "node scripts/audit-design-tokens.mjs",
+    "optimize:logos": "node scripts/optimize-logos.mjs"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",

@@ -1,3 +1,8 @@
+// PARKED — not rendered anywhere (removed from WorkEntry 2026-10-23), kept for
+// reuse. To restore: render it in WorkEntry's open panel beside WorkDetails with
+// image={work.projectImage} year={start year from work.dates} open={open}
+// flip={index % 2 === 1}, in a two-column md:grid-cols-12 layout.
+//
 // Two depth layers for one role. Far: a marble slab holding a ghost of the
 // photo and the start year, drifting with the scroll so it lags the page.
 // Near: the photo as a mounted print, moving against the scroll so it runs

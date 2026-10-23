@@ -2,6 +2,8 @@ import lighthouseImage from "../assets/about/header-lighthouse.webp";
 import betsson from "../assets/about/header-betsson.webp";
 import pokerstars from "../assets/about/header-pokerstars.webp";
 import roadooImage from "../assets/about/header-roadoo.webp";
+import betssonLogo from "../assets/about/logo-betsson.webp";
+import pokerstarsLogo from "../assets/about/logo-pokerstars.webp";
 
 // TODO: Add Maslo logo image import when available
 // import masloImage from "../assets/about/header-maslo.webp";
@@ -11,6 +13,8 @@ export interface Work {
   name: string;
   title: string;
   projectImage: string;
+  /** Wordmark from scripts/optimize-logos.mjs (64px tall). */
+  logo?: string;
   link?: string;
   dates: string;
   responsibilities?: string[];
@@ -43,6 +47,7 @@ export const experienceData: Work[] = [
     name: "Betsson Group",
     title: "Software Engineer",
     projectImage: betsson,
+    logo: betssonLogo,
     link: "https://betssongroup.com/",
     dates: "Oct 2020 – Jan 2023",
     // --- UPDATED: responsibilities is now an array ---
@@ -80,6 +85,7 @@ export const experienceData: Work[] = [
     name: "PokerStars",
     title: "Gaming Operator & Tournament Coordinator",
     projectImage: pokerstars,
+    logo: pokerstarsLogo,
     link: "https://www.pokerstarslive.com/",
     dates: "Jan 2003 – Jul 2016",
     responsibilities: [

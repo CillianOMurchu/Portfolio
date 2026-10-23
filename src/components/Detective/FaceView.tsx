@@ -4,11 +4,14 @@
 import React from "react";
 import { cn } from "../../lib/utils";
 import type { Expression, Gaze } from "./faceExpression";
+import type { FaceMotionRefs } from "./usePleasureMotion";
 
 interface FaceViewProps {
   expression: Expression;
   /** Eye offset towards the pointer, in viewBox units. */
   gaze?: Gaze;
+  /** Groups usePleasureMotion animates: the bounce, the head, and the features riding in it. */
+  motionRefs?: FaceMotionRefs;
   className?: string;
 }
 
@@ -22,7 +25,7 @@ const shown = (visible: boolean) => (visible ? "opacity-100" : "opacity-0");
 const FOLLOW = "transition-transform duration-(--dur-base) ease-out motion-reduce:transition-none";
 const AHEAD: Gaze = { x: 0, y: 0 };
 
-const FaceView = React.forwardRef<SVGSVGElement, FaceViewProps>(({ expression, gaze = AHEAD, className }, ref) => {
+const FaceView = React.forwardRef<SVGSVGElement, FaceViewProps>(({ expression, gaze = AHEAD, motionRefs, className }, ref) => {
   const happy = expression === "happy";
   const curious = expression === "curious";
 
@@ -35,9 +38,12 @@ const FaceView = React.forwardRef<SVGSVGElement, FaceViewProps>(({ expression, g
       data-expression={expression}
       className={cn("aspect-square overflow-visible", className)}
     >
+      {/* Outer group bounces while happy; the head inside it acts out fits (see usePleasureMotion). */}
+      <g ref={motionRefs?.bob} data-part="bob">
+      <g ref={motionRefs?.body} data-part="body">
       <circle cx="100" cy="100" r="90" strokeWidth="4" className={cn(GROW, "fill-card stroke-strong")} />
 
-      <g className="fill-none stroke-strong" strokeWidth="5" strokeLinecap="round">
+      <g ref={motionRefs?.features} className="fill-none stroke-strong" strokeWidth="5" strokeLinecap="round" data-part="features">
         <g className={cn(GROW, "delay-400")} data-part="eyes">
           {/* CSS px on SVG children are viewBox units. */}
           <g className={FOLLOW} style={{ transform: `translate(${gaze.x}px, ${gaze.y}px)` }} data-part="gaze">
@@ -68,6 +74,8 @@ const FaceView = React.forwardRef<SVGSVGElement, FaceViewProps>(({ expression, g
           <ellipse cx="52" cy="116" rx="14" ry="8" />
           <ellipse cx="148" cy="116" rx="14" ry="8" />
         </g>
+      </g>
+      </g>
       </g>
     </svg>
   );

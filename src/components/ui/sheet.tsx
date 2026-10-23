@@ -27,12 +27,15 @@ function SheetPortal({
   return <SheetPrimitive.Portal data-slot="sheet-portal" {...props} />
 }
 
-function SheetOverlay({
-  className,
-  ...props
-}: React.ComponentProps<typeof SheetPrimitive.Overlay>) {
+// forwardRef: on React 18 `ref` is not a prop, and Radix's Portal/Presence
+// hands a ref to this direct child (React-19-style shadcn code drops it).
+const SheetOverlay = React.forwardRef<
+  React.ComponentRef<typeof SheetPrimitive.Overlay>,
+  React.ComponentPropsWithoutRef<typeof SheetPrimitive.Overlay>
+>(function SheetOverlay({ className, ...props }, ref) {
   return (
     <SheetPrimitive.Overlay
+      ref={ref}
       data-slot="sheet-overlay"
       className={cn(
         "fixed inset-0 z-50 bg-scrim duration-300 supports-backdrop-filter:backdrop-blur-xs data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0",
@@ -41,7 +44,7 @@ function SheetOverlay({
       {...props}
     />
   )
-}
+})
 
 function SheetContent({
   className,

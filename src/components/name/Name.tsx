@@ -68,12 +68,41 @@ export function Name() {
     }
   }, [isHovered, setOrbOrigin, setOCharPosition]);
 
+  // Touch has no hover: the first tap shows the info box, the second navigates.
+  // Mouse and keyboard navigate straight away (the mouse already hovered).
+  const isTap = useRef(false);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const recordPointer = (event: React.PointerEvent) => {
+    isTap.current = event.pointerType !== "mouse";
+  };
+  const handleClick = (event: React.MouseEvent) => {
+    if (!isTap.current) return;
+    isTap.current = false;
+    if (isHovered) {
+      setIsHovered(false);
+      return;
+    }
+    event.preventDefault();
+    setIsHovered(true);
+  };
+
+  // A tap anywhere else dismisses the box opened by a tap.
+  useEffect(() => {
+    if (!isHovered) return;
+    const dismiss = (event: PointerEvent) => {
+      if (event.pointerType !== "mouse" && !rootRef.current?.contains(event.target as Node)) setIsHovered(false);
+    };
+    document.addEventListener("pointerdown", dismiss);
+    return () => document.removeEventListener("pointerdown", dismiss);
+  }, [isHovered]);
+
   return (
-    <div className="relative">
+    <div className="relative" ref={rootRef}>
       <div
         className="relative w-40 h-20"
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
+        // Pointer (not mouse) events, so a tap's emulated mouseenter doesn't count as hover.
+        onPointerEnter={(event) => event.pointerType === "mouse" && setIsHovered(true)}
+        onPointerLeave={(event) => event.pointerType === "mouse" && setIsHovered(false)}
         ref={containerRef}
       >
         <div className="absolute inset-0" />
@@ -81,6 +110,8 @@ export function Name() {
           letters={NAME_LETTERS}
           oIndex={O_INDEX}
           oCharRef={oCharRef}
+          onPointerDown={recordPointer}
+          onClick={handleClick}
         />
         <OrbTrace isHovered={isHovered} orbStart={orbStart} />
       </div>
