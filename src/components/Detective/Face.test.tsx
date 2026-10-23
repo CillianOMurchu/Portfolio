@@ -57,6 +57,20 @@ describe("FaceView", () => {
     expect(isShown(markup, 'data-part="cheeks"')).toBe(true);
   });
 
+  it("sad: open eyes and a frown, no blush", () => {
+    const markup = render("sad");
+    expect(isShown(markup, 'data-state="open"')).toBe(true);
+    expect(isShown(markup, 'data-state="frown"')).toBe(true);
+    expect(isShown(markup, 'data-state="smile"')).toBe(false);
+    expect(isShown(markup, 'data-state="line"')).toBe(false);
+    expect(isShown(markup, 'data-part="cheeks"')).toBe(false);
+  });
+
+  it("blushes instantly but fades the blush out", () => {
+    expect(classesOf(render("happy"), 'data-part="cheeks"')).toContain("transition-none");
+    expect(classesOf(render("neutral"), 'data-part="cheeks"')).toContain("transition-opacity");
+  });
+
   it("grows the features in after the circle, in order", () => {
     const markup = render("neutral");
     expect(classesOf(markup, 'data-part="eyes"')).toContain("delay-400");
