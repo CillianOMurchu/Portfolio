@@ -47,7 +47,7 @@ export default function PuppeteerDemo() {
             <div className="w-2.5 h-2.5 rounded-full" style={{ background: WARN_COLOR }} />
             <div className="w-2.5 h-2.5 rounded-full" style={{ background: PASS_COLOR }} />
           </div>
-          <span className="text-muted-foreground/60">scraper.js</span>
+          <span className="text-muted">scraper.js</span>
           <span className="ml-auto" style={{ color: running ? PUPPETEER_ACCENT : done ? PASS_COLOR : MUTED_COLOR }}>
             {running ? "▶ running" : done ? "✓ done (4.2s)" : "idle"}
           </span>
@@ -59,7 +59,7 @@ export default function PuppeteerDemo() {
             const isCurrent = lines[lines.length - 1] === i && running;
             return (
               <div key={i} className="flex gap-2 transition-all duration-300" style={{ opacity: active ? 1 : 0.25 }}>
-                <span className="text-muted-foreground/60 select-none shrink-0">{String(i + 1).padStart(2, "0")}</span>
+                <span className="text-muted select-none shrink-0">{String(i + 1).padStart(2, "0")}</span>
                 <div className="flex-1">
                   <span style={{ color: isCurrent ? PUPPETEER_ACCENT : active ? SECONDARY_TEXT : DARK_MUTED }}>
                     {step.code}
@@ -79,7 +79,7 @@ export default function PuppeteerDemo() {
 
       {done && (
         <div className="rounded-lg overflow-hidden" style={{ border: "1px solid rgba(0,216,162,0.25)" }}>
-          <div className="px-3 py-1.5 text-sm text-muted-foreground" style={{ background: "rgba(0,216,162,0.05)", borderBottom: "1px solid rgba(0,216,162,0.1)" }}>
+          <div className="px-3 py-1.5 text-sm text-muted" style={{ background: "rgba(0,216,162,0.05)", borderBottom: "1px solid rgba(0,216,162,0.1)" }}>
             sphere.png — 1280×720
           </div>
           <div className="p-4 flex items-center justify-center" style={{ background: "#0a0e1a", minHeight: 80 }}>
@@ -87,7 +87,7 @@ export default function PuppeteerDemo() {
               <div className="w-16 h-16 rounded-full mx-auto border-2 flex items-center justify-center" style={{ borderColor: PASS_COLOR, background: tint(PASS_COLOR, 5) }}>
                 <span style={{ color: PASS_COLOR }}>🌐</span>
               </div>
-              <p className="text-sm text-muted-foreground/60">Portfolio screenshot captured</p>
+              <p className="text-sm text-muted">Portfolio screenshot captured</p>
             </div>
           </div>
         </div>

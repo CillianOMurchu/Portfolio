@@ -87,7 +87,7 @@ export default function CypressDemo() {
           <div className="w-2.5 h-2.5 rounded-full bg-red-500/60" />
           <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/60" />
           <div className="w-2.5 h-2.5 rounded-full bg-green-500/60" />
-          <span className="ml-2 text-sm text-muted-foreground">localhost:5173</span>
+          <span className="ml-2 text-sm text-muted">localhost:5173</span>
         </div>
         <div className="px-4 py-6 text-center min-h-[80px] flex items-center justify-center">
           <p className="text-sm" style={{ color: running ? PASS_COLOR : SECONDARY_TEXT }}>{browserState}</p>
@@ -96,7 +96,7 @@ export default function CypressDemo() {
 
       <div className="rounded-lg overflow-hidden font-mono text-sm" style={{ background: CODE_BG, border: "1px solid rgba(23,32,44,0.8)" }}>
         <div className="px-3 py-2 flex items-center justify-between" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-          <span className="text-muted-foreground">Tests: portfolio.cy.ts</span>
+          <span className="text-muted">Tests: portfolio.cy.ts</span>
           <span style={{ color: PASS_COLOR }}>{passed}/{STEPS.length}</span>
         </div>
         <div className="max-h-44 overflow-y-auto">
@@ -110,7 +110,7 @@ export default function CypressDemo() {
               <span style={{ color: s.status === "running" || s.status === "passed" ? SECONDARY_ACCENT : DARK_MUTED }}>{s.cmd}</span>
               {s.target}
             </div>
-            {s.status === "passed" && <span className="ml-auto shrink-0 text-muted-foreground/60">{s.duration}</span>}
+            {s.status === "passed" && <span className="ml-auto shrink-0 text-muted">{s.duration}</span>}
           </div>
         ))}
         </div>

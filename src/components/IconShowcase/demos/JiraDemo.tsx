@@ -82,7 +82,7 @@ export default function JiraDemo() {
 
   return (
     <DemoShell className="gap-3">
-      <p className="text-sm text-muted-foreground text-center">
+      <p className="text-sm text-muted text-center">
         Click arrows to move tickets across the board
       </p>
       <div className="grid grid-cols-3 gap-2">
@@ -100,7 +100,7 @@ export default function JiraDemo() {
                 >
                   {col.label}
                 </span>
-                <span className="text-sm text-muted-foreground/60 ml-auto">
+                <span className="text-sm text-muted ml-auto">
                   {colTickets.length}
                 </span>
               </div>
@@ -117,13 +117,13 @@ export default function JiraDemo() {
                   >
                     <div className="flex items-center gap-1">
                       <span className="text-sm">{TYPE_ICON[t.type]}</span>
-                      <span className="text-sm text-muted-foreground">{t.id}</span>
+                      <span className="text-sm text-muted">{t.id}</span>
                       <span
                         className="ml-auto w-1.5 h-1.5 rounded-full"
                         style={{ background: PRIORITY_COLOR[t.priority] }}
                       />
                     </div>
-                    <p className="text-sm text-secondary-foreground leading-tight line-clamp-2">
+                    <p className="text-sm text-body leading-tight line-clamp-2">
                       {t.title}
                     </p>
                     <div className="flex gap-1 mt-0.5">

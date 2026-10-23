@@ -35,7 +35,7 @@ const TypeScriptDemo: React.FC = () => {
 
   return (
     <DemoShell>
-      <p className="text-sm text-muted-foreground text-center">
+      <p className="text-sm text-muted text-center">
         Fill in the correct TypeScript types for Cillian's profile object
       </p>
 
@@ -44,7 +44,7 @@ const TypeScriptDemo: React.FC = () => {
         {FIELDS.map((field) => (
           <div key={field.key} className="flex items-center gap-2 ml-4 mb-2 min-w-0 overflow-hidden">
             <span style={{ color: "#9cdcfe" }}>{field.key}</span>
-            <span className="text-muted-foreground">:</span>
+            <span className="text-muted">:</span>
             <select
               disabled={submitted}
               value={answers[field.key] ?? ""}
@@ -61,8 +61,8 @@ const TypeScriptDemo: React.FC = () => {
                 <option key={o} value={o}>{o}</option>
               ))}
             </select>
-            <span className="text-muted-foreground">{"// "}</span>
-            <span className="text-muted-foreground/60 text-sm truncate min-w-0">{field.value}</span>
+            <span className="text-muted">{"// "}</span>
+            <span className="text-muted text-sm truncate min-w-0">{field.value}</span>
             {submitted && (
               <span style={{ color: answers[field.key] === field.correct ? PASS_COLOR : FAIL_COLOR }}>
                 {answers[field.key] === field.correct ? "✓" : `✗ (${field.correct})`}
@@ -95,7 +95,7 @@ const TypeScriptDemo: React.FC = () => {
           >
             {score}/{FIELDS.length} correct
           </p>
-          <p className="text-sm text-muted-foreground mt-1">
+          <p className="text-sm text-muted mt-1">
             {score === FIELDS.length
               ? "Zero type errors. TypeScript approves."
               : score >= 2

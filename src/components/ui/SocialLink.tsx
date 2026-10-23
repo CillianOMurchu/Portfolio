@@ -1,5 +1,6 @@
+import { ArrowUpRight } from "lucide-react";
 import React from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "./Button";
 
 interface SocialLinkProps {
   href: string;
@@ -7,15 +8,18 @@ interface SocialLinkProps {
   children: React.ReactNode;
 }
 
-export const SocialLink: React.FC<SocialLinkProps> = ({
-  href,
-  icon: Icon,
-  children,
-}) => (
-  <Button asChild variant="ghost" className="text-primary hover:text-accent-foreground">
-    <a href={href} target="_blank" rel="noopener noreferrer">
-      <Icon className="size-5" />
-      {children}
-    </a>
+// External link: brand mark, label, then the ↗ arrow, which turns red on hover.
+export const SocialLink: React.FC<SocialLinkProps> = ({ href, icon: Icon, children }) => (
+  <Button
+    href={href}
+    target="_blank"
+    rel="noopener noreferrer"
+    variant="ghost"
+    size="sm"
+    leftIcon={<Icon />}
+    rightIcon={<ArrowUpRight strokeWidth={1.5} strokeLinecap="square" />}
+    className="[&>span:last-child]:transition-colors hover:[&>span:last-child]:text-accent"
+  >
+    {children}
   </Button>
 );

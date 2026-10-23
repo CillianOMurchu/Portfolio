@@ -73,8 +73,8 @@ const Character: React.FC = () => {
           onLoad={handleLoad}
           onTransitionEnd={() => setPhase("done")}
           className={cn(
-            "block h-[calc(100dvh-8rem)] w-auto drop-shadow-rim",
-            "transition-transform duration-800 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:transition-opacity motion-reduce:duration-300",
+            "block h-[calc(100dvh-8rem)] w-auto grayscale",
+            "transition-transform duration-(--dur-slower) ease-gallery motion-reduce:transition-opacity motion-reduce:duration-300",
             phase === "hidden"
               ? "-translate-x-[calc(100%+3rem)] motion-reduce:translate-x-0 motion-reduce:opacity-0"
               : "translate-x-0 opacity-20",

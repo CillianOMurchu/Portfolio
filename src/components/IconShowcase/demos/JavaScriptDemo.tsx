@@ -45,7 +45,7 @@ export default function JavaScriptDemo() {
   if (done) return (
     <div className="flex flex-col items-center gap-4 py-6">
       <p className="text-4xl font-bold" style={{ color: score >= 4 ? JS_ACCENT : WARN_COLOR }}>{score}/{QUESTIONS.length}</p>
-      <p className="text-muted-foreground text-sm">
+      <p className="text-muted text-sm">
         {score === 5 ? "You've clearly read the spec. Or suffered enough." : score >= 3 ? "Solid. JS quirks are a survival skill." : "That's fine. Linters exist for a reason."}
       </p>
       <button onClick={reset} className="text-sm px-4 py-2 rounded-sm" style={{ background: "rgba(247,223,30,0.1)", border: "1px solid rgba(247,223,30,0.3)", color: JS_ACCENT }}>
@@ -55,14 +55,14 @@ export default function JavaScriptDemo() {
   );
 
   return (
-    <div className="flex flex-col gap-4 w-full max-w-md mx-auto">
-      <div className="flex justify-between text-sm text-muted-foreground">
+    <div className="flex flex-col gap-4 w-full max-w-[28rem] mx-auto">
+      <div className="flex justify-between text-sm text-muted">
         <span>Question {idx + 1} / {QUESTIONS.length}</span>
         <span style={{ color: JS_ACCENT }}>Score: {score}</span>
       </div>
 
       <CodePanel accent={JS_ACCENT} className="px-4 py-3 font-mono text-center">
-        <span className="text-muted-foreground">{">"} </span>
+        <span className="text-muted">{">"} </span>
         <span style={{ color: JS_ACCENT }}>{q.code}</span>
       </CodePanel>
 
@@ -87,7 +87,7 @@ export default function JavaScriptDemo() {
       </div>
 
       {selected && (
-        <div className="rounded-lg px-4 py-3 text-sm text-muted-foreground leading-relaxed" style={{ background: "rgba(247,223,30,0.05)", border: "1px solid rgba(247,223,30,0.15)" }}>
+        <div className="rounded-lg px-4 py-3 text-sm text-muted leading-relaxed" style={{ background: "rgba(247,223,30,0.05)", border: "1px solid rgba(247,223,30,0.15)" }}>
           {correct ? "✓ Correct. " : "✗ Wrong. "}{q.explanation}
         </div>
       )}

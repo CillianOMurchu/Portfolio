@@ -47,7 +47,7 @@ export default function ReactDemo() {
 
   return (
     <DemoShell className="gap-5">
-      <p className="text-sm text-muted-foreground text-center">
+      <p className="text-sm text-muted text-center">
         Watch which components re-render when state changes
       </p>
 
@@ -89,7 +89,7 @@ export default function ReactDemo() {
         </button>
       </div>
 
-      <p className="text-sm text-center text-muted-foreground/60">
+      <p className="text-sm text-center text-muted">
         Header is memoized — it never re-renders even when parent state changes
       </p>
     </DemoShell>

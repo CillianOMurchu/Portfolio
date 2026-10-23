@@ -4,7 +4,7 @@
 
 ### 1. HeroTitle items are decorative only
 **File:** `components/HeroTitle/HeroTitle.tsx`
-**Symptom:** The SASS / Hospitality / iGaming items glow on hover but clicking does nothing.
+**Symptom:** The SASS / Hospitality / iGaming items darken on hover but clicking does nothing.
 **Root cause:** By design for now. The sector pages they once pointed at were removed (Oct 2026). Don't add an `onClick` without a destination.
 
 ---

@@ -78,50 +78,59 @@ export default MyComponent;
 
 ### Order of preference
 
-1. **shadcn components** (`components/ui/*.tsx`) — Button, Card, Badge, Sheet, …
-2. **Tailwind utilities with semantic tokens** — `bg-card`, `text-muted-foreground`, `border-border`, `text-primary`; plus layout/spacing/responsive utilities
+1. **UI primitives** (`components/ui/`) — `Button`, `IconButton`, `Input`, `Switch`, `Checkbox`, `Badge`, `Tag`, `Card`, `Avatar`, `Tabs`; shadcn `sheet` / `dropdown-menu` for overlays
+2. **Tailwind utilities with semantic tokens** — `bg-page`, `bg-card`, `text-strong`, `text-muted`, `border-hairline`; plus layout/spacing/responsive utilities
 3. **Inline `style` prop** — only for dynamic values that can't be expressed in CSS (animation state, calculated positions)
+
+### Look and feel ("white marble, gallery daylight")
+
+- One accent only: red (`bg-accent`, `text-accent-text` for text). Use sparingly — a dot, a hover, an active thumb. Never large red areas except the accent button.
+- Square corners; `rounded-xs` (2px) on buttons; `rounded-pill` only for tags and switches. 1px hairline rules (`border`, `rule`) carry structure.
+- No glows, gradients or hard shadows. `shadow-paper` / `shadow-lift` / `shadow-float` only for raised or floating things.
+- Motion: `ease-gallery` for movement and reveals, `ease-out` for colour; durations `duration-(--dur-fast|base|slow|slower)`. In Framer Motion use `EASE_GALLERY` / `DUR_*` from `utils/animations.ts`. No springs or overshoot.
+- Hover = inversion (outline → ink, ink → red), underline drawing in, or a 4px lift. Focus = `focus-visible:shadow-focus`. Disabled = 40% opacity.
+- Icons: lucide with `strokeWidth={1.5}` and `strokeLinecap="square"`. No emoji.
 
 ### Type scale
 
-Font is Geist (variable, bundled via `@fontsource-variable/geist`). Use only these sizes:
+Bodoni Moda (`font-display`, weight 400) for headings — never bold; put one word per headline in `<em>`. Archivo (`font-sans`) for UI and body. IBM Plex Mono via the `label` class for small uppercase labels, indices, dates and metadata. Loaded from Google Fonts in `index.html`.
 
 | Class | Size | Use |
 |---|---|---|
-| `text-xs` | 12px | labels, captions, badges, demo metadata — the minimum, nothing smaller |
-| `text-sm` | 14px | nav, buttons, secondary text |
-| `text-base` | 16px | body (default) |
-| `text-lg` | 18px | subtitles |
-| `text-2xl` | 24px | card / section titles |
-| `text-4xl` | 36px | page headings |
-| `text-[length:clamp(4rem,12vw,10rem)]` | 64–160px | hero display (`HeroTitle`) only |
+| `text-2xs` / `label` | 11px | catalogue labels, badges, counts |
+| `text-xs` | 12px | hints, captions |
+| `text-sm` | 14px | nav, tags, secondary text |
+| `text-md` | 16px | body (default) — there is no `text-base` |
+| `text-lg` | 19px | subtitles, `h4` |
+| `text-xl` | 24px | large input text |
+| `text-2xl` | 28–36px | `h3`, card titles |
+| `text-3xl` | 36–52px | panel headings |
+| `text-4xl` | 48–80px | `h2`, section headings |
+| `text-5xl` | 60–120px | `h1` |
+| `text-6xl` | 72–176px | hero display (`HeroTitle`) only |
 
 Exception: IconShowcase demos may use other sizes when the size itself is what's being demonstrated (Figma, Sass, Stencil).
 
+### Colour tokens
+
+| Utility | Light | Use |
+|---|---|---|
+| `bg-page` / `bg-card` / `bg-sunken` / `bg-inset` / `bg-overlay` | marble 50 / white / 100 / 200 / white | surfaces |
+| `bg-inverse` + `text-on-inverse` | ink + marble | primary button, active tag, switch track |
+| `text-strong` / `text-body` / `text-muted` | ink / stone 800 / stone 600 | text (all ≥ 4.5:1 on page) |
+| `text-faint` | stone 500 | placeholders and decorative text only (< 4.5:1) |
+| `bg-accent` / `text-accent-text` / `bg-accent-soft` | red 500 / red 700 / red 100 | the one accent — `bg-accent` is fill-only, use `text-accent-text` for text |
+| `border-hairline` / `border-line` / `border-line-strong` | marble 300 / stone 400 / ink | rules, inputs, strong outlines |
+| `text-success` / `text-danger` / `text-warning` / `text-info` (+ `-soft` fills) | | status only |
+
+Dark mode redefines the same tokens under `[data-theme="dark"]`, so never branch on the theme in components.
+
 ### Never
 
-- Use a font size outside the type scale, or set `font-family` (Geist for everything, `font-mono` for code)
+- Use a font size outside the type scale, or set `font-family` outside `font-display` / `font-sans` / `font-mono`
 - Create new CSS files (use Tailwind; add tokens to `src/index.css`)
-- Use magic colour values — use semantic token utilities (`bg-primary`, `text-foreground`, …)
-- Add a `tailwind.config.js` — Tailwind v4 is configured in CSS (`@theme inline` in `src/index.css`)
-
-### Watch out: `accent` means shadcn's accent
-
-`text-accent` / `bg-accent` / `border-accent` are shadcn's hover tint (emerald at 15% opacity), not the brand colour. For emerald text, borders or fills use `text-primary`, `border-primary/30`, `bg-primary`.
-
-### Neon glow pattern
-
-Use the glow tokens, not hardcoded values:
-
-```tsx
-// Good
-<div className="shadow-(--glow-primary)" />
-<span className="hover:text-shadow-(--glow-primary)" />
-style={{ boxShadow: showSphere ? "var(--glow-primary)" : "var(--glow-secondary)" }}  // dynamic
-
-// Avoid
-style={{ boxShadow: "0 0 5px rgba(16,185,129,0.8), ..." }}
-```
+- Use raw colour values outside `src/index.css` — `npm run audit:tokens` fails on them (IconShowcase demo brand colours are exempt)
+- Add a `tailwind.config.js` — Tailwind v4 is configured in CSS (`@theme` in `src/index.css`)
 
 ---
 
@@ -154,7 +163,7 @@ import { scrollVariants, scrollViewport, scrollTiming } from "../../utils/animat
 | What | Convention | Example |
 |---|---|---|
 | React components | PascalCase | `TimelineItem.tsx` |
-| Hooks | camelCase, `use` prefix | `useNeonFlicker.ts` |
+| Hooks | camelCase, `use` prefix | `useSphereCanvas.ts` |
 | Utils / pure functions | camelCase | `fibonacciSphere.ts` |
 | Types file in feature folder | `types.ts` | `components/sphere/types.ts` |
 | CSS colocated with component | Same name | `NameAnimations.css` |
@@ -197,4 +206,4 @@ useSphereCanvas.ts   — canvas setup + mouse + animation loop
 
 **Hooks that belong to a feature** live in the feature folder, not `src/hooks/`.
 
-**General-purpose hooks** (scroll direction, neon flicker, page navigation) live in `src/hooks/`.
+**General-purpose hooks** (scroll direction, page navigation) live in `src/hooks/`.

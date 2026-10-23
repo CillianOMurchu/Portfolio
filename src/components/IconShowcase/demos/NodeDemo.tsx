@@ -78,7 +78,7 @@ const NodeDemo: React.FC = () => {
         ))}
       </CodePanel>
 
-      <p className="text-sm text-muted-foreground text-center">Click a method to run it</p>
+      <p className="text-sm text-muted text-center">Click a method to run it</p>
 
       <div className="grid grid-cols-2 gap-2">
         {Object.keys(COMMANDS).map((cmd) => (

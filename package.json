@@ -10,10 +10,10 @@
     "preview": "vite preview",
     "test": "vitest",
     "test:run": "vitest run",
-    "optimize:character": "node scripts/optimize-character.mjs"
+    "optimize:character": "node scripts/optimize-character.mjs",
+    "audit:tokens": "node scripts/audit-design-tokens.mjs"
   },
   "dependencies": {
-    "@fontsource-variable/geist": "^5.3.0",
     "class-variance-authority": "^0.7.1",
     "cn": "^0.4.0",
     "framer-motion": "^12.23.24",

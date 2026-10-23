@@ -4,21 +4,26 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://api.open-meteo.com" crossorigin />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Archivo:wght@400..700&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..800;1,6..96,400..800&family=IBM+Plex+Mono:wght@400;500&display=swap"
+    />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cillian Ó Murchú | Creative Engineer</title>
-    <meta name="theme-color" content="#0a0e1a" />
-    <!-- Applies the saved colour theme before first paint (see components/ThemeSwitcher). -->
+    <!-- Page colour per mode: --surface-page in src/index.css. -->
+    <meta name="theme-color" content="#FBFAF7" />
+    <!-- Applies the saved light/dark mode before first paint (see components/ThemeSwitcher). -->
     <script>
       (function () {
         try {
-          var t = localStorage.getItem("portfolio-theme");
-          var bg = { ultraviolet: "#100b19", amber: "#17110c", magenta: "#160b19" }[t];
-          if (bg) {
-            document.documentElement.dataset.theme = t;
-            document.querySelector('meta[name="theme-color"]').setAttribute("content", bg);
+          if (localStorage.getItem("portfolio-theme") === "dark") {
+            document.documentElement.dataset.theme = "dark";
+            document.querySelector('meta[name="theme-color"]').setAttribute("content", "#121110");
           }
         } catch (e) {
-          console.error("Could not apply saved colour theme:", e);
+          // Storage blocked: stay in light mode.
         }
       })();
     </script>

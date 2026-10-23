@@ -51,7 +51,7 @@ export default function ExpressDemo() {
 
   return (
     <DemoShell>
-      <p className="text-sm text-center text-muted-foreground">Toggle middleware on/off then send a request</p>
+      <p className="text-sm text-center text-muted">Toggle middleware on/off then send a request</p>
 
       <div className="flex flex-col gap-1">
         {middleware.map((m) => {

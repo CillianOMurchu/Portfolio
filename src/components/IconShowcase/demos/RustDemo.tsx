@@ -45,7 +45,7 @@ export default function RustDemo() {
     <DemoShell className="gap-5">
       <div className="flex flex-col gap-2">
         <div className="flex items-center justify-between">
-          <p className="text-sm text-muted-foreground">fibonacci({n})</p>
+          <p className="text-sm text-muted">fibonacci({n})</p>
           <span className="text-sm font-mono" style={{ color: RUST_ACCENT }}>
             {n >= 40 ? "🔥 borrow checker sweating" : n >= 35 ? "⚡ warming up" : "✓ trivial"}
           </span>
@@ -87,7 +87,7 @@ export default function RustDemo() {
       {phase === "done" && speedup && (
         <div className="rounded-lg px-4 py-3 text-center" style={{ background: "rgba(206,74,0,0.08)", border: "1px solid rgba(206,74,0,0.25)" }}>
           <p className="text-2xl font-bold" style={{ color: RUST_ACCENT }}>{speedup}×</p>
-          <p className="text-sm text-muted-foreground mt-0.5">faster in Rust — same algorithm, zero GC pauses</p>
+          <p className="text-sm text-muted mt-0.5">faster in Rust — same algorithm, zero GC pauses</p>
         </div>
       )}
 

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import HeroTitle from "../components/HeroTitle/HeroTitle";
 import IconShowcase from "../components/IconShowcase/IconShowcase";
+import RainEffect from "../components/WeatherEffects/RainEffect";
 import WeatherEffect from "../components/WeatherEffects/WeatherEffect";
 import { skyForWeatherCode, type WeatherScene } from "../components/WeatherEffects/weatherCodes";
 import ItemSphere from "../components/sphere/ItemSphere";
@@ -28,12 +29,13 @@ const HomeScreen: React.FC = () => {
   }, []);
 
   return (
-    <div className="relative isolate h-full w-full bg-linear-135 from-background to-card">
+    <div className="relative isolate h-full w-full bg-page">
       <div className="absolute top-4 right-4 z-20 flex items-start gap-3 md:top-6 md:right-6">
         <ToggleSphere />
       </div>
 
-      <WeatherEffect weather={scene.id} sky={scene.sky} />
+      {/* Live weather: rain uses the plain rain layer at the reported intensity; sun and storms use the full sky. */}
+      {scene.id === "rainy" ? <RainEffect density={scene.sky?.rain} /> : <WeatherEffect weather={scene.id} sky={scene.sky} />}
 
       <div className={`fixed inset-0 z-1 transition-opacity duration-400 ${showSphere ? "opacity-100" : "pointer-events-none opacity-0"}`}>
         <ItemSphere visible={showSphere} />

@@ -43,7 +43,7 @@ export default function TailwindDemo() {
 
   return (
     <DemoShell className="gap-5">
-      <p className="text-sm text-muted-foreground text-center">
+      <p className="text-sm text-muted text-center">
         Toggle utilities and watch the card update in real time
       </p>
 
@@ -59,8 +59,8 @@ export default function TailwindDemo() {
             width: 200,
           }}
         >
-          <p className="text-sm font-semibold text-foreground">Cillian.tsx</p>
-          <p className="text-sm text-muted-foreground mt-1">Senior Frontend Dev</p>
+          <p className="text-sm font-semibold text-strong">Cillian.tsx</p>
+          <p className="text-sm text-muted mt-1">Senior Frontend Dev</p>
           <span
             className="inline-block mt-2 text-sm px-2 py-0.5 rounded-full"
             style={{ background: "rgba(56,189,248,0.2)", color: TAILWIND_ACCENT }}
@@ -91,9 +91,9 @@ export default function TailwindDemo() {
       </div>
 
       <CodePanel accent={TAILWIND_ACCENT} className="px-3 py-2 font-mono text-sm break-all" >
-        <span className="text-muted-foreground">className=</span>
+        <span className="text-muted">className=</span>
         <span className="text-yellow-400">"</span>
-        <span style={{ color: TAILWIND_ACCENT }}>{classStr || <span className="text-muted-foreground/60">no classes</span>}</span>
+        <span style={{ color: TAILWIND_ACCENT }}>{classStr || <span className="text-muted">no classes</span>}</span>
         <span className="text-yellow-400">"</span>
       </CodePanel>
     </DemoShell>

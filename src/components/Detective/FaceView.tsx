@@ -30,13 +30,13 @@ const FaceView = React.forwardRef<SVGSVGElement, FaceViewProps>(({ expression, c
       data-expression={expression}
       className={cn("aspect-square overflow-visible", className)}
     >
-      <circle cx="100" cy="100" r="90" strokeWidth="4" className={cn(GROW, "fill-card stroke-primary")} />
+      <circle cx="100" cy="100" r="90" strokeWidth="4" className={cn(GROW, "fill-card stroke-strong")} />
 
-      <g className="fill-none stroke-foreground" strokeWidth="5" strokeLinecap="round">
+      <g className="fill-none stroke-strong" strokeWidth="5" strokeLinecap="round">
         <g className={cn(GROW, "delay-400")} data-part="eyes">
           <g className={cn(FADE, shown(!happy))} data-state="open">
-            <circle cx="70" cy="88" r="7" className="fill-foreground stroke-none" />
-            <circle cx="130" cy="88" r="7" className="fill-foreground stroke-none" />
+            <circle cx="70" cy="88" r="7" className="fill-strong stroke-none" />
+            <circle cx="130" cy="88" r="7" className="fill-strong stroke-none" />
           </g>
           <path d="M60 90 Q70 79 80 90 M120 90 Q130 79 140 90" className={cn(FADE, shown(happy))} data-state="closed" />
         </g>
@@ -55,7 +55,7 @@ const FaceView = React.forwardRef<SVGSVGElement, FaceViewProps>(({ expression, c
           <path d="M74 128 Q100 156 126 128" className={cn(FADE, shown(happy))} data-state="smile" />
         </g>
 
-        <g className={cn(FADE, shown(happy), "fill-destructive/55 stroke-none")} data-part="cheeks">
+        <g className={cn(FADE, shown(happy), "fill-accent/40 stroke-none")} data-part="cheeks">
           <ellipse cx="52" cy="116" rx="14" ry="8" />
           <ellipse cx="148" cy="116" rx="14" ry="8" />
         </g>

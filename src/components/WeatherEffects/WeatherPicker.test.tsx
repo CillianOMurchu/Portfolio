@@ -64,8 +64,8 @@ describe("<WeatherPicker />", () => {
     expect(html).toContain('aria-haspopup="menu"');
   });
 
-  it("uses the outline style when off and the filled style when on", () => {
-    expect(renderToStaticMarkup(<WeatherPicker value="off" onChange={() => {}} />)).toContain('data-variant="outline"');
-    expect(renderToStaticMarkup(<WeatherPicker value="sunny" onChange={() => {}} />)).toContain('data-variant="default"');
+  it("uses the hairline style when off and the solid style when on", () => {
+    expect(renderToStaticMarkup(<WeatherPicker value="off" onChange={() => {}} />)).toContain('data-variant="default"');
+    expect(renderToStaticMarkup(<WeatherPicker value="sunny" onChange={() => {}} />)).toContain('data-variant="solid"');
   });
 });

@@ -1,61 +1,41 @@
 import React from "react";
 import type { IconDemoMeta } from "../../../data/icon-demos";
 import DemoShell from "./components/DemoShell";
+import { GHOST_BG, SUBTLE_BORDER } from "./constants";
 
 interface GenericDemoProps {
   name: string;
   meta: IconDemoMeta;
 }
 
-const GenericDemo: React.FC<GenericDemoProps> = ({ name, meta }) => {
-  return (
-    <DemoShell className="gap-6">
-      <div
-        className="rounded-xl p-6 border"
-        style={{
-          background: "rgba(255,255,255,0.04)",
-          borderColor: `${meta.accentColor}33`,
-        }}
-      >
-        <p className="text-sm uppercase tracking-widest mb-2" style={{ color: meta.accentColor }}>
-          Cillian's take
-        </p>
-        <p className="text-gray-200 text-lg leading-relaxed italic">
-          "{meta.personalNote}"
-        </p>
+const PANEL_STYLE: React.CSSProperties = { background: GHOST_BG, borderColor: SUBTLE_BORDER };
+
+const proficiency = (yearsUsed: number) => (yearsUsed >= 5 ? "★★★★★" : yearsUsed >= 3 ? "★★★★☆" : "★★★☆☆");
+
+const GenericDemo: React.FC<GenericDemoProps> = ({ name, meta }) => (
+  <DemoShell className="gap-6">
+    <div className="border p-6" style={PANEL_STYLE}>
+      <p className="label mb-2">Cillian's take</p>
+      <p className="font-display text-xl leading-snug text-strong italic">"{meta.personalNote}"</p>
+    </div>
+
+    <div className="grid grid-cols-2 gap-4">
+      <div className="flex flex-col items-center gap-2 border p-4" style={PANEL_STYLE}>
+        <span className="font-display text-3xl text-strong">{meta.yearsUsed}</span>
+        <span className="text-center text-sm text-muted">years using {name}</span>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
-        <div
-          className="rounded-lg p-4 flex flex-col items-center gap-2 border"
-          style={{ background: "rgba(255,255,255,0.03)", borderColor: "rgba(255,255,255,0.08)" }}
-        >
-          <span className="text-3xl font-bold" style={{ color: meta.accentColor }}>
-            {meta.yearsUsed}
-          </span>
-          <span className="text-sm text-muted-foreground text-center">years using {name}</span>
-        </div>
-
-        <div
-          className="rounded-lg p-4 flex flex-col items-center gap-2 border"
-          style={{ background: "rgba(255,255,255,0.03)", borderColor: "rgba(255,255,255,0.08)" }}
-        >
-          <span className="text-3xl font-bold" style={{ color: meta.accentColor }}>
-            {meta.yearsUsed >= 5 ? "★★★★★" : meta.yearsUsed >= 3 ? "★★★★☆" : "★★★☆☆"}
-          </span>
-          <span className="text-sm text-muted-foreground text-center">proficiency</span>
-        </div>
+      <div className="flex flex-col items-center gap-2 border p-4" style={PANEL_STYLE}>
+        <span className="text-3xl text-strong">{proficiency(meta.yearsUsed)}</span>
+        <span className="text-center text-sm text-muted">proficiency</span>
       </div>
+    </div>
 
-      <div
-        className="rounded-lg p-4 border"
-        style={{ background: "rgba(255,255,255,0.03)", borderColor: "rgba(255,255,255,0.08)" }}
-      >
-        <p className="text-sm text-muted-foreground uppercase tracking-wider mb-2">used in</p>
-        <p className="text-secondary-foreground text-sm">{meta.tagline}</p>
-      </div>
-    </DemoShell>
-  );
-};
+    <div className="border p-4" style={PANEL_STYLE}>
+      <p className="label mb-2">Used in</p>
+      <p className="text-sm text-body">{meta.tagline}</p>
+    </div>
+  </DemoShell>
+);
 
 export default GenericDemo;

@@ -21,8 +21,8 @@ const MODAL_EXAMPLES = [
 ] as const;
 
 const STREAM_ROW_CLASSES = "flex w-full items-start gap-4";
-const STREAM_LABEL_CLASSES = "w-14 shrink-0 pt-1 text-right text-xs font-semibold text-secondary-foreground";
-const MODAL_BODY_CLASSES = "mb-3.5 text-base leading-relaxed text-secondary-foreground [&_strong]:font-bold [&_strong]:text-rxjs-light";
+const STREAM_LABEL_CLASSES = "w-14 shrink-0 pt-1 text-right text-xs font-semibold text-body";
+const MODAL_BODY_CLASSES = "mb-3.5 text-md leading-relaxed text-body [&_strong]:font-bold [&_strong]:text-rxjs-light";
 const MODAL_PANEL_CLASSES =
   "relative w-full max-w-120 rounded-[18px] border border-rxjs/35 px-7 pt-8 pb-7 text-center " +
   "bg-[radial-gradient(120%_120%_at_0%_0%,rgb(183_23_140/0.18)_0%,transparent_55%),linear-gradient(160deg,#16101c_0%,#0d0f1a_100%)] " +
@@ -137,7 +137,7 @@ export default function RxJSDemo() {
             );
           })}
         </AnimatePresence>
-        {events.length === 0 && <span className="absolute top-1/2 left-0 -translate-y-1/2 text-xs text-muted-foreground italic">— waiting —</span>}
+        {events.length === 0 && <span className="absolute top-1/2 left-0 -translate-y-1/2 text-xs text-muted italic">— waiting —</span>}
       </div>
     );
   };
@@ -197,7 +197,7 @@ export default function RxJSDemo() {
       <div className="flex justify-center">
         <button
           onClick={() => setIsInfoOpen(true)}
-          className="inline-flex items-center gap-2 rounded-full border border-rxjs/30 bg-rxjs/8 px-4 py-2 text-sm font-medium text-secondary-foreground transition hover:-translate-y-px hover:border-rxjs/55 hover:bg-rxjs/16"
+          className="inline-flex items-center gap-2 rounded-full border border-rxjs/30 bg-rxjs/8 px-4 py-2 text-sm font-medium text-body transition hover:-translate-y-px hover:border-rxjs/55 hover:bg-rxjs/16"
           aria-label="What is an RxJS stream?"
         >
           <span className="inline-flex size-[1.15rem] items-center justify-center rounded-full border border-rxjs-light/50 text-xs text-rxjs-light italic">ℹ</span>
@@ -224,7 +224,7 @@ export default function RxJSDemo() {
               onClick={(e) => e.stopPropagation()}
             >
               <button
-                className="absolute top-3.5 right-3.5 flex size-[1.9rem] items-center justify-center rounded-full border border-white/12 bg-white/5 text-sm text-muted-foreground transition-colors hover:bg-white/12 hover:text-foreground"
+                className="absolute top-3.5 right-3.5 flex size-[1.9rem] items-center justify-center rounded-full border border-white/12 bg-white/5 text-sm text-muted transition-colors hover:bg-white/12 hover:text-strong"
                 onClick={() => setIsInfoOpen(false)}
                 aria-label="Close"
               >
@@ -232,7 +232,7 @@ export default function RxJSDemo() {
               </button>
 
               <div className="mx-auto mb-3.5 flex size-12 items-center justify-center rounded-full border border-rxjs/40 bg-rxjs/14 text-2xl font-bold text-rxjs-light">~</div>
-              <h3 className="mb-3.5 text-2xl font-extrabold tracking-tight text-foreground">What is a stream?</h3>
+              <h3 className="mb-3.5 text-2xl font-extrabold tracking-tight text-strong">What is a stream?</h3>
 
               <p className={MODAL_BODY_CLASSES}>
                 A <strong>stream</strong> is a river of events flowing over time —
@@ -245,7 +245,7 @@ export default function RxJSDemo() {
 
               <div className="mt-5 flex flex-col gap-2 border-t border-white/8 pt-5 text-left">
                 {MODAL_EXAMPLES.map(({ op, description }) => (
-                  <div key={op} className="flex items-center gap-3 text-base text-secondary-foreground">
+                  <div key={op} className="flex items-center gap-3 text-md text-body">
                     <span className="min-w-16 shrink-0 rounded-md border border-violet-500/30 bg-violet-500/14 px-2.5 py-0.5 text-center font-mono text-sm font-bold text-violet-300">
                       {op}
                     </span>

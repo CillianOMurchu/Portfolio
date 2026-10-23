@@ -122,7 +122,7 @@ export default function GitLabDemo() {
           <span className="text-xs font-semibold whitespace-nowrap" style={{ color: STATUS_COLOR[overall] }}>
             ● Pipeline #{pipelineId}
           </span>
-          <span className="text-xs whitespace-nowrap text-foreground/50">main → production</span>
+          <span className="text-xs whitespace-nowrap text-strong/50">main → production</span>
         </div>
         <div className="flex w-full shrink-0 justify-between gap-1.5 sm:w-auto sm:justify-start sm:gap-2">
           <DemoButton color={PASS_COLOR} disabled={running} onClick={() => runPipeline(false)} className="px-3 py-1 text-sm">

@@ -3,12 +3,13 @@ import { m, AnimatePresence } from "framer-motion";
 import { useOrbOrigin } from "../../context/OrbOriginContext";
 import InfoBox from "../ui/InfoBox";
 import { iconDescriptions } from "../../data/icon-descriptions";
+import { DUR_SLOW, EASE_GALLERY } from "../../utils/animations";
 
 const ORB_SIZE = 8;
 const LINE_WIDTH = 56;
 const SETTLE_DELAY_MS = 450;
 const TYPING_INTERVAL_MS = 22;
-const ORB_SPRING = { type: "spring" as const, stiffness: 280, damping: 22 };
+const ORB_FLIGHT = { duration: DUR_SLOW, ease: EASE_GALLERY };
 const ORB_APPEAR_DURATION = 0.12;
 const ORB_FLY_DELAY = 0.12;
 
@@ -66,8 +67,7 @@ const SphereOrb: React.FC = () => {
               width: ORB_SIZE,
               height: ORB_SIZE,
               borderRadius: "50%",
-              backgroundColor: "var(--primary)",
-              boxShadow: "0 0 10px var(--primary), 0 0 20px var(--primary), 0 0 30px var(--primary)",
+              backgroundColor: "var(--accent)",
               pointerEvents: "none",
               zIndex: 9999,
             }}
@@ -85,8 +85,8 @@ const SphereOrb: React.FC = () => {
             }}
             exit={{ opacity: 0, scale: 0, transition: { duration: 0.15 } }}
             transition={{
-              x: { ...ORB_SPRING, delay: ORB_FLY_DELAY },
-              y: { ...ORB_SPRING, delay: ORB_FLY_DELAY },
+              x: { ...ORB_FLIGHT, delay: ORB_FLY_DELAY },
+              y: { ...ORB_FLIGHT, delay: ORB_FLY_DELAY },
               opacity: { duration: ORB_APPEAR_DURATION, ease: "easeOut" },
               scale: { duration: ORB_APPEAR_DURATION, ease: "easeOut" },
             }}
@@ -103,16 +103,15 @@ const SphereOrb: React.FC = () => {
               position: "fixed",
               left: lineLeft,
               top: lineTop,
-              height: 2,
-              backgroundColor: "var(--primary)",
-              boxShadow: "0 0 6px var(--primary)",
+              height: 1,
+              backgroundColor: "var(--border-strong)",
               pointerEvents: "none",
               zIndex: 9998,
             }}
             initial={{ width: 0, opacity: 0 }}
             animate={{ width: LINE_WIDTH, opacity: 1 }}
             exit={{ width: 0, opacity: 0 }}
-            transition={{ duration: 0.25, ease: "easeOut" }}
+            transition={{ duration: 0.25, ease: EASE_GALLERY }}
           />
         )}
       </AnimatePresence>

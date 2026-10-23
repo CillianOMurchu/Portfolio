@@ -63,9 +63,9 @@ export default function FirebaseDemo() {
       <div className="rounded-lg overflow-hidden font-mono text-sm" style={{ border: "1px solid rgba(255,202,40,0.2)" }}>
         <div className="px-3 py-2 flex items-center gap-2" style={{ background: "#1a1200", borderBottom: "1px solid rgba(255,202,40,0.15)" }}>
           <span className="text-yellow-400">firestore</span>
-          <span className="text-muted-foreground/60">/</span>
+          <span className="text-muted">/</span>
           <span className="text-blue-400">users</span>
-          <span className="text-muted-foreground/60">/</span>
+          <span className="text-muted">/</span>
           <span className="text-green-400">cillian</span>
           <div className="ml-auto flex items-center gap-1.5">
             <div className="w-1.5 h-1.5 rounded-full" style={{ background: listening ? PASS_COLOR : DARK_MUTED, boxShadow: listening ? `0 0 6px ${PASS_COLOR}` : "none" }} />
@@ -83,9 +83,9 @@ export default function FirebaseDemo() {
 
       <CodePanel accent={FIREBASE_ACCENT} className="px-3 py-2 font-mono text-sm">
         <span className="text-purple-400">onSnapshot</span>
-        <span className="text-muted-foreground">(docRef, (doc) {"=>"} {"{"}</span>
-        <div className="ml-4 text-muted-foreground">setData(doc.<span className="text-blue-400">data</span>())</div>
-        <span className="text-muted-foreground">{"}"} )</span>
+        <span className="text-muted">(docRef, (doc) {"=>"} {"{"}</span>
+        <div className="ml-4 text-muted">setData(doc.<span className="text-blue-400">data</span>())</div>
+        <span className="text-muted">{"}"} )</span>
       </CodePanel>
 
       <button onClick={() => setListening(l => !l)}

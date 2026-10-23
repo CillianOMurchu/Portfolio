@@ -25,7 +25,7 @@ export default function DemoButton({ color, variant, disabled, className = "", .
   return (
     <button
       disabled={disabled}
-      className={`rounded-lg transition-all ${className}`}
+      className={`rounded-xs transition-colors duration-(--dur-base) ease-out focus-visible:shadow-focus focus-visible:outline-none ${className}`}
       style={resolvedVariant === "accent" ? accentStyle : ghostStyle}
       {...props}
     />

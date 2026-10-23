@@ -28,9 +28,9 @@ export default function MongoDBDemo() {
   return (
     <DemoShell>
       <CodePanel accent={MONGODB_ACCENT} className="px-3 py-2 font-mono text-sm" >
-        <span className="text-muted-foreground/60" style={{ color: MONGODB_ACCENT }}>
-          <span className="text-muted-foreground/60">{">"} </span>{query}
-          <span className="text-muted-foreground/60"> // {visible.length} document{visible.length !== 1 ? "s" : ""}</span>
+        <span className="text-muted" style={{ color: MONGODB_ACCENT }}>
+          <span className="text-muted">{">"} </span>{query}
+          <span className="text-muted"> // {visible.length} document{visible.length !== 1 ? "s" : ""}</span>
         </span>
       </CodePanel>
 
@@ -54,17 +54,17 @@ export default function MongoDBDemo() {
             className="rounded-lg p-3 text-left transition-all w-full"
             style={{ background: "rgba(71,162,72,0.05)", border: `1px solid ${expanded === doc._id ? MONGODB_ACCENT : "rgba(71,162,72,0.15)"}` }}>
             <div className="flex items-center justify-between">
-              <span className="text-sm text-foreground font-medium">{doc.name}</span>
+              <span className="text-sm text-strong font-medium">{doc.name}</span>
               <span className="text-sm" style={{ color: MONGODB_ACCENT }}>{doc.year}</span>
             </div>
             {expanded === doc._id ? (
-              <pre className="mt-2 text-sm font-mono text-muted-foreground whitespace-pre-wrap text-left">
+              <pre className="mt-2 text-sm font-mono text-muted whitespace-pre-wrap text-left">
 {JSON.stringify(doc, null, 2)}
               </pre>
             ) : (
               <div className="flex gap-1 mt-1 flex-wrap">
                 {doc.stack.map((s) => (
-                  <span key={s} className="text-sm px-1.5 py-0.5 rounded-sm text-muted-foreground"
+                  <span key={s} className="text-sm px-1.5 py-0.5 rounded-sm text-muted"
                     style={{ background: "rgba(255,255,255,0.05)", color: filter === s ? MONGODB_ACCENT : SECONDARY_TEXT }}>
                     {s}
                   </span>
@@ -73,7 +73,7 @@ export default function MongoDBDemo() {
             )}
           </button>
         ))}
-        {visible.length === 0 && <p className="text-center text-muted-foreground/60 text-sm py-4">No documents match</p>}
+        {visible.length === 0 && <p className="text-center text-muted text-sm py-4">No documents match</p>}
       </div>
     </DemoShell>
   );

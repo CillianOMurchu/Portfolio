@@ -147,17 +147,17 @@ Two layers:
 
 ## Theming
 
-Tailwind v4 + shadcn/ui, configured in CSS (no `tailwind.config.js`, no PostCSS config — `@tailwindcss/vite` plugin).
+Tailwind v4, configured in CSS (no `tailwind.config.js`, no PostCSS config — `@tailwindcss/vite` plugin). Design system: "white marble, gallery daylight" — see docs/STYLE_GUIDE.md → Styling.
 
-- `src/index.css` — imports Tailwind, `tw-animate-css`, `shadcn/tailwind.css`, and the Geist variable font (`@fontsource-variable/geist`). Defines shadcn's semantic tokens on `:root` (mapped to the Neon Emerald palette) and exposes them to Tailwind via `@theme inline`.
-- Single dark palette — no light/dark switching. `@custom-variant dark` always matches so shadcn's `dark:` refinements apply.
-- `components.json` — shadcn CLI config (style `radix-nova`, Radix primitives via `radix-ui`, `lucide` icons). Components land in `src/components/ui/`.
+- `src/index.css` — all tokens. Primitives (`--marble-*`, `--stone-*`, `--ink`, `--red-*`), semantic tokens (`--surface-*`, `--text-*`, `--accent*`, `--border-*`, status) on `:root`, dark values under `[data-theme="dark"]`. Tokens whose names Tailwind also uses (`--font-*`, `--text-<size>`, `--leading-*`, `--tracking-*`, `--radius-*`, `--shadow-*`, `--ease-*`, `--container-*`) live in `@theme static`; semantic colours are exposed as utilities (`bg-page`, `text-strong`, …) via `@theme inline`. Also the base element styles and the `label`, `rule`, `accent-dot`, `surface-marble`, `surface-grain`, `demo-stage` utilities.
+- Fonts (Bodoni Moda, Archivo, IBM Plex Mono) load from Google Fonts in `index.html`.
+- Light by default; dark = `<html data-theme="dark">`, toggled by `components/ThemeSwitcher` (localStorage `portfolio-theme`; `index.html` applies it before first paint). `dark:` matches inside any `[data-theme="dark"]`.
+- The IconShowcase demo area sets `data-theme="dark"` on itself: the demos mock other tools' dark UIs, so they always render on the dark tokens. Their colours go through `demos/constants.ts`.
+- `components.json` — shadcn CLI config; only `sheet` and `dropdown-menu` remain shadcn-generated. The other `ui/` primitives are ours.
 - `src/lib/utils.ts` — re-exports `cn` (the `cn` package replaces clsx + tailwind-merge).
-- Neon extras on `:root`: `--glow-primary`, `--glow-secondary` (box/text-shadow values) and `--accent-secondary` (sky blue, used by the sphere toggle). Use as `shadow-(--glow-primary)` or `var(--glow-primary)` in dynamic inline styles.
 - Demo brand colours in `@theme` (`--color-rxjs`, `--color-rxjs-light`) for `bg-rxjs/10` style utilities.
 - `components/name/NameAnimations.css` — the only other CSS file (Name widget keyframes).
-
-The colour that drives almost everything: `--primary` = `#10b981` (emerald).
+- `npm run audit:tokens` (`scripts/audit-design-tokens.mjs`) fails on leftover old tokens, Geist, or raw colours outside the token file.
 
 ---
 

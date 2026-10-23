@@ -10,8 +10,6 @@ const NAME_LETTERS = NAME.split("");
 const O_INDEX = NAME.indexOf("Ó");
 const BIO_TEXT =
   "Full-stack engineer specializing in modern web technologies and creative digital experiences.";
-const HEXAGON_CLIP =
-  "polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)";
 const TYPING_INTERVAL_MS = 30;
 const HOVER_DELAY_MS = 800;
 
@@ -79,10 +77,6 @@ export function Name() {
         ref={containerRef}
       >
         <div className="absolute inset-0" />
-        <div
-          className="absolute inset-3 border border-primary/30"
-          style={{ clipPath: HEXAGON_CLIP }}
-        />
         <NameDisplay
           letters={NAME_LETTERS}
           oIndex={O_INDEX}

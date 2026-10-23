@@ -12,15 +12,8 @@ const NameDisplay: React.FC<NameDisplayProps> = ({
   oCharRef,
 }) => (
   <div className="absolute inset-0 flex items-center justify-center">
-    <a href="/">
-      <span
-        className="text-primary text-xs tracking-wider"
-        style={{
-          cursor: "pointer",
-          textShadow:
-            "0 0 5px color-mix(in srgb, var(--primary) 80%, transparent), 0 0 10px color-mix(in srgb, var(--primary) 60%, transparent), 0 0 15px color-mix(in srgb, var(--primary) 40%, transparent), 0 0 20px color-mix(in srgb, var(--primary) 30%, transparent)",
-        }}
-      >
+    <a href="/" className="no-underline focus-visible:shadow-focus focus-visible:outline-none">
+      <span className="font-mono text-xs tracking-label whitespace-nowrap text-strong">
         {letters.map((char, i) => (
           <span
             key={i}

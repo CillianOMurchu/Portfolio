@@ -13,17 +13,18 @@ const ProfileImage: React.FC<{ className?: string }> = ({ className }) => (
     width={800}
     height={800}
     decoding="async"
-    className={cn("rounded-full border-4 border-primary/30 object-cover shadow-lg", className)}
+    className={cn("rounded-full object-cover grayscale", className)}
   />
 );
 
 const ProfileHeader: React.FC = () => (
   <>
-    <h1 className="mb-6 text-4xl font-extrabold tracking-tight text-primary">
+    <p className="label mb-(--space-4)">01 — Profile</p>
+    <h1 className="mb-(--space-5)">
       Cillian
-      <span className="block">Ó Murchú</span>
+      <em className="block">Ó Murchú</em>
     </h1>
-    <p className="mt-8 text-lg text-muted-foreground">Creative Engineer</p>
+    <p className="label">Creative Engineer</p>
   </>
 );
 

@@ -72,7 +72,7 @@ font-weight: ${selected.fontWeight};`;
             border: "1px solid rgba(255,255,255,0.1)",
           }}
         >
-          <p className="text-sm text-muted-foreground">Canvas</p>
+          <p className="text-sm text-muted">Canvas</p>
           <div className="flex flex-wrap gap-3 items-center">
             {ELEMENTS.map((el) => {
               const isSelected = selected.id === el.id;
@@ -111,7 +111,7 @@ font-weight: ${selected.fontWeight};`;
           }}
         >
           <div
-            className="px-3 py-2 text-sm text-muted-foreground"
+            className="px-3 py-2 text-sm text-muted"
             style={{
               borderBottom: "1px solid rgba(255,255,255,0.08)",
               background: "#3c3c3c",
@@ -121,30 +121,30 @@ font-weight: ${selected.fontWeight};`;
           </div>
           <div className="p-2 space-y-2 text-sm font-mono">
             <div>
-              <span className="text-muted-foreground">Type</span>
+              <span className="text-muted">Type</span>
               <br />
               <span className="text-blue-400">{selected.type}</span>
             </div>
             <div>
-              <span className="text-muted-foreground">Fill</span>
+              <span className="text-muted">Fill</span>
               <br />
               <span className="flex items-center gap-1">
                 <span
                   className="w-3 h-3 rounded-xs inline-block"
                   style={{ background: selected.fill }}
                 />
-                <span className="text-secondary-foreground">{selected.fill}</span>
+                <span className="text-body">{selected.fill}</span>
               </span>
             </div>
             <div>
-              <span className="text-muted-foreground">Corner</span>
+              <span className="text-muted">Corner</span>
               <br />
-              <span className="text-secondary-foreground">{selected.radius}px</span>
+              <span className="text-body">{selected.radius}px</span>
             </div>
             <div>
-              <span className="text-muted-foreground">Padding</span>
+              <span className="text-muted">Padding</span>
               <br />
-              <span className="text-secondary-foreground">
+              <span className="text-body">
                 {selected.py} {selected.px}
               </span>
             </div>
@@ -154,15 +154,15 @@ font-weight: ${selected.fontWeight};`;
 
       <CodePanel
         accent={FIGMA_ACCENT}
-        className="p-3 font-mono text-sm leading-5 text-muted-foreground"
+        className="p-3 font-mono text-sm leading-5 text-muted"
       >
-        <p className="text-muted-foreground/60 mb-1">{"/* CSS export */"}</p>
+        <p className="text-muted mb-1">{"/* CSS export */"}</p>
         {css.split("\n").map((line, i) => {
           const [prop, val] = line.split(": ");
           return (
             <div key={i}>
               <span className="text-blue-400">{prop}</span>
-              <span className="text-muted-foreground/60">: </span>
+              <span className="text-muted">: </span>
               <span style={{ color: FIGMA_ACCENT }}>{val}</span>
             </div>
           );

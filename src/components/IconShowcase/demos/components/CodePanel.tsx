@@ -11,7 +11,7 @@ interface CodePanelProps {
 export default function CodePanel({ accent, children, className = "p-4 font-mono text-sm" }: CodePanelProps) {
   return (
     <div
-      className={`rounded-lg ${className}`}
+      className={`rounded-xs ${className}`}
       style={{ background: CODE_BG, border: `1px solid ${accent}4d` }}
     >
       {children}

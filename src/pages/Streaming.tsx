@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { m, AnimatePresence } from "framer-motion";
-import { Badge } from "@/components/ui/badge";
+import { Badge } from "../components/ui/Badge";
+import { DUR_SLOW, EASE_GALLERY } from "../utils/animations";
 
 interface TwitchPlayer {
   addEventListener(event: string, callback: () => void): void;
@@ -40,11 +41,11 @@ function loadTwitchEmbedScript() {
 
 type StreamStatus = "checking" | "live" | "offline";
 
-// Traffic-light colours are deliberate: they signal status, not brand.
-const STATUS_DISPLAY: Record<StreamStatus, { label: string; text: string; dot: string }> = {
-    live:     { label: "LIVE",        text: "text-success", dot: "bg-success shadow-success/60" },
-    checking: { label: "CHECKING...", text: "text-warning",  dot: "bg-warning shadow-warning/40" },
-    offline:  { label: "OFFLINE",     text: "text-error",     dot: "bg-error shadow-error/40" },
+// Live gets the red accent dot; offline reads as a status (danger), checking stays neutral.
+const STATUS_DISPLAY: Record<StreamStatus, { label: string; color: "neutral" | "danger"; dot: boolean }> = {
+    live:     { label: "Live",     color: "neutral", dot: true },
+    checking: { label: "Checking", color: "neutral", dot: false },
+    offline:  { label: "Offline",  color: "danger",  dot: true },
 };
 
 const Streaming = () => {
@@ -94,11 +95,11 @@ const Streaming = () => {
         };
     }, []); // Empty dependency array ensures run on mount, cleanup on unmount
 
-    // 🔴 The Twitch Player API will manage the iframe inside this div
+    // The Twitch Player API will manage the iframe inside this div
     return (
         <div className="min-h-screen flex flex-col items-center justify-center px-4 pt-20 pb-16 relative overflow-hidden">
             
-            {/* 🔴 LIVE INDICATOR - Animated Position */}
+            {/* Live indicator - animated position */}
             <AnimatePresence mode="wait">
                 <m.div
                     key={status}
@@ -113,28 +114,28 @@ const Streaming = () => {
                     }}
                     exit={{ opacity: 0 }}
                     style={{ position: "fixed" }}
-                    transition={{ type: "spring", stiffness: 100, damping: 15, duration: 0.6 }}
+                    transition={{ duration: DUR_SLOW, ease: EASE_GALLERY }}
                 >
-                    <Badge variant="outline" className={`h-7 gap-2 px-3 text-sm font-semibold ${STATUS_DISPLAY[status].text}`}>
-                        <span className={`size-2.5 rounded-full animate-pulse shadow-lg ${STATUS_DISPLAY[status].dot}`} />
+                    <Badge size="lg" color={STATUS_DISPLAY[status].color} dot={STATUS_DISPLAY[status].dot} className="bg-card" role="status">
                         {STATUS_DISPLAY[status].label}
                     </Badge>
                 </m.div>
             </AnimatePresence>
 
-            {/* 📺 VIDEO PLAYER CONTAINER - Fades in when live */}
+            {/* Video player container - fades in when live */}
             <m.div
                 className="w-full max-w-7xl aspect-video"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: status === "live" ? 1 : 0 }}
                 transition={{
                     delay: status === "live" ? 1.2 : 0,
-                    duration: 0.6
+                    duration: DUR_SLOW,
+                    ease: EASE_GALLERY,
                 }}
             >
                 <div 
                     id="twitch-player-embed" 
-                    className="w-full h-full rounded-lg border border-primary/30"
+                    className="w-full h-full border bg-sunken shadow-paper"
                 />
             </m.div>
         </div>
