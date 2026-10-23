@@ -107,7 +107,7 @@ Bodoni Moda (`font-display`, weight 400) for headings — never bold; put one wo
 | `text-3xl` | 36–52px | panel headings |
 | `text-4xl` | 48–80px | `h2`, section headings |
 | `text-5xl` | 60–120px | `h1` |
-| `text-6xl` | 72–176px | hero display (`HeroTitle`) only |
+| `text-6xl` | 72–176px | hero display (`HeroTitle`) only; `WorkTitle` uses `text-[15vw]` so it spans the page |
 
 Exception: IconShowcase demos may use other sizes when the size itself is what's being demonstrated (Figma, Sass, Stencil).
 

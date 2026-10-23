@@ -6,7 +6,18 @@ import roadooImage from "../assets/about/header-roadoo.webp";
 // TODO: Add Maslo logo image import when available
 // import masloImage from "../assets/about/header-maslo.webp";
 
-export const experienceData = [
+export interface Work {
+  id: string;
+  name: string;
+  title: string;
+  projectImage: string;
+  link?: string;
+  dates: string;
+  responsibilities?: string[];
+  keyFeatures?: string[];
+}
+
+export const experienceData: Work[] = [
   {
     id: "2",
     name: "Lighthouse",

@@ -1,14 +1,15 @@
 import { AnimatePresence, m } from "framer-motion";
 import React from "react";
-import { Navigate, Route, Routes, useLocation } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import StreamGate from "../components/StreamAuth/StreamGate";
+import About from "./About";
 import HomeScreen from "./HomeScreen";
 import Streaming from "./Streaming";
 
 const routes = [
   { path: "/", key: "home", screen: <HomeScreen /> },
-  // About is hidden for now (detective puzzle in progress); send visitors home.
-  { path: "/about", key: "about", screen: <Navigate to="/" replace /> },
+  // Not linked from the navbar yet (detective puzzle in progress); reachable by URL.
+  { path: "/about", key: "about", screen: <About /> },
   {
     path: "/streaming",
     key: "streaming",
