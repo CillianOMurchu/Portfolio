@@ -2,7 +2,7 @@
 import React from "react";
 import { cn } from "../../lib/utils";
 
-type CardVariant = "framed" | "paper" | "stone" | "marble";
+type CardVariant = "framed" | "paper" | "stone";
 type CardPadding = "none" | "sm" | "md" | "lg";
 
 interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -15,8 +15,6 @@ const VARIANTS: Record<CardVariant, string> = {
   framed: "border bg-card",
   paper: "bg-card shadow-paper",
   stone: "bg-sunken",
-  // The marble texture is always light, so its text stays dark in both themes.
-  marble: "bg-(--marble-0) [background-image:var(--texture-marble),var(--texture-grain)] bg-[length:cover,220px] text-(--stone-800)",
 };
 
 const PADDING: Record<CardPadding, string> = {

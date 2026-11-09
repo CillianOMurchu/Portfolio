@@ -3,7 +3,7 @@
 // image={work.projectImage} year={start year from work.dates} open={open}
 // flip={index % 2 === 1}, in a two-column md:grid-cols-12 layout.
 //
-// Two depth layers for one role. Far: a marble slab holding a ghost of the
+// Two depth layers for one role. Far: a tinted slab holding a ghost of the
 // photo and the start year, drifting with the scroll so it lags the page.
 // Near: the photo as a mounted print, moving against the scroll so it runs
 // ahead of the page. It opens out from a small window when the role expands.
@@ -32,7 +32,7 @@ export const WorkVisual: React.FC<WorkVisualProps> = ({ image, name, year, open,
     <div ref={ref} aria-hidden className="relative isolate h-[28rem] md:h-[36rem]">
       <m.div
         style={reduce ? undefined : { y: far }}
-        className={cn("surface-marble absolute top-[8%] bottom-[8%] -z-1 w-[78%] overflow-hidden", flip ? "left-0" : "right-0")}
+        className={cn("surface-panel absolute top-[8%] bottom-[8%] -z-1 w-[78%] overflow-hidden", flip ? "left-0" : "right-0")}
       >
         <img
           src={image}

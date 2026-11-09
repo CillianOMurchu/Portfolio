@@ -7,7 +7,7 @@
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 /* ===========================================================================
- * TOKENS — "white marble, gallery daylight".
+ * TOKENS — "Paper" (light) and "Ink" (dark): blue-slate neutrals, blue accent, coral highlight.
  * Names that Tailwind also uses (--font-*, --text-<size>, --leading-*,
  * --tracking-*, --radius-*, --shadow-*, --ease-*, --container-*) are declared
  * in `@theme static` below instead, with the same values, so each token is
@@ -15,110 +15,126 @@
  * ======================================================================== */
 
 :root {
-  /* Marble & stone — warm whites to warm greys */
-  --marble-0: #ffffff;
-  --marble-50: #fbfaf7;
-  --marble-100: #f5f3ee;
-  --marble-200: #ece9e2;
-  --marble-300: #dfdbd2;
-  --stone-400: #bab5ab;
-  --stone-500: #8e897f;
-  --stone-600: #6c685f;
-  --stone-700: #4a4742;
-  --stone-800: #2a2825;
-  --stone-900: #1a1917;
-  --ink: #111111; /* clrs black */
+  /* Two themes, one family: blue-tinted slate neutrals (hue ~215), a blue accent
+   * and its warm complement, coral, for small highlights.
+   * Rules: neutral surfaces carry ~90% of the screen; the accent is for links,
+   * primary actions, labels and focus; coral marks numbering and hero words; depth = small lightness steps, not new
+   * colours or glows. `npm run audit:contrast` checks every pair against WCAG AA. */
 
-  /* Accent — clrs red */
-  --red-100: #ffe7e4;
-  --red-300: #ff9c93;
-  --red-500: #ff4136; /* clrs red */
-  --red-700: #c4261c; /* text-safe on white */
-  --red-900: #85144b; /* clrs maroon */
+  /* Slate scale — light end */
+  --slate-0: #ffffff;
+  --slate-25: #f3f7fc;
+  --slate-50: #e9f0f8;
+  --slate-100: #dde7f3;
+  --slate-200: #d3deeb;
+  --slate-400: #818e9d;
+  --slate-500: #5d6b7b;
+  --slate-600: #475465;
+  --slate-700: #2b3848;
+  --slate-900: #111a26;
 
-  /* Supporting clrs hues (status only) */
-  --clrs-olive: #3d9970;
-  --clrs-orange: #ff851b;
-  --clrs-blue: #0074d9;
-  --clrs-navy: #001f3f;
+  /* Blue — the single accent (clrs.cc blue, plus a text-safe and a soft step) */
+  --blue-100: #e5f0fc;
+  --blue-500: #0074d9;
+  --blue-600: #0062b8;
 
-  /* ---------- SEMANTIC — LIGHT ---------- */
-  --surface-page: var(--marble-50);
-  --surface-card: var(--marble-0);
-  --surface-sunken: var(--marble-100);
-  --surface-inset: var(--marble-200);
-  --surface-overlay: var(--marble-0);
-  --surface-inverse: var(--ink);
+  /* Coral — the warm complement, for small highlights (numbering, hero words) */
+  --coral-100: #fdebe5;
+  --coral-500: #e8613c;
+  --coral-700: #b2421c;
 
-  --text-strong: var(--ink);
-  --text-body: var(--stone-800);
-  --text-muted: var(--stone-600);
-  --text-faint: var(--stone-500);
-  --text-inverse: var(--marble-50);
-  --text-on-accent: var(--ink);
+  /* ---- Light: "Paper" ---- */
+  --surface-page: var(--slate-25);
+  --surface-card: var(--slate-0);
+  --surface-sunken: var(--slate-50);
+  --surface-inset: var(--slate-100);
+  --surface-overlay: var(--slate-0);
+  --surface-inverse: var(--slate-900);
 
-  --accent: var(--red-500);
-  --accent-text: var(--red-700);
-  --accent-soft: var(--red-100);
+  --text-strong: var(--slate-900);
+  --text-body: var(--slate-700);
+  --text-muted: var(--slate-600);
+  --text-faint: var(--slate-500);
+  --text-inverse: var(--slate-25);
+  --text-on-accent: var(--slate-0);
 
-  --border-hairline: var(--marble-300);
-  --border-default: var(--stone-400);
-  --border-strong: var(--ink);
-  --border-focus: var(--ink);
+  --accent: var(--blue-500);
+  --accent-text: var(--blue-600);
+  --accent-soft: var(--blue-100);
 
-  --success: var(--clrs-olive);
-  --danger: var(--red-700);
-  --warning: #b35f0e;
-  --info: var(--clrs-blue);
-  --success-soft: #e6f1eb;
-  --danger-soft: var(--red-100);
-  --warning-soft: #fbebdb;
-  --info-soft: #e2eef9;
+  --highlight: var(--coral-500);
+  --highlight-text: var(--coral-700);
+  --highlight-soft: var(--coral-100);
 
-  --ring: rgba(17, 17, 17, 0.18);
-  --selection-bg: var(--ink);
-  --selection-fg: var(--marble-50);
-  --scrim: rgba(251, 250, 247, 0.72);
+  --border-hairline: var(--slate-200);
+  --border-default: var(--slate-400);
+  --border-strong: var(--slate-900);
+  --border-focus: var(--blue-500);
+
+  --success: #1d7a4f;
+  --danger: #c0352b;
+  --warning: #a35a00;
+  --info: var(--blue-600);
+  --success-soft: #e4f4ec;
+  --danger-soft: #fdeceb;
+  --warning-soft: #fdf1e1;
+  --info-soft: var(--blue-100);
+
+  --ring: rgba(0, 116, 217, 0.3);
+  --selection-bg: #cfe2f7;
+  --selection-fg: var(--slate-900);
+  --scrim: rgba(17, 26, 38, 0.4);
   color-scheme: light;
 }
 
+/* ---- Dark: "Ink" — light mode's text colour becomes the ground ---- */
 [data-theme="dark"] {
-  --surface-page: #121110;
-  --surface-card: #1a1917;
-  --surface-sunken: #0d0c0b;
-  --surface-inset: #24221f;
-  --surface-overlay: #1f1d1b;
-  --surface-inverse: var(--marble-50);
+  --surface-page: #0b1320;
+  --surface-card: #111c2c;
+  --surface-sunken: #08101b;
+  --surface-inset: #182638;
+  --surface-overlay: #152234;
+  --surface-inverse: #e8edf3;
 
-  --text-strong: #f4f1eb;
-  --text-body: #d9d4cb;
-  --text-muted: #a39e94;
-  --text-faint: #77736b;
-  --text-inverse: var(--ink);
-  --text-on-accent: var(--ink);
+  --text-strong: #edf1f6;
+  --text-body: #c5cfda;
+  --text-muted: #9aa7b6;
+  --text-faint: #7f8c9c;
+  --text-inverse: #0b1320;
+  --text-on-accent: #0b1320;
 
-  --accent: #ff5348;
-  --accent-text: #ff7a70;
-  --accent-soft: rgba(255, 65, 54, 0.16);
+  --accent: #5aa9f5;
+  --accent-text: #7dbcf8;
+  --accent-soft: rgba(90, 169, 245, 0.14);
 
-  --border-hairline: rgba(244, 241, 235, 0.1);
-  --border-default: rgba(244, 241, 235, 0.22);
-  --border-strong: #f4f1eb;
-  --border-focus: #f4f1eb;
+  --highlight: #ff8c66;
+  --highlight-text: #ffa384;
+  --highlight-soft: rgba(255, 140, 102, 0.14);
 
-  --success: #6bc497;
-  --danger: #ff7a70;
-  --warning: #ffa45c;
-  --info: #6fb4f0;
-  --success-soft: rgba(61, 153, 112, 0.18);
-  --danger-soft: rgba(255, 65, 54, 0.16);
-  --warning-soft: rgba(255, 133, 27, 0.16);
-  --info-soft: rgba(0, 116, 217, 0.2);
+  --border-hairline: #1e2d42;
+  --border-default: #607080;
+  --border-strong: #edf1f6;
+  --border-focus: #7dbcf8;
 
-  --ring: rgba(244, 241, 235, 0.25);
-  --selection-bg: #f4f1eb;
-  --selection-fg: var(--ink);
-  --scrim: rgba(13, 12, 11, 0.72);
+  --success: #4fc48a;
+  --danger: #f2837a;
+  --warning: #e6ad4a;
+  --info: #7dbcf8;
+  --success-soft: rgba(79, 196, 138, 0.14);
+  --danger-soft: rgba(242, 131, 122, 0.14);
+  --warning-soft: rgba(230, 173, 74, 0.14);
+  --info-soft: rgba(90, 169, 245, 0.14);
+
+  --ring: rgba(125, 188, 248, 0.4);
+  --selection-bg: #24476b;
+  --selection-fg: #edf1f6;
+  --scrim: rgba(5, 8, 12, 0.66);
+
+  /* Depth from edges, not shadows: dark shadows are near-invisible. */
+  --shadow-paper: 0 0 0 1px var(--border-hairline);
+  --shadow-lift: 0 0 0 1px var(--border-hairline), 0 16px 32px -16px rgba(0, 0, 0, 0.6);
+  --shadow-float: 0 0 0 1px var(--border-hairline), 0 24px 48px -20px rgba(0, 0, 0, 0.7);
+
   /* Re-resolved here so nested dark scopes (the demo stage) get the dark ring. */
   --focus-ring: 0 0 0 3px var(--ring);
   color-scheme: dark;
@@ -128,7 +144,7 @@
   --weight-regular: 400;
   --weight-medium: 500;
   --weight-semibold: 600;
-  --weight-display: 400;
+  --weight-display: 500;
 
   --space-0: 0;
   --space-1: 0.25rem;
@@ -160,15 +176,13 @@
   --z-overlay: 500;
   --z-toast: 900;
 
-  --texture-marble: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='900' height='900'><filter id='v'><feTurbulence type='turbulence' baseFrequency='0.0035 0.0075' numOctaves='4' seed='23'/><feColorMatrix values='0 0 0 0 0.52 0 0 0 0 0.50 0 0 0 0 0.47 -3.4 0 0 0 0.58'/></filter><rect width='100%' height='100%' filter='url(%23v)'/></svg>");
-  --texture-grain: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.1 0 0 0 0 0.1 0 0 0 0 0.1 0 0 0 0.06 0'/></filter><rect width='100%' height='100%' filter='url(%23g)'/></svg>");
 }
 
 /* Tokens shared with Tailwind's namespaces. `static` emits every one as a CSS
  * variable on :root, used or not. */
 @theme static {
   --font-*: initial;
-  --font-display: "Bodoni Moda", "Didot", "Bodoni 72", Georgia, serif;
+  --font-display: "Space Grotesk", "Archivo", "Helvetica Neue", Arial, sans-serif;
   --font-sans: "Archivo", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
 
@@ -203,9 +217,9 @@
   --radius-pill: 999px;
 
   --shadow-none: none;
-  --shadow-paper: 0 1px 0 rgba(17, 17, 17, 0.04), 0 8px 24px -12px rgba(17, 17, 17, 0.12);
-  --shadow-lift: 0 2px 4px rgba(17, 17, 17, 0.04), 0 24px 48px -20px rgba(17, 17, 17, 0.22);
-  --shadow-float: 0 4px 10px rgba(17, 17, 17, 0.06), 0 40px 80px -30px rgba(17, 17, 17, 0.3);
+  --shadow-paper: 0 1px 0 rgba(17, 26, 38, 0.04), 0 8px 24px -12px rgba(17, 26, 38, 0.12);
+  --shadow-lift: 0 2px 4px rgba(17, 26, 38, 0.04), 0 24px 48px -20px rgba(17, 26, 38, 0.22);
+  --shadow-float: 0 4px 10px rgba(17, 26, 38, 0.06), 0 40px 80px -30px rgba(17, 26, 38, 0.3);
 
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
@@ -237,6 +251,9 @@
   --color-accent: var(--accent);
   --color-accent-text: var(--accent-text);
   --color-accent-soft: var(--accent-soft);
+  --color-highlight: var(--highlight);
+  --color-highlight-text: var(--highlight-text);
+  --color-highlight-soft: var(--highlight-soft);
 
   --color-hairline: var(--border-hairline);
   --color-line: var(--border-default);
@@ -268,7 +285,7 @@
   font-weight: var(--weight-regular);
   letter-spacing: var(--tracking-label);
   text-transform: uppercase;
-  color: var(--text-muted);
+  color: var(--accent-text);
 }
 @utility rule {
   border-top: 1px solid var(--border-hairline);
@@ -280,17 +297,8 @@
   border-radius: 50%;
   background: var(--accent);
 }
-@utility surface-marble {
-  background-color: var(--marble-0);
-  background-image: var(--texture-marble), var(--texture-grain);
-  background-size: cover, 220px;
-  [data-theme="dark"] & {
-    background-color: #1a1917;
-    background-blend-mode: screen;
-  }
-}
-@utility surface-grain {
-  background-image: var(--texture-grain);
+@utility surface-panel {
+  background-color: var(--accent-soft);
 }
 /* IconShowcase demos mock other tools' UIs; keep the site's prose margins out. */
 @utility demo-stage {
@@ -359,11 +367,12 @@
   i {
     font-style: italic;
   }
+  /* Headline emphasis is colour, not italic. */
   h1 em,
   h2 em,
   h3 em {
-    font-style: italic;
-    font-weight: 400;
+    font-style: normal;
+    color: var(--accent-text);
   }
   p {
     margin: 0 0 var(--space-4);

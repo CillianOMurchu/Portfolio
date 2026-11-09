@@ -1,4 +1,4 @@
-// Round greyscale portrait, or serif-italic initials (up to two words) without `src`.
+// Round greyscale portrait, or display-font initials (up to two words) without `src`.
 import React from "react";
 import { cn } from "../../lib/utils";
 
@@ -40,7 +40,7 @@ export const Avatar: React.FC<AvatarProps> = ({ name, src, size = "md", color = 
   return (
     <span
       className={cn(
-        "inline-grid flex-none place-items-center overflow-hidden font-display leading-none italic",
+        "inline-grid flex-none place-items-center overflow-hidden font-display leading-none",
         square ? "rounded-none" : "rounded-full",
         box,
         COLORS[color],

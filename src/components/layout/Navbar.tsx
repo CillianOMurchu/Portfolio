@@ -8,10 +8,10 @@ import { IconButton } from "../ui/IconButton";
 import { MenuToggleIcon } from "../ui/MenuToggleIcon";
 import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "../ui/sheet";
 
-const NAV_LINKS = [
-  { href: "/", label: "Home" },
-  { href: "/streaming", label: "Streaming", private: true }, // logged-in visitors only
-];
+// The first link points away from where you are: About on the home page, Home elsewhere.
+const HOME_LINK = { href: "/", label: "Home" };
+const ABOUT_LINK = { href: "/about", label: "About" };
+const STREAMING_LINK = { href: "/streaming", label: "Streaming", private: true }; // logged-in visitors only
 
 // Mono labels; NavLink sets aria-current="page" on the active route, which gets the ink underline.
 const LINK_CLASSES =
@@ -33,7 +33,7 @@ const Navbar: React.FC = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { status } = useStreamAuth();
   const { pathname } = useLocation();
-  const links = NAV_LINKS.filter((link) => !("private" in link) || status === "authed");
+  const links = [pathname === "/" ? ABOUT_LINK : HOME_LINK, STREAMING_LINK].filter((link) => !("private" in link) || status === "authed");
 
   return (
     <header className="fixed inset-x-0 top-0 z-60 flex h-16 items-center justify-between border-b bg-page/88 px-(--gutter) backdrop-blur-[10px]">

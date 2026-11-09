@@ -1,4 +1,4 @@
-// Theme-aware: these resolve to the marble tokens (see src/index.css). The demo
+// Theme-aware: these resolve to the semantic tokens (see src/index.css). The demo
 // stage is a dark-mode scope, so they take the dark values.
 export const CODE_BG = "var(--surface-sunken)";
 export const RAISED_BG = "var(--surface-overlay)";

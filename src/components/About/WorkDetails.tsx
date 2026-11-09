@@ -32,7 +32,7 @@ const DetailList: React.FC<{ title: string; items?: string[] }> = ({ title, item
       <ul className="m-0 list-none border-t p-0">
         {items.map((item, i) => (
           <li key={i} className="grid grid-cols-[2.5rem_1fr] border-b py-(--space-3)">
-            <span className="font-mono text-2xs leading-6 text-faint">{pad(i + 1)}</span>
+            <span className="font-mono text-2xs leading-6 text-highlight-text">{pad(i + 1)}</span>
             <p className="m-0">{withBold(item)}</p>
           </li>
         ))}

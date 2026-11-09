@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
-import { GET } from "../../../api/location";
-import { FALLBACK_LATITUDE, FALLBACK_LONGITUDE, getVisitorLocation } from "../location";
+import { GET } from "../../../../api/location";
+import { FALLBACK_LATITUDE, FALLBACK_LONGITUDE, getVisitorLocation } from "./location";
 
 const FALLBACK = { latitude: FALLBACK_LATITUDE, longitude: FALLBACK_LONGITUDE, source: "fallback" };
 

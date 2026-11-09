@@ -1,9 +1,11 @@
+import type { ReactNode } from "react";
 import lighthouseImage from "../assets/about/header-lighthouse.webp";
 import betsson from "../assets/about/header-betsson.webp";
 import pokerstars from "../assets/about/header-pokerstars.webp";
 import roadooImage from "../assets/about/header-roadoo.webp";
 import betssonLogo from "../assets/about/logo-betsson.webp";
 import pokerstarsLogo from "../assets/about/logo-pokerstars.webp";
+import { LightbulbWord } from "../components/About/LightbulbWord";
 
 // TODO: Add Maslo logo image import when available
 // import masloImage from "../assets/about/header-maslo.webp";
@@ -11,6 +13,8 @@ import pokerstarsLogo from "../assets/about/logo-pokerstars.webp";
 export interface Work {
   id: string;
   name: string;
+  /** How the name is drawn in the role header, when it differs from plain `name`. */
+  displayName?: ReactNode;
   title: string;
   projectImage: string;
   /** Wordmark from scripts/optimize-logos.mjs (64px tall). */
@@ -25,6 +29,7 @@ export const experienceData: Work[] = [
   {
     id: "2",
     name: "Lighthouse",
+    displayName: <LightbulbWord word="Lighthouse" />,
     title: "Senior Software Engineer",
     projectImage: lighthouseImage, // Imported image module
     link: "https://www.mylighthouse.com/",

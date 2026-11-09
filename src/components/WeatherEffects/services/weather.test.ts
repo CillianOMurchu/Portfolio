@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import { buildWeatherUrl, getCurrentWeather } from "../weather";
+import { buildWeatherUrl, getCurrentWeather } from "./weather";
 
 const LAT = 36.72;
 const LON = -4.42;

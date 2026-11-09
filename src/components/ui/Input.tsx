@@ -1,5 +1,5 @@
 // Underline-only text field with a mono uppercase label above. An error
-// replaces the hint and turns the underline red; `lg` sets the text in Bodoni.
+// replaces the hint and turns the underline red; `lg` sets the text in the display font.
 import React, { useId } from "react";
 import { cn } from "../../lib/utils";
 
