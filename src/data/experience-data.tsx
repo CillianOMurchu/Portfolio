@@ -6,15 +6,25 @@ import roadooImage from "../assets/about/header-roadoo.webp";
 import betssonLogo from "../assets/about/logo-betsson.webp";
 import pokerstarsLogo from "../assets/about/logo-pokerstars.webp";
 import { LightbulbWord } from "../components/About/LightbulbWord";
+import { PokerChipWord } from "../components/About/PokerChipWord";
+import { SlotWord } from "../components/About/SlotWord";
+import { TargetWord } from "../components/About/TargetWord";
 
 // TODO: Add Maslo logo image import when available
 // import masloImage from "../assets/about/header-maslo.webp";
 
+/** "reels": rows spin in like slot reels. */
+export type PanelEffect = "reels";
+
 export interface Work {
   id: string;
+  /** URL fragment that opens this role on About, e.g. /about#betsson. */
+  slug: string;
   name: string;
   /** How the name is drawn in the role header, when it differs from plain `name`. */
   displayName?: ReactNode;
+  /** A flourish on the details when the role opens (see WorkDetails). */
+  panelEffect?: PanelEffect;
   title: string;
   projectImage: string;
   /** Wordmark from scripts/optimize-logos.mjs (64px tall). */
@@ -27,7 +37,31 @@ export interface Work {
 
 export const experienceData: Work[] = [
   {
+    id: "3",
+    slug: "betsson",
+    name: "Betsson Group",
+    displayName: <SlotWord text="Betsson Group" finals={["💎", "💎", "💎", "💎"]} />,
+    panelEffect: "reels",
+    title: "Software Engineer",
+    projectImage: betsson,
+    logo: betssonLogo,
+    link: "https://betssongroup.com/",
+    dates: "Oct 2020 – Jan 2023",
+    // --- UPDATED: responsibilities is now an array ---
+    responsibilities: [
+      "Maintained and enhanced a multi-tenant iGaming platform serving 1.38 Million active users across 10+ international brands in regulated markets.",
+      "Engineered a centralized time-handling component using Day.js to ensure timezone consistency and regional compliance across the distributed user base.",
+    ],
+    // --- Existing keyFeatures array remains ---
+    keyFeatures: [
+      "Optimized Terms & Conditions registration flow through UX refinement and progressive disclosure patterns, resulting in an **8% conversion rate improvement**.",
+      "Developed responsible gaming UI compliance modules and white-label affiliate configuration systems meeting complex jurisdictional regulatory requirements.",
+      "Contributed to the **Selenium-based UAT testing infrastructure**, establishing test structure, coverage standards, and CI integration.",
+    ],
+  },
+  {
     id: "2",
+    slug: "lighthouse",
     name: "Lighthouse",
     displayName: <LightbulbWord word="Lighthouse" />,
     title: "Senior Software Engineer",
@@ -48,28 +82,10 @@ export const experienceData: Work[] = [
     ],
   },
   {
-    id: "3",
-    name: "Betsson Group",
-    title: "Software Engineer",
-    projectImage: betsson,
-    logo: betssonLogo,
-    link: "https://betssongroup.com/",
-    dates: "Oct 2020 – Jan 2023",
-    // --- UPDATED: responsibilities is now an array ---
-    responsibilities: [
-      "Maintained and enhanced a multi-tenant iGaming platform serving 1.38 Million active users across 10+ international brands in regulated markets.",
-      "Engineered a centralized time-handling component using Day.js to ensure timezone consistency and regional compliance across the distributed user base.",
-    ],
-    // --- Existing keyFeatures array remains ---
-    keyFeatures: [
-      "Optimized Terms & Conditions registration flow through UX refinement and progressive disclosure patterns, resulting in an **8% conversion rate improvement**.",
-      "Developed responsible gaming UI compliance modules and white-label affiliate configuration systems meeting complex jurisdictional regulatory requirements.",
-      "Contributed to the **Selenium-based UAT testing infrastructure**, establishing test structure, coverage standards, and CI integration.",
-    ],
-  },
-  {
     id: "1",
+    slug: "maslo",
     name: "Maslo / Roadoo Network",
+    displayName: <TargetWord text="Maslo / Roadoo Network" word="Roadoo" />,
     title: "Lead Frontend Developer",
     projectImage: roadooImage,
     link: "https://www.maslo.app/en",
@@ -87,7 +103,9 @@ export const experienceData: Work[] = [
   },
   {
     id: "4",
+    slug: "pokerstars",
     name: "PokerStars",
+    displayName: <PokerChipWord text="PokerStars" />,
     title: "Gaming Operator & Tournament Coordinator",
     projectImage: pokerstars,
     logo: pokerstarsLogo,

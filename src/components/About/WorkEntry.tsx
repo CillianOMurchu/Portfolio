@@ -83,7 +83,7 @@ export const WorkEntry: React.FC<WorkEntryProps> = ({ work, index, open, onToggl
           >
             <p className="label md:hidden">{work.dates}</p>
             <div className="md:col-span-9">
-              <WorkDetails name={work.name} link={work.link} responsibilities={work.responsibilities} keyFeatures={work.keyFeatures} />
+              <WorkDetails name={work.name} link={work.link} responsibilities={work.responsibilities} keyFeatures={work.keyFeatures} effect={work.panelEffect} open={open} />
             </div>
           </div>
         </div>

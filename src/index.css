@@ -80,6 +80,19 @@
   --warning-soft: #fdf1e1;
   --info-soft: var(--blue-100);
 
+  /* Gems — velvet card suits and the ruby diamond (About › SlotWord). hi = edge
+   * sheen, base = body, deep = shadow; shine is the glossy highlight. */
+  --gem-ruby-hi: #ff4560;
+  --gem-ruby: #b0001c;
+  --gem-ruby-deep: #3f000c;
+  --gem-ruby-rim: #2a0008;
+  --gem-onyx-hi: #9aa2c8;
+  --gem-onyx: #22263a;
+  --gem-onyx-deep: #030407;
+  --gem-onyx-rim: #000000;
+  --gem-shine: #ffffff;
+  --gem-shadow: rgba(10, 4, 8, 0.45);
+
   --ring: rgba(0, 116, 217, 0.3);
   --selection-bg: #cfe2f7;
   --selection-fg: var(--slate-900);
@@ -124,6 +137,18 @@
   --danger-soft: rgba(242, 131, 122, 0.14);
   --warning-soft: rgba(230, 173, 74, 0.14);
   --info-soft: rgba(90, 169, 245, 0.14);
+
+  /* On the dark ground the rims turn light and the velvet sheen brightens, so
+   * black suits glow at the edges instead of sinking into the page. */
+  --gem-ruby-hi: #ff6b80;
+  --gem-ruby: #d0102f;
+  --gem-ruby-deep: #4f0010;
+  --gem-ruby-rim: #ff97a5;
+  --gem-onyx-hi: #dfe4fb;
+  --gem-onyx: #3c4260;
+  --gem-onyx-deep: #0a0c14;
+  --gem-onyx-rim: #c9d0ee;
+  --gem-shadow: rgba(0, 0, 0, 0.6);
 
   --ring: rgba(125, 188, 248, 0.4);
   --selection-bg: #24476b;
@@ -224,6 +249,8 @@
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
   --ease-gallery: cubic-bezier(0.4, 0, 0, 1);
+  --ease-flick: cubic-bezier(0.05, 0.7, 0.2, 1); /* fast start, long glide to a stop */
+  --ease-reel: cubic-bezier(0.3, 0.6, 0.3, 1.06); /* slot reel: quick spin-up, slight overshoot "clunk" */
 
   --container-sm: 640px;
   --container-md: 920px;
@@ -412,5 +439,87 @@
       animation-iteration-count: 1 !important;
       transition-duration: 0.001ms !important;
     }
+  }
+}
+
+/* A shard blown off on the wind (About › SlotWord's diamonds). Per-shard
+ * --dx/--dy/--rot set where it ends up (rotation is applied after the move,
+ * so the 45° diamond tilt doesn't bend the path); fill-mode `forwards` keeps it hidden
+ * before its delay and after it has gone. */
+@keyframes wind-dust {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(45deg) scale(1);
+  }
+  35% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--dx), var(--dy)) rotate(var(--rot)) scale(0.3);
+  }
+}
+
+/* Targets in an "o" (About › TargetWord): the letter fades out as a target
+ * grows in, an arrow flies in and quivers in the bullseye, then the target and
+ * arrow fade and the letter returns. All three share one 2s timeline. */
+@keyframes target-letter {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  8%,
+  82% {
+    opacity: 0;
+  }
+}
+@keyframes target-show {
+  0% {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  10%,
+  78% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  90%,
+  100% {
+    opacity: 0;
+    transform: scale(1.08);
+  }
+}
+@keyframes arrow-fly {
+  0%,
+  16% {
+    opacity: 0;
+    transform: translate(-2.2em, -0.8em) rotate(20deg);
+  }
+  17% {
+    opacity: 1;
+    transform: translate(-2.2em, -0.8em) rotate(20deg);
+    animation-timing-function: cubic-bezier(0.3, 0.4, 0.6, 1);
+  }
+  30% {
+    transform: translate(0, 0) rotate(20deg);
+  }
+  33% {
+    transform: translate(0, 0) rotate(15deg);
+  }
+  36% {
+    transform: translate(0, 0) rotate(24deg);
+  }
+  40% {
+    transform: translate(0, 0) rotate(18deg);
+  }
+  44%,
+  78% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(20deg);
+  }
+  90%,
+  100% {
+    opacity: 0;
+    transform: translate(0, 0) rotate(20deg);
   }
 }

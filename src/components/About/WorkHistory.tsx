@@ -1,5 +1,6 @@
 // "02 — Work": a full-width rising title, then one expanding row per role.
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { experienceData } from "../../data/experience-data";
 import { WorkEntry } from "./WorkEntry";
 import { WorkTitle } from "./WorkTitle";
@@ -10,6 +11,14 @@ const SPAN = `${Math.min(...years)}–${Math.max(...years)}`;
 export const WorkHistory: React.FC = () => {
   // One role open at a time; opening another closes it.
   const [openId, setOpenId] = useState<string | null>(null);
+
+  // /about#betsson opens that role. Set after mount (not as initial state) so the
+  // panel animates open and WorkEntry scrolls it into view when it finishes.
+  const { hash } = useLocation();
+  useEffect(() => {
+    const role = experienceData.find((work) => work.slug === hash.slice(1));
+    if (role) setOpenId(role.id);
+  }, [hash]);
 
   return (
     <section aria-labelledby="work-history-label" className="w-full py-(--space-9)">
