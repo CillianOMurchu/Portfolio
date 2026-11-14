@@ -11,7 +11,7 @@ import React from "react";
 import { cn } from "../../lib/utils";
 
 const FLIP =
-  "[transform:perspective(2em)_rotateY(0deg)] transition-transform duration-0 group-aria-expanded:duration-[1100ms] group-aria-expanded:ease-flick";
+  "[transform:perspective(2em)_rotateY(0deg)] transition-transform duration-0 group-aria-expanded:duration-[900ms] group-aria-expanded:ease-flick";
 
 // Per chip: colour and flip. The second flick is a touch harder and a beat later.
 const CHIP_STYLES = [

@@ -47,7 +47,7 @@ const ratio = (a, b) => {
 };
 
 const SURFACES = ["surface-page", "surface-card", "surface-sunken", "surface-overlay"];
-const TEXT = ["text-strong", "text-body", "text-muted", "text-faint", "accent-text", "highlight-text", "danger", "success"];
+const TEXT = ["text-strong", "text-body", "text-muted", "text-faint", "accent-text", "highlight-text", "danger", "success", ...Object.keys(light).filter((name) => /^brand-.+-text$/.test(name))];
 const NON_TEXT = ["border-default", "border-strong", "border-focus", "accent", "highlight"];
 const PAIRS = [
   ...SURFACES.flatMap((bg) => TEXT.map((fg) => [fg, bg, 4.5])),

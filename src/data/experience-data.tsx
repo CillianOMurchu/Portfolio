@@ -7,14 +7,11 @@ import betssonLogo from "../assets/about/logo-betsson.webp";
 import pokerstarsLogo from "../assets/about/logo-pokerstars.webp";
 import { LightbulbWord } from "../components/About/LightbulbWord";
 import { PokerChipWord } from "../components/About/PokerChipWord";
-import { SlotWord } from "../components/About/SlotWord";
-import { TargetWord } from "../components/About/TargetWord";
 
 // TODO: Add Maslo logo image import when available
 // import masloImage from "../assets/about/header-maslo.webp";
 
 /** "reels": rows spin in like slot reels. */
-export type PanelEffect = "reels";
 
 export interface Work {
   id: string;
@@ -23,8 +20,8 @@ export interface Work {
   name: string;
   /** How the name is drawn in the role header, when it differs from plain `name`. */
   displayName?: ReactNode;
+  /** Words/phrases that fade in bold first when the role opens, before the rest of the text. */
   /** A flourish on the details when the role opens (see WorkDetails). */
-  panelEffect?: PanelEffect;
   title: string;
   projectImage: string;
   /** Wordmark from scripts/optimize-logos.mjs (64px tall). */
@@ -40,8 +37,6 @@ export const experienceData: Work[] = [
     id: "3",
     slug: "betsson",
     name: "Betsson Group",
-    displayName: <SlotWord text="Betsson Group" finals={["💎", "💎", "💎", "💎"]} />,
-    panelEffect: "reels",
     title: "Software Engineer",
     projectImage: betsson,
     logo: betssonLogo,
@@ -85,7 +80,6 @@ export const experienceData: Work[] = [
     id: "1",
     slug: "maslo",
     name: "Maslo / Roadoo Network",
-    displayName: <TargetWord text="Maslo / Roadoo Network" word="Roadoo" />,
     title: "Lead Frontend Developer",
     projectImage: roadooImage,
     link: "https://www.maslo.app/en",

@@ -1,5 +1,5 @@
 import type { ButtonHTMLAttributes } from "react";
-import { DARK_MUTED, GHOST_BG, MUTED_COLOR, SUBTLE_BORDER } from "../constants";
+import { DARK_MUTED, GHOST_BG, MUTED_COLOR, SUBTLE_BORDER, tint } from "../constants";
 
 interface DemoButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   color?: string;
@@ -10,8 +10,8 @@ export default function DemoButton({ color, variant, disabled, className = "", .
   const resolvedVariant = variant ?? (color ? "accent" : "ghost");
 
   const accentStyle = {
-    background: `${color}1a`,
-    border: `1px solid ${color}4d`,
+    background: tint(color ?? MUTED_COLOR, 10),
+    border: `1px solid ${tint(color ?? MUTED_COLOR, 30)}`,
     color: disabled ? DARK_MUTED : color,
     cursor: disabled ? ("default" as const) : ("pointer" as const),
   };

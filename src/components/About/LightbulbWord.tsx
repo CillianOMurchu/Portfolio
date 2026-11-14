@@ -18,7 +18,7 @@ export const LightbulbWord: React.FC<{ word: string }> = ({ word }) => {
           ı
           <Lightbulb
             strokeWidth={2.25}
-            className="absolute bottom-[0.7em] left-1/2 size-[0.38em] -translate-x-1/2 fill-transparent text-faint transition-[color,fill,filter] duration-(--dur-slow) ease-gallery group-aria-expanded:fill-highlight/35 group-aria-expanded:text-highlight group-aria-expanded:drop-shadow-[0_0_0.12em_var(--highlight)]"
+            className="absolute bottom-[0.7em] left-1/2 size-[0.38em] -translate-x-1/2 fill-transparent text-faint transition-[color,fill,filter] duration-(--dur-slow) ease-gallery group-hover:fill-highlight/35 group-hover:text-highlight group-hover:drop-shadow-[0_0_0.12em_var(--highlight)] group-aria-expanded:fill-highlight/35 group-aria-expanded:text-highlight group-aria-expanded:drop-shadow-[0_0_0.12em_var(--highlight)]"
           />
         </span>
         {word.slice(at + 1)}

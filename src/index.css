@@ -2,8 +2,7 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
-/* Light is the default; dark applies under <html data-theme="dark"> (or any
- * element with it — the IconShowcase demo stage uses that to stay dark). */
+/* Light is the default; dark applies under <html data-theme="dark"> (or any element with it). */
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 /* ===========================================================================
@@ -80,23 +79,57 @@
   --warning-soft: #fdf1e1;
   --info-soft: var(--blue-100);
 
-  /* Gems — velvet card suits and the ruby diamond (About › SlotWord). hi = edge
-   * sheen, base = body, deep = shadow; shine is the glossy highlight. */
-  --gem-ruby-hi: #ff4560;
-  --gem-ruby: #b0001c;
-  --gem-ruby-deep: #3f000c;
-  --gem-ruby-rim: #2a0008;
-  --gem-onyx-hi: #9aa2c8;
-  --gem-onyx: #22263a;
-  --gem-onyx-deep: #030407;
-  --gem-onyx-rim: #000000;
-  --gem-shine: #ffffff;
-  --gem-shadow: rgba(10, 4, 8, 0.45);
-
   --ring: rgba(0, 116, 217, 0.3);
   --selection-bg: #cfe2f7;
   --selection-fg: var(--slate-900);
   --scrim: rgba(17, 26, 38, 0.4);
+
+  /* brand-tokens:start */
+  --brand-angular: #dd0031;
+  --brand-angular-text: #ce002e;
+  --brand-figma: #f24e1e;
+  --brand-figma-text: #b63b17;
+  --brand-firebase: #ffca28;
+  --brand-firebase-text: #7a6113;
+  --brand-gitlab: #fc6d26;
+  --brand-gitlab-text: #a94919;
+  --brand-javascript: #f7df1e;
+  --brand-javascript-text: #72670e;
+  --brand-jest: #c21325;
+  --brand-jest-text: #c21325;
+  --brand-jira: #0052cc;
+  --brand-jira-text: #0052cc;
+  --brand-mongodb: #47a248;
+  --brand-mongodb-text: #327333;
+  --brand-node: #68a063;
+  --brand-node-text: #486e44;
+  --brand-postman: #ef5b25;
+  --brand-postman-text: #ae421b;
+  --brand-puppeteer: #00d8a2;
+  --brand-puppeteer-text: #007256;
+  --brand-react: #61dafb;
+  --brand-react-text: #306d7d;
+  --brand-rust: #ce4a00;
+  --brand-rust-text: #b14000;
+  --brand-rxjs: #b7178c;
+  --brand-rxjs-text: #b7178c;
+  --brand-sass: #cc6699;
+  --brand-sass-text: #994d73;
+  --brand-stencil: #4c50bf;
+  --brand-stencil-text: #4c50bf;
+  --brand-storybook: #ff4785;
+  --brand-storybook-text: #b5325e;
+  --brand-tailwind: #38bdf8;
+  --brand-tailwind-text: #206c8d;
+  --brand-typescript: #3178c6;
+  --brand-typescript-text: #2a67aa;
+  --brand-cypress: var(--text-strong);
+  --brand-cypress-text: var(--text-strong);
+  --brand-express: var(--text-strong);
+  --brand-express-text: var(--text-strong);
+  --brand-github: var(--text-strong);
+  --brand-github-text: var(--text-strong);
+  /* brand-tokens:end */
   color-scheme: light;
 }
 
@@ -138,18 +171,6 @@
   --warning-soft: rgba(230, 173, 74, 0.14);
   --info-soft: rgba(90, 169, 245, 0.14);
 
-  /* On the dark ground the rims turn light and the velvet sheen brightens, so
-   * black suits glow at the edges instead of sinking into the page. */
-  --gem-ruby-hi: #ff6b80;
-  --gem-ruby: #d0102f;
-  --gem-ruby-deep: #4f0010;
-  --gem-ruby-rim: #ff97a5;
-  --gem-onyx-hi: #dfe4fb;
-  --gem-onyx: #3c4260;
-  --gem-onyx-deep: #0a0c14;
-  --gem-onyx-rim: #c9d0ee;
-  --gem-shadow: rgba(0, 0, 0, 0.6);
-
   --ring: rgba(125, 188, 248, 0.4);
   --selection-bg: #24476b;
   --selection-fg: #edf1f6;
@@ -162,6 +183,53 @@
 
   /* Re-resolved here so nested dark scopes (the demo stage) get the dark ring. */
   --focus-ring: 0 0 0 3px var(--ring);
+
+  /* brand-tokens:start */
+  --brand-angular: #dd0031;
+  --brand-angular-text: #ea5e7d;
+  --brand-figma: #f24e1e;
+  --brand-figma-text: #f35a2e;
+  --brand-firebase: #ffca28;
+  --brand-firebase-text: #ffca28;
+  --brand-gitlab: #fc6d26;
+  --brand-gitlab-text: #fc6d26;
+  --brand-javascript: #f7df1e;
+  --brand-javascript-text: #f7df1e;
+  --brand-jest: #c21325;
+  --brand-jest-text: #d96d78;
+  --brand-jira: #0052cc;
+  --brand-jira-text: #598fde;
+  --brand-mongodb: #47a248;
+  --brand-mongodb-text: #47a248;
+  --brand-node: #68a063;
+  --brand-node-text: #68a063;
+  --brand-postman: #ef5b25;
+  --brand-postman-text: #ef5e29;
+  --brand-puppeteer: #00d8a2;
+  --brand-puppeteer-text: #00d8a2;
+  --brand-react: #61dafb;
+  --brand-react-text: #61dafb;
+  --brand-rust: #ce4a00;
+  --brand-rust-text: #d97238;
+  --brand-rxjs: #b7178c;
+  --brand-rxjs-text: #d068b4;
+  --brand-sass: #cc6699;
+  --brand-sass-text: #cf6e9e;
+  --brand-stencil: #4c50bf;
+  --brand-stencil-text: #8386d3;
+  --brand-storybook: #ff4785;
+  --brand-storybook-text: #ff4785;
+  --brand-tailwind: #38bdf8;
+  --brand-tailwind-text: #38bdf8;
+  --brand-typescript: #3178c6;
+  --brand-typescript-text: #5690d0;
+  --brand-cypress: var(--text-strong);
+  --brand-cypress-text: var(--text-strong);
+  --brand-express: var(--text-strong);
+  --brand-express-text: var(--text-strong);
+  --brand-github: var(--text-strong);
+  --brand-github-text: var(--text-strong);
+  /* brand-tokens:end */
   color-scheme: dark;
 }
 
@@ -250,7 +318,6 @@
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
   --ease-gallery: cubic-bezier(0.4, 0, 0, 1);
   --ease-flick: cubic-bezier(0.05, 0.7, 0.2, 1); /* fast start, long glide to a stop */
-  --ease-reel: cubic-bezier(0.3, 0.6, 0.3, 1.06); /* slot reel: quick spin-up, slight overshoot "clunk" */
 
   --container-sm: 640px;
   --container-md: 920px;
@@ -297,9 +364,53 @@
   --color-warning-soft: var(--warning-soft);
   --color-info-soft: var(--info-soft);
 
-  /* Brand colours used by IconShowcase demos. */
-  --color-rxjs: #b7178c;
-  --color-rxjs-light: #e879c4;
+  /* Brand colours used by IconShowcase demos (generated by scripts/brand-tokens.mjs). */
+  /* brand-tokens:start */
+  --color-angular: var(--brand-angular);
+  --color-angular-text: var(--brand-angular-text);
+  --color-figma: var(--brand-figma);
+  --color-figma-text: var(--brand-figma-text);
+  --color-firebase: var(--brand-firebase);
+  --color-firebase-text: var(--brand-firebase-text);
+  --color-gitlab: var(--brand-gitlab);
+  --color-gitlab-text: var(--brand-gitlab-text);
+  --color-javascript: var(--brand-javascript);
+  --color-javascript-text: var(--brand-javascript-text);
+  --color-jest: var(--brand-jest);
+  --color-jest-text: var(--brand-jest-text);
+  --color-jira: var(--brand-jira);
+  --color-jira-text: var(--brand-jira-text);
+  --color-mongodb: var(--brand-mongodb);
+  --color-mongodb-text: var(--brand-mongodb-text);
+  --color-node: var(--brand-node);
+  --color-node-text: var(--brand-node-text);
+  --color-postman: var(--brand-postman);
+  --color-postman-text: var(--brand-postman-text);
+  --color-puppeteer: var(--brand-puppeteer);
+  --color-puppeteer-text: var(--brand-puppeteer-text);
+  --color-react: var(--brand-react);
+  --color-react-text: var(--brand-react-text);
+  --color-rust: var(--brand-rust);
+  --color-rust-text: var(--brand-rust-text);
+  --color-rxjs: var(--brand-rxjs);
+  --color-rxjs-text: var(--brand-rxjs-text);
+  --color-sass: var(--brand-sass);
+  --color-sass-text: var(--brand-sass-text);
+  --color-stencil: var(--brand-stencil);
+  --color-stencil-text: var(--brand-stencil-text);
+  --color-storybook: var(--brand-storybook);
+  --color-storybook-text: var(--brand-storybook-text);
+  --color-tailwind: var(--brand-tailwind);
+  --color-tailwind-text: var(--brand-tailwind-text);
+  --color-typescript: var(--brand-typescript);
+  --color-typescript-text: var(--brand-typescript-text);
+  --color-cypress: var(--brand-cypress);
+  --color-cypress-text: var(--brand-cypress-text);
+  --color-express: var(--brand-express);
+  --color-express-text: var(--brand-express-text);
+  --color-github: var(--brand-github);
+  --color-github-text: var(--brand-github-text);
+  /* brand-tokens:end */
 
   --shadow-focus: var(--focus-ring);
 }
@@ -439,87 +550,5 @@
       animation-iteration-count: 1 !important;
       transition-duration: 0.001ms !important;
     }
-  }
-}
-
-/* A shard blown off on the wind (About › SlotWord's diamonds). Per-shard
- * --dx/--dy/--rot set where it ends up (rotation is applied after the move,
- * so the 45° diamond tilt doesn't bend the path); fill-mode `forwards` keeps it hidden
- * before its delay and after it has gone. */
-@keyframes wind-dust {
-  0% {
-    opacity: 1;
-    transform: translate(0, 0) rotate(45deg) scale(1);
-  }
-  35% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-    transform: translate(var(--dx), var(--dy)) rotate(var(--rot)) scale(0.3);
-  }
-}
-
-/* Targets in an "o" (About › TargetWord): the letter fades out as a target
- * grows in, an arrow flies in and quivers in the bullseye, then the target and
- * arrow fade and the letter returns. All three share one 2s timeline. */
-@keyframes target-letter {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  8%,
-  82% {
-    opacity: 0;
-  }
-}
-@keyframes target-show {
-  0% {
-    opacity: 0;
-    transform: scale(0.6);
-  }
-  10%,
-  78% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  90%,
-  100% {
-    opacity: 0;
-    transform: scale(1.08);
-  }
-}
-@keyframes arrow-fly {
-  0%,
-  16% {
-    opacity: 0;
-    transform: translate(-2.2em, -0.8em) rotate(20deg);
-  }
-  17% {
-    opacity: 1;
-    transform: translate(-2.2em, -0.8em) rotate(20deg);
-    animation-timing-function: cubic-bezier(0.3, 0.4, 0.6, 1);
-  }
-  30% {
-    transform: translate(0, 0) rotate(20deg);
-  }
-  33% {
-    transform: translate(0, 0) rotate(15deg);
-  }
-  36% {
-    transform: translate(0, 0) rotate(24deg);
-  }
-  40% {
-    transform: translate(0, 0) rotate(18deg);
-  }
-  44%,
-  78% {
-    opacity: 1;
-    transform: translate(0, 0) rotate(20deg);
-  }
-  90%,
-  100% {
-    opacity: 0;
-    transform: translate(0, 0) rotate(20deg);
   }
 }

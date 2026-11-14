@@ -7,7 +7,7 @@ interface DemoShellProps {
 
 export default function DemoShell({ children, className = "" }: DemoShellProps) {
   return (
-    <div className={`flex flex-col gap-4 w-full max-w-[32rem] mx-auto ${className}`.trim()}>
+    <div className={`mx-auto flex w-full max-w-2xl flex-col gap-4 ${className}`.trim()}>
       {children}
     </div>
   );

@@ -51,7 +51,7 @@ export const WorkVisual: React.FC<WorkVisualProps> = ({ image, name, year, open,
       <m.figure
         style={reduce ? undefined : { y: near }}
         className={cn(
-          "absolute top-[18%] m-0 w-[58%] bg-card p-3 shadow-lift transition-[clip-path] delay-150 duration-(--dur-slower) ease-gallery",
+          "absolute top-[18%] m-0 w-[58%] bg-card p-3 shadow-lift transition-[clip-path] delay-100 duration-(--dur-slower) ease-gallery",
           flip ? "right-0" : "left-0",
           open ? "[clip-path:inset(0)]" : "[clip-path:inset(38%_38%_38%_38%)]",
         )}

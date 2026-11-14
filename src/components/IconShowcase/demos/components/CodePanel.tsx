@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { CODE_BG } from "../constants";
+import { CODE_BG, tint } from "../constants";
 
 interface CodePanelProps {
   accent: string;
@@ -12,7 +12,7 @@ export default function CodePanel({ accent, children, className = "p-4 font-mono
   return (
     <div
       className={`rounded-xs ${className}`}
-      style={{ background: CODE_BG, border: `1px solid ${accent}4d` }}
+      style={{ background: CODE_BG, border: `1px solid ${tint(accent, 30)}` }}
     >
       {children}
     </div>

@@ -1,9 +1,9 @@
-// One role: a compact hairline row (a button) over a panel that grows via
-// grid-template-rows 0fr → 1fr. Open state lives in WorkHistory, which keeps
+// One role: a compact hairline row (a button) over a panel that opens instantly
+// (no animation). Open state lives in WorkHistory, which keeps
 // one role open at a time. An open row keeps its hover look (indent, logo in
 // colour, accent ×) via aria-expanded.
 import { Plus } from "lucide-react";
-import React, { useId, useRef } from "react";
+import React, { useEffect, useId, useRef } from "react";
 import { cn } from "../../lib/utils";
 import type { Work } from "../../data/experience-data";
 import { scrollIntoMain } from "./scrollIntoMain";
@@ -22,13 +22,14 @@ export const WorkEntry: React.FC<WorkEntryProps> = ({ work, index, open, onToggl
   const panelId = useId();
   const articleRef = useRef<HTMLElement>(null);
 
-  // Once the panel has finished growing (any role above has finished closing by
-  // then too), bring the whole role into view.
-  const handlePanelTransitionEnd = (event: React.TransitionEvent<HTMLDivElement>) => {
-    if (open && event.target === event.currentTarget && event.propertyName === "grid-template-rows" && articleRef.current) {
-      scrollIntoMain(articleRef.current);
-    }
-  };
+  // On open, scroll the role into view on the next frame, once its panel is laid out.
+  useEffect(() => {
+    if (!open) return;
+    const frame = requestAnimationFrame(() => {
+      if (articleRef.current) scrollIntoMain(articleRef.current);
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [open]);
 
   return (
     <article ref={articleRef} className="border-b">
@@ -54,7 +55,9 @@ export const WorkEntry: React.FC<WorkEntryProps> = ({ work, index, open, onToggl
               </span>
             )}
             <span className="min-w-0">
-              <span className="block font-display text-3xl leading-(--leading-tight) tracking-display text-strong transition-colors duration-(--dur-slow) ease-gallery group-hover:text-accent-text group-aria-expanded:text-accent-text">{work.displayName ?? work.name}</span>
+              <span className="block font-display text-3xl leading-(--leading-tight) tracking-display text-strong transition-colors duration-(--dur-slow) ease-gallery group-hover:text-accent-text group-aria-expanded:text-accent-text">
+                {work.displayName ?? work.name}
+              </span>
               <span className="mt-1 block font-sans text-sm tracking-normal text-muted">{work.title}</span>
             </span>
           </span>
@@ -62,29 +65,19 @@ export const WorkEntry: React.FC<WorkEntryProps> = ({ work, index, open, onToggl
           <Plus
             strokeWidth={1.5}
             strokeLinecap="square"
-            className={cn("size-5 self-center text-strong transition-[rotate,color] duration-(--dur-slow) ease-gallery group-hover:text-accent group-aria-expanded:text-accent", open && "rotate-45")}
+            className={cn(
+              "size-5 self-center text-strong transition-[rotate,color] duration-(--dur-slow) ease-gallery group-hover:text-accent group-aria-expanded:text-accent",
+              open && "rotate-45",
+            )}
           />
         </button>
       </h3>
 
-      <div
-        id={panelId}
-        className={cn("grid transition-[grid-template-rows] duration-(--dur-slower) ease-gallery", open ? "grid-rows-[1fr]" : "grid-rows-[0fr]")}
-        onTransitionEnd={handlePanelTransitionEnd}
-        // React 18 has no typed `inert`; it keeps the collapsed links out of the tab order.
-        {...{ inert: open ? undefined : "" }}
-      >
-        <div className="min-h-0 overflow-hidden">
-          <div
-            className={cn(
-              "grid gap-(--space-7) pb-(--space-8) transition-[opacity,translate] duration-(--dur-slower) ease-gallery md:grid-cols-12 md:pl-[calc(4rem+var(--space-5))]",
-              open ? "translate-y-0 opacity-100 delay-150" : "translate-y-6 opacity-0",
-            )}
-          >
-            <p className="label md:hidden">{work.dates}</p>
-            <div className="md:col-span-9">
-              <WorkDetails name={work.name} link={work.link} responsibilities={work.responsibilities} keyFeatures={work.keyFeatures} effect={work.panelEffect} open={open} />
-            </div>
+      <div id={panelId} hidden={!open}>
+        <div className="grid gap-(--space-7) pb-(--space-8) md:grid-cols-12 md:pl-[calc(4rem+var(--space-5))]">
+          <p className="label md:hidden">{work.dates}</p>
+          <div className="md:col-span-9">
+            <WorkDetails name={work.name} link={work.link} responsibilities={work.responsibilities} keyFeatures={work.keyFeatures} />
           </div>
         </div>
       </div>
